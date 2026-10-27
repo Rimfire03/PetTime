@@ -97,6 +97,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get remindDaysBefore => 'Ricordami (giorni prima)';
 
   @override
+  String get reminderChannel => 'Promemoria';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

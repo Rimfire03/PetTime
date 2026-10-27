@@ -29,6 +29,7 @@
   "date": "Data",
   "nextDue": "Prossima scadenza",
   "remindDaysBefore": "Ricordami (giorni prima)",
+  "reminderChannel": "Promemoria",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

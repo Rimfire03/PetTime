@@ -280,6 +280,12 @@ abstract class AppLocalizations {
   /// **'Remind me (days before)'**
   String get remindDaysBefore;
 
+  /// No description provided for @reminderChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get reminderChannel;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

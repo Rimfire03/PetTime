@@ -29,6 +29,7 @@
   "date": "Datum",
   "nextDue": "Nächster Termin",
   "remindDaysBefore": "Erinnern (Tage vorher)",
+  "reminderChannel": "Erinnerungen",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

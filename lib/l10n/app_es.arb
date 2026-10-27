@@ -29,6 +29,7 @@
   "date": "Fecha",
   "nextDue": "Próxima fecha",
   "remindDaysBefore": "Recordarme (días antes)",
+  "reminderChannel": "Recordatorios",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

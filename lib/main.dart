@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'l10n/app_localizations.dart';
+import 'notifications.dart';
 import 'screens/pets_screen.dart';
 
-void main() => runApp(const PetTimeApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initNotifications();
+  watchReminders();
+  runApp(const PetTimeApp());
+}
 
 class PetTimeApp extends StatelessWidget {
   const PetTimeApp({super.key});

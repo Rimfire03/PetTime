@@ -97,6 +97,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get remindDaysBefore => 'Lembrar-me (dias antes)';
 
   @override
+  String get reminderChannel => 'Lembretes';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

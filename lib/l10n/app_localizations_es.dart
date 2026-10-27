@@ -97,6 +97,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get remindDaysBefore => 'Recordarme (días antes)';
 
   @override
+  String get reminderChannel => 'Recordatorios';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

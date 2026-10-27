@@ -29,6 +29,7 @@
   "date": "Date",
   "nextDue": "Next due date",
   "remindDaysBefore": "Remind me (days before)",
+  "reminderChannel": "Reminders",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

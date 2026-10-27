@@ -29,6 +29,7 @@
   "date": "Data",
   "nextDue": "Próximo vencimento",
   "remindDaysBefore": "Lembrar-me (dias antes)",
+  "reminderChannel": "Lembretes",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

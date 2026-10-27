@@ -29,6 +29,7 @@
   "date": "Date",
   "nextDue": "Prochaine échéance",
   "remindDaysBefore": "Me rappeler (jours avant)",
+  "reminderChannel": "Rappels",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }
