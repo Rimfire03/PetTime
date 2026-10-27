@@ -50,3 +50,4 @@ app.*.map.json
 # Firebase config (API key): keep local, never commit
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
+android/debug.keystore

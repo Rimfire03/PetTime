@@ -46,9 +46,8 @@ jobs:
           DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
         run: |
           if [ -n "$DEBUG_KEYSTORE_BASE64" ]; then
-            mkdir -p ~/.android
             # tr keeps only base64 characters: the secret was stored from Windows and carries stray bytes (BOM, CR/LF)
-            printf '%s' "$DEBUG_KEYSTORE_BASE64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > ~/.android/debug.keystore
+            printf '%s' "$DEBUG_KEYSTORE_BASE64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > android/debug.keystore
           fi
       # Firebase config is git-ignored; rebuilt from a repo secret. Absent (forks, PRs): the app builds with sharing off.
       - name: Firebase config

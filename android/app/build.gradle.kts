@@ -44,6 +44,17 @@ android {
     }
 
     signingConfigs {
+        // android/debug.keystore is written by CI (git-ignored): one fixed debug key for every test APK,
+        // so a new build installs over the previous one. Without it Gradle keeps its default debug key.
+        val fixedDebugKey = rootProject.file("debug.keystore")
+        if (fixedDebugKey.exists()) {
+            getByName("debug") {
+                storeFile = fixedDebugKey
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
         if (!keyProps.isEmpty) {
             create("release") {
                 storeFile = rootProject.file(keyProps.getProperty("storeFile"))
