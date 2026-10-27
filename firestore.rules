@@ -63,7 +63,7 @@ service cloud.firestore {
     }
 
     match /pets/{petId}/{collection}/{docId} {
-      allow read, write: if collection in ['records', 'weights', 'appointments']
+      allow read, write: if collection in ['records', 'weights', 'appointments', 'contacts']
         && isMemberOf(petId);
     }
 

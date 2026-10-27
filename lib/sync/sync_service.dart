@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 import '../data/db.dart';
+import '../photos.dart' show replaceAllPhotos;
 
 /// True once Firebase is configured and running (Android/iOS only).
 final syncAvailable = ValueNotifier<bool>(false);
@@ -29,7 +30,10 @@ Future<void> initSync() async {
   if (!(Platform.isAndroid || Platform.isIOS)) return;
   await Firebase.initializeApp();
   syncAvailable.value = true;
-  FirebaseAuth.instance.authStateChanges().listen((user) {
+  final auth = FirebaseAuth.instance;
+  syncUser.value = await auth.authStateChanges().first; // restored session, or null on first launch
+  _sync = syncUser.value == null ? null : _Sync(syncUser.value!.uid);
+  auth.authStateChanges().skip(1).listen((user) {
     syncUser.value = user;
     _sync?.dispose();
     _sync = user == null ? null : _Sync(user.uid);
@@ -79,41 +83,47 @@ Map<String, Object?> _petMap(Pet p) => {
       'deleted': false,
     };
 
-/// Makes [localPetId] a shared pet (uploading it on first use) and returns an
-/// invite code valid for 7 days.
+final _publishing = <int, Future<void>>{};
+
+/// Gives a local pet its cloud id and sends it, with everything it owns, to the server.
+/// Every pet goes through here: new pets are published automatically, "share" only adds an invite code.
+/// With [wait] the call returns once the server has the pet (and throws if it cannot be reached).
+Future<void> _publishPet(int localPetId, String uid, {required bool wait}) =>
+    _publishing[localPetId] ??= _doPublish(localPetId, uid, wait).whenComplete(() => _publishing.remove(localPetId));
+
+Future<void> _doPublish(int localPetId, String uid, bool wait) async {
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+  if (pet.remoteId != null) return; // already in the cloud
+  final id = _uuid();
+  // 1. Local id FIRST. When the server copy appears, the sync listener must recognise it as this very
+  //    pet; otherwise it adds a second, duplicate pet.
+  await db.applyingRemote(() => (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
+      .write(PetsCompanion(remoteId: Value(id))));
+  // 2. The pet document must exist before its children (their rules check membership on it).
+  //    Firestore keeps this write queued while offline and sends writes in order, so the children
+  //    can follow even when we do not wait for the answer.
+  final create = _pets.doc(id).set({..._petMap(pet), 'members': [uid], 'ownerUid': uid});
+  if (wait) {
+    await create.timeout(const Duration(seconds: 20));
+  } else {
+    unawaited(create.catchError((Object e) => _log(e)));
+  }
+  // 3. Upload everything the pet owns.
+  final now = _nowMs();
+  await db.applyingRemote(() async {
+    await (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
+        .write(PetsCompanion(updatedAt: Value(now), dirty: const Value(true)));
+    for (final t in ['health_records', 'weights', 'appointments', 'pet_contacts']) {
+      await db.customStatement('UPDATE $t SET dirty = 1, updated_at = ? WHERE pet_id = ?', [now, localPetId]);
+    }
+  });
+}
+
+/// Returns an invite code valid for 7 days. The pet is published first if it is not in the cloud yet.
 Future<String> sharePet(int localPetId) async {
   final user = await ensureSignedIn();
-  var pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
-  if (pet.remoteId == null) {
-    final id = _uuid();
-    // 1. Give the local pet its shared id FIRST. When the server copy appears, the sync listener
-    //    must recognise it as this very pet; otherwise it adds a second, duplicate pet.
-    await db.applyingRemote(() => (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
-        .write(PetsCompanion(remoteId: Value(id))));
-    try {
-      // 2. The pet document must exist before its children: their rules check membership on it
-      await _pets.doc(id).set({
-        ..._petMap(pet),
-        'members': [user.uid],
-        'ownerUid': user.uid,
-      }).timeout(const Duration(seconds: 20));
-    } catch (_) {
-      // offline or refused: the pet is not shared after all
-      await db.applyingRemote(() => (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
-          .write(const PetsCompanion(remoteId: Value(null))));
-      rethrow;
-    }
-    // 3. Now that the server has the pet, upload everything it owns
-    final now = _nowMs();
-    await db.applyingRemote(() async {
-      await (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
-          .write(PetsCompanion(updatedAt: Value(now), dirty: const Value(true)));
-      for (final t in ['health_records', 'weights', 'appointments']) {
-        await db.customStatement('UPDATE $t SET dirty = 1, updated_at = ? WHERE pet_id = ?', [now, localPetId]);
-      }
-    });
-    pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
-  }
+  await _publishPet(localPetId, user.uid, wait: true);
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
   final code = _inviteCode();
   await _fs.collection('invites').doc(code).set({
     'petId': pet.remoteId,
@@ -123,6 +133,30 @@ Future<String> sharePet(int localPetId) async {
   return code;
 }
 
+/// Number of local changes the server has not received yet.
+Future<int> unsyncedCount() async {
+  final row = await db.customSelect('SELECT '
+      '(SELECT COUNT(*) FROM pets WHERE dirty = 1 OR remote_id IS NULL) + '
+      '(SELECT COUNT(*) FROM health_records WHERE dirty = 1) + '
+      '(SELECT COUNT(*) FROM weights WHERE dirty = 1) + '
+      '(SELECT COUNT(*) FROM appointments WHERE dirty = 1) + '
+      '(SELECT COUNT(*) FROM pet_contacts WHERE dirty = 1) + '
+      '(SELECT COUNT(*) FROM sync_deletes) AS n').getSingle();
+  return row.read<int>('n');
+}
+
+/// Signs out and removes this account's data from the phone (it stays in the cloud).
+/// Without that wipe, the next account to sign in would adopt these pets into its own cloud.
+Future<void> signOutAndWipe() async {
+  _sync?.dispose();
+  _sync = null;
+  await db.applyingRemote(() async {
+    await db.delete(db.pets).go(); // children go with it
+    await db.delete(db.syncDeletes).go();
+  });
+  replaceAllPhotos({});
+  await FirebaseAuth.instance.signOut();
+}
 /// Joins the pet behind [code]. It then appears locally through the normal sync.
 Future<void> joinWithCode(String code) async {
   final user = await ensureSignedIn();
@@ -142,9 +176,10 @@ Future<void> joinWithCode(String code) async {
   }
 }
 
-const _kinds = ['records', 'weights', 'appointments'];
+const _kinds = ['records', 'weights', 'appointments', 'contacts'];
 String _kindOf(String table) => switch (table) {
       'health_records' => 'records',
+      'pet_contacts' => 'contacts',
       _ => table,
     };
 
@@ -156,6 +191,7 @@ class _Sync {
     for (final s in [
       db.select(db.pets).watch(),
       db.select(db.healthRecords).watch(),
+      db.select(db.petContacts).watch(),
       db.select(db.weights).watch(),
       db.select(db.appointments).watch(),
     ]) {
@@ -353,6 +389,30 @@ class _Sync {
           } else {
             await (db.update(db.appointments)..where((a) => a.id.equals(local.id))).write(c);
           }
+        case 'contacts':
+          final local = await (db.select(db.petContacts)..where((x) => x.remoteId.equals(id))).getSingleOrNull();
+          if (gone) {
+            await (db.delete(db.petContacts)..where((x) => x.remoteId.equals(id))).go();
+            return;
+          }
+          if (local != null && (_localWins(local.updatedAt, local.dirty, ts) || (local.updatedAt == ts && local.dirty != true))) return;
+          final c = PetContactsCompanion(
+            petId: Value(pet.id),
+            kind: Value(ContactKind.values[(d['kind'] as num).toInt()]),
+            name: Value(d['name'] as String),
+            address: Value(d['address'] as String?),
+            phone: Value(d['phone'] as String?),
+            website: Value(d['website'] as String?),
+            notes: Value(d['notes'] as String?),
+            remoteId: Value(id),
+            updatedAt: Value(ts),
+            dirty: const Value(false),
+          );
+          if (local == null) {
+            await db.into(db.petContacts).insert(c);
+          } else {
+            await (db.update(db.petContacts)..where((x) => x.id.equals(local.id))).write(c);
+          }
       }
     });
   }
@@ -362,6 +422,7 @@ class _Sync {
   // Writes are not awaited: Firestore queues them on disk and sends them when
   // the phone is online, so an offline edit is never lost.
   Future<void> _push() async {
+    await _adoptUnsharedPets();
     final pets = await db.select(db.pets).get();
     final byLocalId = {for (final p in pets) p.id: p};
     for (final p in pets.where((p) => p.remoteId != null && p.dirty == true)) {
@@ -416,6 +477,24 @@ class _Sync {
       await _markChildClean('appointments', a.id, id, a.updatedAt);
     }
 
+    final contacts = await (db.select(db.petContacts)..where((c) => c.dirty.equals(true))).get();
+    for (final c in contacts) {
+      final pet = byLocalId[c.petId];
+      if (pet?.remoteId == null) continue;
+      final id = c.remoteId ?? _uuid();
+      unawaited(_pets.doc(pet!.remoteId!).collection('contacts').doc(id).set({
+        'kind': c.kind.index,
+        'name': c.name,
+        'address': c.address,
+        'phone': c.phone,
+        'website': c.website,
+        'notes': c.notes,
+        'updatedAt': c.updatedAt ?? _nowMs(),
+        'deleted': false,
+      }, SetOptions(merge: true)).catchError(_log));
+      await _markChildClean('pet_contacts', c.id, id, c.updatedAt);
+    }
+
     for (final t in await db.select(db.syncDeletes).get()) {
       try {
         if (t.kind == 'pets') {
@@ -430,6 +509,19 @@ class _Sync {
         await (db.delete(db.syncDeletes)..where((x) => x.id.equals(t.id))).go();
       } catch (e) {
         _log('delete $t kept for retry: $e');
+      }
+    }
+  }
+
+  /// Every pet belongs to the signed-in account: pets created on this phone are sent to the cloud
+  /// automatically (that is what lets a new phone get them back after signing in).
+  Future<void> _adoptUnsharedPets() async {
+    final todo = await (db.select(db.pets)..where((p) => p.remoteId.isNull())).get();
+    for (final p in todo) {
+      try {
+        await _publishPet(p.id, uid, wait: false);
+      } catch (e) {
+        _log('could not publish pet ${p.id}: $e');
       }
     }
   }

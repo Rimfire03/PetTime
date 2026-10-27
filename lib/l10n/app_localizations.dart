@@ -568,6 +568,42 @@ abstract class AppLocalizations {
   /// **'Rabbit'**
   String get rabbit;
 
+  /// No description provided for @welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to PetTime'**
+  String get welcome;
+
+  /// No description provided for @signInExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google to keep your pets safe in your account. Your pets follow you on every phone, and you can share a pet with your family.'**
+  String get signInExplain;
+
+  /// No description provided for @signInWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get signInWithGoogle;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logout;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out and remove this account\'s data from this phone? It stays safe in the cloud and comes back when you sign in again. Photos are not saved in the cloud and will be removed.'**
+  String get logoutConfirm;
+
+  /// No description provided for @logoutUnsynced.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}'**
+  String logoutUnsynced(int n);
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

@@ -77,6 +77,12 @@
   "removeAds": "Retirer les pubs ({price})",
   "restorePurchases": "Restaurer mes achats",
   "rabbit": "Lapin",
+  "welcome": "Bienvenue dans PetTime",
+  "signInExplain": "Connecte-toi avec Google pour garder tes animaux en sécurité dans ton compte. Tes animaux te suivent sur chaque téléphone, et tu peux partager un animal avec ta famille.",
+  "signInWithGoogle": "Continuer avec Google",
+  "logout": "Se déconnecter",
+  "logoutConfirm": "Te déconnecter et supprimer les données de ce compte sur ce téléphone ? Elles restent en sécurité dans le cloud et reviennent quand tu te reconnectes. Les photos ne sont pas enregistrées dans le cloud et seront supprimées.",
+  "logoutUnsynced": "{n, plural, =1{1 modification n'a pas encore été envoyée au cloud et sera perdue.} other{{n} modifications n'ont pas encore été envoyées au cloud et seront perdues.}}",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

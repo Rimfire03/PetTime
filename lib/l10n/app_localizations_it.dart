@@ -246,6 +246,35 @@ class AppLocalizationsIt extends AppLocalizations {
   String get rabbit => 'Coniglio';
 
   @override
+  String get welcome => 'Benvenuto in PetTime';
+
+  @override
+  String get signInExplain =>
+      'Accedi con Google per tenere al sicuro i tuoi animali nel tuo account. I tuoi animali ti seguono su ogni telefono e puoi condividere un animale con la tua famiglia.';
+
+  @override
+  String get signInWithGoogle => 'Continua con Google';
+
+  @override
+  String get logout => 'Esci';
+
+  @override
+  String get logoutConfirm =>
+      'Uscire e rimuovere i dati di questo account da questo telefono? Restano al sicuro nel cloud e tornano quando accedi di nuovo. Le foto non sono salvate nel cloud e verranno rimosse.';
+
+  @override
+  String logoutUnsynced(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other:
+          '$n modifiche non sono ancora state inviate al cloud e andranno perse.',
+      one: '1 modifica non è ancora stata inviata al cloud e andrà persa.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

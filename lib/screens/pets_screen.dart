@@ -7,7 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../photos.dart';
 import '../purchases.dart';
 import '../watermark.dart';
-import '../sync/sync_service.dart' show syncAvailable;
+import '../sync/sync_service.dart' show signOutAndWipe, syncAvailable, syncUser, unsyncedCount;
 import 'share_dialogs.dart';
 import 'pet_detail_screen.dart';
 import 'pet_form_screen.dart';
@@ -21,13 +21,14 @@ class PetsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t.myPets), actions: [
         ListenableBuilder(
-          listenable: Listenable.merge([privacyOptionsRequired, adsRemoved, removeAdsPrice]),
+          listenable: Listenable.merge([privacyOptionsRequired, adsRemoved, removeAdsPrice, syncUser]),
           builder: (_, _) => PopupMenuButton<_Backup>(
             onSelected: (m) => switch (m) {
               _Backup.privacy => showPrivacyOptions(),
               _Backup.join => showJoinDialog(context),
               _Backup.removeAds => buyRemoveAds(),
               _Backup.restore => restorePurchases(),
+              _Backup.logout => _logout(context),
               _ => _runBackup(context, m),
             },
             itemBuilder: (_) => [
@@ -42,6 +43,8 @@ class PetsScreen extends StatelessWidget {
               ],
               if (privacyOptionsRequired.value)
                 PopupMenuItem(value: _Backup.privacy, child: Text(t.privacySettings)),
+              if (syncUser.value != null)
+                PopupMenuItem(value: _Backup.logout, child: Text(t.logout)),
             ],
           ),
         ),
@@ -76,7 +79,25 @@ class PetsScreen extends StatelessWidget {
   }
 }
 
-enum _Backup { export, import, privacy, join, removeAds, restore }
+enum _Backup { export, import, privacy, join, removeAds, restore, logout }
+
+Future<void> _logout(BuildContext context) async {
+  final t = AppLocalizations.of(context);
+  final unsent = await unsyncedCount(); // local changes the cloud has not received yet
+  if (!context.mounted) return;
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text(t.logout),
+      content: Text(unsent > 0 ? '${t.logoutConfirm}\n\n${t.logoutUnsynced(unsent)}' : t.logoutConfirm),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, false), child: Text(t.cancel)),
+        FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(t.logout)),
+      ],
+    ),
+  );
+  if (ok == true) await signOutAndWipe();
+}
 
 Future<void> _runBackup(BuildContext context, _Backup action) async {
   final t = AppLocalizations.of(context);

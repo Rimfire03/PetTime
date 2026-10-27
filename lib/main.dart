@@ -5,11 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'l10n/app_localizations.dart';
 import 'ads.dart';
+import 'app_shell.dart';
 import 'notifications.dart';
 import 'photos.dart';
 import 'purchases.dart';
 import 'sync/sync_service.dart';
-import 'screens/pets_screen.dart';
+import 'screens/sign_in_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,7 @@ class PetTimeApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const PetsScreen(),
+        builder: withSystemInsets,
+        home: const AuthGate(),
       );
 }

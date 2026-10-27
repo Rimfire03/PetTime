@@ -77,6 +77,12 @@
   "removeAds": "Quitar anuncios ({price})",
   "restorePurchases": "Restaurar compras",
   "rabbit": "Conejo",
+  "welcome": "Bienvenido a PetTime",
+  "signInExplain": "Inicia sesión con Google para mantener a tus mascotas seguras en tu cuenta. Tus mascotas te siguen en cada teléfono y puedes compartir una mascota con tu familia.",
+  "signInWithGoogle": "Continuar con Google",
+  "logout": "Cerrar sesión",
+  "logoutConfirm": "¿Cerrar sesión y eliminar los datos de esta cuenta de este teléfono? Siguen seguros en la nube y vuelven al iniciar sesión. Las fotos no se guardan en la nube y se eliminarán.",
+  "logoutUnsynced": "{n, plural, =1{1 cambio aún no se ha enviado a la nube y se perderá.} other{{n} cambios aún no se han enviado a la nube y se perderán.}}",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

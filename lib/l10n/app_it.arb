@@ -77,6 +77,12 @@
   "removeAds": "Rimuovi la pubblicità ({price})",
   "restorePurchases": "Ripristina acquisti",
   "rabbit": "Coniglio",
+  "welcome": "Benvenuto in PetTime",
+  "signInExplain": "Accedi con Google per tenere al sicuro i tuoi animali nel tuo account. I tuoi animali ti seguono su ogni telefono e puoi condividere un animale con la tua famiglia.",
+  "signInWithGoogle": "Continua con Google",
+  "logout": "Esci",
+  "logoutConfirm": "Uscire e rimuovere i dati di questo account da questo telefono? Restano al sicuro nel cloud e tornano quando accedi di nuovo. Le foto non sono salvate nel cloud e verranno rimosse.",
+  "logoutUnsynced": "{n, plural, =1{1 modifica non è ancora stata inviata al cloud e andrà persa.} other{{n} modifiche non sono ancora state inviate al cloud e andranno perse.}}",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }
