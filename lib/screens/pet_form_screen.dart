@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../breeds.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
@@ -25,6 +26,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
   late final _notes = TextEditingController(text: widget.pet?.notes);
   late String _species = widget.pet?.species ?? 'dog';
   late DateTime? _birth = widget.pet?.birthDate;
+  final _breedFocus = FocusNode();
   late String? _photo = widget.pet?.photoPath;
   bool _saved = false;
 
@@ -46,6 +48,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
   @override
   void dispose() {
     if (!_saved && _photoIsDraft) deletePhoto(_photo);
+    _breedFocus.dispose();
     super.dispose();
   }
 
@@ -136,7 +139,33 @@ class _PetFormScreenState extends State<PetFormScreen> {
               onChanged: (v) => setState(() => _species = v!),
             ),
             const SizedBox(height: 12),
-            TextFormField(controller: _breed, decoration: InputDecoration(labelText: t.breed)),
+            // suggestions follow the chosen species; any other breed can still be typed freely
+            RawAutocomplete<String>(
+              textEditingController: _breed,
+              focusNode: _breedFocus,
+              optionsBuilder: (value) => suggestBreeds(_species, value.text),
+              fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
+                controller: controller,
+                focusNode: focusNode,
+                decoration: InputDecoration(labelText: t.breed),
+              ),
+              optionsViewBuilder: (context, onSelected, options) => Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 240, maxWidth: 360),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: [
+                        for (final o in options) ListTile(dense: true, title: Text(o), onTap: () => onSelected(o)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
             ListTile(
               contentPadding: EdgeInsets.zero,
