@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../pdf_export.dart';
 import '../photos.dart';
 import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
@@ -52,6 +53,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 Tab(text: t.appointments),
               ]),
               actions: [
+                IconButton(
+                  tooltip: t.exportPdf,
+                  icon: const Icon(Icons.picture_as_pdf),
+                  onPressed: () => exportHealthBookPdf(context, pet),
+                ),
                 IconButton(
                   tooltip: t.editPet,
                   icon: const Icon(Icons.edit),

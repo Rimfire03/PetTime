@@ -139,6 +139,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get removePhoto => 'Foto entfernen';
 
   @override
+  String get exportPdf => 'Als PDF exportieren';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

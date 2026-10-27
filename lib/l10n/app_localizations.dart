@@ -364,6 +364,12 @@ abstract class AppLocalizations {
   /// **'Remove photo'**
   String get removePhoto;
 
+  /// No description provided for @exportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdf;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

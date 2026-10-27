@@ -139,6 +139,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get removePhoto => 'Rimuovi foto';
 
   @override
+  String get exportPdf => 'Esporta PDF';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

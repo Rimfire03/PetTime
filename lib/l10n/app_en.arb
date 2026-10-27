@@ -43,6 +43,7 @@
   "takePhoto": "Take a photo",
   "chooseFromGallery": "Choose from gallery",
   "removePhoto": "Remove photo",
+  "exportPdf": "Export PDF",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

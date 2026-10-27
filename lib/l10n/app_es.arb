@@ -43,6 +43,7 @@
   "takePhoto": "Hacer una foto",
   "chooseFromGallery": "Elegir de la galería",
   "removePhoto": "Quitar foto",
+  "exportPdf": "Exportar PDF",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }
