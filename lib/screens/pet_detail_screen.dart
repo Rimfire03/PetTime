@@ -7,6 +7,7 @@ import '../pdf_export.dart';
 import '../sync/sync_service.dart' show syncAvailable;
 import 'share_dialogs.dart';
 import '../photos.dart';
+import '../watermark.dart';
 import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
 import 'pets_screen.dart' show speciesLabel;
@@ -81,13 +82,15 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 ),
               ],
             ),
-            body: TabBarView(children: [
-              _Info(pet: pet),
-              _Records(petId: petId),
-              WeightsTab(petId: petId),
-              AppointmentsTab(petId: petId),
-              ServicesTab(petId: petId),
-            ]),
+            body: PawBackdrop(
+              child: TabBarView(children: [
+                _Info(pet: pet),
+                _Records(petId: petId),
+                WeightsTab(petId: petId),
+                AppointmentsTab(petId: petId),
+                ServicesTab(petId: petId),
+              ]),
+            ),
           ),
         );
       },
@@ -135,6 +138,7 @@ class _Records extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     final fmt = DateFormat.yMd(locale);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: StreamBuilder<List<HealthRecord>>(
         stream: db.watchRecords(petId),
         builder: (context, snap) {

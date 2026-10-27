@@ -21,6 +21,7 @@ class _AppointmentsTabState extends State<AppointmentsTab> {
     final t = AppLocalizations.of(context);
     final fmt = DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm();
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: StreamBuilder<List<Appointment>>(
         stream: _stream,
         builder: (context, snap) {

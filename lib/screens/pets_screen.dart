@@ -5,6 +5,7 @@ import '../backup.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
+import '../watermark.dart';
 import '../sync/sync_service.dart' show syncAvailable;
 import 'share_dialogs.dart';
 import 'pet_detail_screen.dart';
@@ -37,7 +38,7 @@ class PetsScreen extends StatelessWidget {
         ),
       ]),
       bottomNavigationBar: const AdBanner(),
-      body: StreamBuilder<List<Pet>>(
+      body: PawBackdrop(child: StreamBuilder<List<Pet>>(
         stream: db.watchPets(),
         builder: (context, snap) {
           final pets = snap.data ?? [];
@@ -55,7 +56,7 @@ class PetsScreen extends StatelessWidget {
             ],
           );
         },
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         tooltip: t.addPet,
         onPressed: () => Navigator.push(

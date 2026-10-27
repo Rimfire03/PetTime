@@ -35,7 +35,8 @@ class PetTimeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         onGenerateTitle: (c) => AppLocalizations.of(c).appTitle,
-        theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+        // same coral as the app icon
+        theme: ThemeData(colorSchemeSeed: const Color(0xFFF2784B), useMaterial3: true),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

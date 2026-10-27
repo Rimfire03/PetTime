@@ -34,6 +34,7 @@ class _ServicesTabState extends State<ServicesTab> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: StreamBuilder<List<PetContact>>(
         stream: _stream,
         builder: (context, snap) {

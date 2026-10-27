@@ -18,6 +18,7 @@ class WeightsTab extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     final fmt = DateFormat.yMd(locale);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: StreamBuilder<List<Weight>>(
         stream: db.watchWeights(petId),
         builder: (context, snap) {
