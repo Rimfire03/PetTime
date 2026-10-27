@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../care_catalog.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import 'pet_detail_screen.dart' show recordLabel;
@@ -22,6 +23,34 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
   late RecordType _type = widget.record?.type ?? RecordType.vaccine;
   late DateTime _date = widget.record?.date ?? DateTime.now();
   late DateTime? _next = widget.record?.nextDue;
+  final _productFocus = FocusNode();
+  String _species = 'other'; // decides which suggestions are offered
+  int? _autoMonths; // set while the next due date comes from a suggestion; it then follows the care date
+
+  @override
+  void initState() {
+    super.initState();
+    (db.select(db.pets)..where((p) => p.id.equals(widget.petId))).getSingleOrNull().then((p) {
+      if (p != null && mounted) setState(() => _species = p.species);
+    });
+  }
+
+  @override
+  void dispose() {
+    _productFocus.dispose();
+    super.dispose();
+  }
+
+  void _applySuggestion(CareSuggestion s) {
+    final months = s.repeatMonths;
+    setState(() {
+      // never overwrite a date the person typed by hand
+      if (_next == null || _autoMonths != null) {
+        _autoMonths = months;
+        _next = months == null ? null : addMonths(_date, months);
+      }
+    });
+  }
 
   Future<DateTime?> _pick(DateTime initial) => showDatePicker(
         context: context,
@@ -58,6 +87,7 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final fmt = DateFormat.yMd(Localizations.localeOf(context).toString());
+    final lang = Localizations.localeOf(context).languageCode;
     return Scaffold(
       appBar: AppBar(
         title: Text(t.addRecord),
@@ -84,10 +114,41 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
               onChanged: (r) => setState(() => _type = r!),
             ),
             const SizedBox(height: 12),
-            TextFormField(
-              controller: _product,
-              decoration: InputDecoration(labelText: t.product),
-              validator: (v) => (v == null || v.trim().isEmpty) ? t.required : null,
+            // catalogue of usual vaccines / treatments for this species; any other name can be typed
+            RawAutocomplete<CareSuggestion>(
+              textEditingController: _product,
+              focusNode: _productFocus,
+              displayStringForOption: (s) => s.nameFor(lang),
+              optionsBuilder: (v) => suggestCare(_species, _type, v.text, lang),
+              onSelected: _applySuggestion,
+              fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
+                controller: controller,
+                focusNode: focusNode,
+                decoration: InputDecoration(labelText: t.product),
+                validator: (v) => (v == null || v.trim().isEmpty) ? t.required : null,
+              ),
+              optionsViewBuilder: (context, onSelected, options) => Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 280, maxWidth: 380),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: [
+                        for (final o in options)
+                          ListTile(
+                            dense: true,
+                            title: Text(o.nameFor(lang)),
+                            subtitle: o.repeatMonths == null ? null : Text(t.repeatEvery(o.repeatMonths!)),
+                            onTap: () => onSelected(o),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
@@ -96,7 +157,11 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
               trailing: const Icon(Icons.calendar_today),
               onTap: () async {
                 final d = await _pick(_date);
-                if (d != null) setState(() => _date = d);
+                if (d == null) return;
+                setState(() {
+                  _date = d;
+                  if (_autoMonths != null) _next = addMonths(d, _autoMonths!); // suggested date follows
+                });
               },
             ),
             ListTile(
@@ -106,9 +171,19 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
               trailing: const Icon(Icons.event),
               onTap: () async {
                 final d = await _pick(_next ?? _date);
-                if (d != null) setState(() => _next = d);
+                if (d != null) {
+                  setState(() {
+                    _next = d;
+                    _autoMonths = null; // chosen by hand: stop following the care date
+                  });
+                }
               },
             ),
+            if (_autoMonths != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(t.suggestionNote, style: Theme.of(context).textTheme.bodySmall),
+              ),
             TextFormField(
               controller: _days,
               keyboardType: TextInputType.number,

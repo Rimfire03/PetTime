@@ -84,6 +84,8 @@
   "logoutConfirm": "Terminar sessão e remover os dados desta conta deste telemóvel? Continuam seguros na nuvem e voltam quando iniciares sessão. As fotos não são guardadas na nuvem e serão removidas.",
   "logoutUnsynced": "{n, plural, =1{1 alteração ainda não foi enviada para a nuvem e será perdida.} other{{n} alterações ainda não foram enviadas para a nuvem e serão perdidas.}}",
   "recordType": "Tipo de cuidado",
+  "repeatEvery": "{n, plural, =1{todos os meses} other{a cada {n} meses}}",
+  "suggestionNote": "Data sugerida: confirma-a com o teu veterinário.",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

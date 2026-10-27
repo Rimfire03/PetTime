@@ -610,6 +610,18 @@ abstract class AppLocalizations {
   /// **'Type of care'**
   String get recordType;
 
+  /// No description provided for @repeatEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{every month} other{every {n} months}}'**
+  String repeatEvery(int n);
+
+  /// No description provided for @suggestionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested date: check it with your vet.'**
+  String get suggestionNote;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

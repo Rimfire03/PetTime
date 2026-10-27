@@ -86,6 +86,9 @@
   "logoutUnsynced": "{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}",
   "@logoutUnsynced": { "placeholders": { "n": { "type": "int" } } },
   "recordType": "Type of care",
+  "repeatEvery": "{n, plural, =1{every month} other{every {n} months}}",
+  "@repeatEvery": { "placeholders": { "n": { "type": "int" } } },
+  "suggestionNote": "Suggested date: check it with your vet.",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

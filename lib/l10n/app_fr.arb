@@ -84,6 +84,8 @@
   "logoutConfirm": "Te déconnecter et supprimer les données de ce compte sur ce téléphone ? Elles restent en sécurité dans le cloud et reviennent quand tu te reconnectes. Les photos ne sont pas enregistrées dans le cloud et seront supprimées.",
   "logoutUnsynced": "{n, plural, =1{1 modification n'a pas encore été envoyée au cloud et sera perdue.} other{{n} modifications n'ont pas encore été envoyées au cloud et seront perdues.}}",
   "recordType": "Type de soin",
+  "repeatEvery": "{n, plural, =1{tous les mois} other{tous les {n} mois}}",
+  "suggestionNote": "Date suggérée : confirme-la avec ton vétérinaire.",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

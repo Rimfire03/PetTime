@@ -278,6 +278,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recordType => 'Tipo di cura';
 
   @override
+  String repeatEvery(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'ogni $n mesi',
+      one: 'ogni mese',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get suggestionNote =>
+      'Data suggerita: confermala con il tuo veterinario.';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override
