@@ -86,6 +86,9 @@
   "recordType": "Type de soin",
   "repeatEvery": "{n, plural, =1{tous les mois} other{tous les {n} mois}}",
   "suggestionNote": "Date suggérée : confirme-la avec ton vétérinaire.",
+  "weighedOn": "Pesé le",
+  "saveAndAddAnother": "Enregistrer et ajouter une autre",
+  "savedLine": "Enregistré : {text}",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

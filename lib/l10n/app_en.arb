@@ -89,6 +89,10 @@
   "repeatEvery": "{n, plural, =1{every month} other{every {n} months}}",
   "@repeatEvery": { "placeholders": { "n": { "type": "int" } } },
   "suggestionNote": "Suggested date: check it with your vet.",
+  "weighedOn": "Weighed on",
+  "saveAndAddAnother": "Save and add another",
+  "savedLine": "Saved: {text}",
+  "@savedLine": { "placeholders": { "text": { "type": "String" } } },
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

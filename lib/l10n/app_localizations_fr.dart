@@ -294,6 +294,17 @@ class AppLocalizationsFr extends AppLocalizations {
       'Date suggérée : confirme-la avec ton vétérinaire.';
 
   @override
+  String get weighedOn => 'Pesé le';
+
+  @override
+  String get saveAndAddAnother => 'Enregistrer et ajouter une autre';
+
+  @override
+  String savedLine(String text) {
+    return 'Enregistré : $text';
+  }
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

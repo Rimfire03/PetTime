@@ -86,6 +86,9 @@
   "recordType": "Tipo de cuidado",
   "repeatEvery": "{n, plural, =1{todos os meses} other{a cada {n} meses}}",
   "suggestionNote": "Data sugerida: confirma-a com o teu veterinário.",
+  "weighedOn": "Pesado em",
+  "saveAndAddAnother": "Guardar e adicionar outro",
+  "savedLine": "Guardado: {text}",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

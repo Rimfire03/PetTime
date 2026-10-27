@@ -86,6 +86,9 @@
   "recordType": "Tipo di cura",
   "repeatEvery": "{n, plural, =1{ogni mese} other{ogni {n} mesi}}",
   "suggestionNote": "Data suggerita: confermala con il tuo veterinario.",
+  "weighedOn": "Pesato il",
+  "saveAndAddAnother": "Salva e aggiungi un altro",
+  "savedLine": "Salvato: {text}",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

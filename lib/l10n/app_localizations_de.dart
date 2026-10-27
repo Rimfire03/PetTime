@@ -292,6 +292,17 @@ class AppLocalizationsDe extends AppLocalizations {
       'Vorgeschlagenes Datum: bitte mit dem Tierarzt abstimmen.';
 
   @override
+  String get weighedOn => 'Gewogen am';
+
+  @override
+  String get saveAndAddAnother => 'Speichern und weiteres hinzufügen';
+
+  @override
+  String savedLine(String text) {
+    return 'Gespeichert: $text';
+  }
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

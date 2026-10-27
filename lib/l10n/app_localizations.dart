@@ -622,6 +622,24 @@ abstract class AppLocalizations {
   /// **'Suggested date: check it with your vet.'**
   String get suggestionNote;
 
+  /// No description provided for @weighedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Weighed on'**
+  String get weighedOn;
+
+  /// No description provided for @saveAndAddAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and add another'**
+  String get saveAndAddAnother;
+
+  /// No description provided for @savedLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved: {text}'**
+  String savedLine(String text);
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

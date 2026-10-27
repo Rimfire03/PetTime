@@ -293,6 +293,17 @@ class AppLocalizationsIt extends AppLocalizations {
       'Data suggerita: confermala con il tuo veterinario.';
 
   @override
+  String get weighedOn => 'Pesato il';
+
+  @override
+  String get saveAndAddAnother => 'Salva e aggiungi un altro';
+
+  @override
+  String savedLine(String text) {
+    return 'Salvato: $text';
+  }
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

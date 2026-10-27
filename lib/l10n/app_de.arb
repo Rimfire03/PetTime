@@ -86,6 +86,9 @@
   "recordType": "Art der Behandlung",
   "repeatEvery": "{n, plural, =1{jeden Monat} other{alle {n} Monate}}",
   "suggestionNote": "Vorgeschlagenes Datum: bitte mit dem Tierarzt abstimmen.",
+  "weighedOn": "Gewogen am",
+  "saveAndAddAnother": "Speichern und weiteres hinzufügen",
+  "savedLine": "Gespeichert: {text}",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

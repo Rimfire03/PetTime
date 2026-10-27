@@ -291,6 +291,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get suggestionNote => 'Fecha sugerida: confírmala con tu veterinario.';
 
   @override
+  String get weighedOn => 'Pesado el';
+
+  @override
+  String get saveAndAddAnother => 'Guardar y añadir otro';
+
+  @override
+  String savedLine(String text) {
+    return 'Guardado: $text';
+  }
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

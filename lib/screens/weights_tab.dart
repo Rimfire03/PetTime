@@ -114,7 +114,16 @@ class _WeightDialogState extends State<_WeightDialog> {
   late final _kg = TextEditingController(text: widget.weight?.kg.toString());
   late DateTime _date = widget.weight?.date ?? DateTime.now();
 
-  Future<void> _save() async {
+  final _kgFocus = FocusNode();
+  String? _lastSaved;
+
+  @override
+  void dispose() {
+    _kgFocus.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save({bool another = false}) async {
     // accept both "4.2" and "4,2"
     final kg = double.tryParse(_kg.text.replaceAll(',', '.'));
     if (kg == null || kg <= 0) return;
@@ -125,7 +134,18 @@ class _WeightDialogState extends State<_WeightDialog> {
     } else {
       await (db.update(db.weights)..where((w) => w.id.equals(id))).write(c);
     }
-    if (mounted) Navigator.pop(context);
+    if (!mounted) return;
+    if (another) {
+      // keep the date: entering a series of old weights means changing only the value and the day
+      final fmt = DateFormat.yMd(Localizations.localeOf(context).toString());
+      setState(() {
+        _lastSaved = '$kg kg - ${fmt.format(_date)}';
+        _kg.clear();
+      });
+      _kgFocus.requestFocus();
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _delete() async {
@@ -139,34 +159,52 @@ class _WeightDialogState extends State<_WeightDialog> {
     final fmt = DateFormat.yMd(Localizations.localeOf(context).toString());
     return AlertDialog(
       title: Text(t.addWeight),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _kg,
-            autofocus: true,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: t.weightKg),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(t.date),
-            subtitle: Text(fmt.format(_date)),
-            trailing: const Icon(Icons.calendar_today),
-            onTap: () async {
-              final d = await showDatePicker(
-                context: context,
-                initialDate: _date,
-                firstDate: DateTime(1990),
-                lastDate: DateTime.now(),
-              );
-              if (d != null) setState(() => _date = d);
-            },
-          ),
-        ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _kg,
+              focusNode: _kgFocus,
+              autofocus: true,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: t.weightKg),
+            ),
+            const SizedBox(height: 16),
+            // today by default, but a field that clearly invites a tap: any older day can be chosen
+            InkWell(
+              onTap: () async {
+                final d = await showDatePicker(
+                  context: context,
+                  initialDate: _date,
+                  firstDate: DateTime(1990),
+                  lastDate: DateTime.now(),
+                );
+                if (d != null) setState(() => _date = d);
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: t.weighedOn,
+                  suffixIcon: const Icon(Icons.calendar_today),
+                  border: const OutlineInputBorder(),
+                ),
+                child: Text(fmt.format(_date)),
+              ),
+            ),
+            if (_lastSaved != null) ...[
+              const SizedBox(height: 12),
+              Row(children: [
+                const Icon(Icons.check_circle, size: 16),
+                const SizedBox(width: 6),
+                Expanded(child: Text(t.savedLine(_lastSaved!), style: Theme.of(context).textTheme.bodySmall)),
+              ]),
+            ],
+          ],
+        ),
       ),
       actions: [
         if (widget.weight != null) TextButton(onPressed: _delete, child: Text(t.delete)),
+        if (widget.weight == null) TextButton(onPressed: () => _save(another: true), child: Text(t.saveAndAddAnother)),
         FilledButton(onPressed: _save, child: Text(t.save)),
       ],
     );
