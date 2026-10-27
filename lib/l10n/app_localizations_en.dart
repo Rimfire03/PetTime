@@ -142,6 +142,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportPdf => 'Export PDF';
 
   @override
+  String get backupExport => 'Export backup';
+
+  @override
+  String get backupImport => 'Import backup';
+
+  @override
+  String get backupSaved => 'Backup saved.';
+
+  @override
+  String get backupRestored => 'Backup restored.';
+
+  @override
+  String get backupInvalid => 'This file is not a valid PetTime backup.';
+
+  @override
+  String get restoreConfirm =>
+      'This replaces ALL current data with the backup. Continue?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
   String get noRecords => 'No record yet.';
 
   @override

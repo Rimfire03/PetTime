@@ -142,6 +142,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get exportPdf => 'Exportar PDF';
 
   @override
+  String get backupExport => 'Exportar cópia de segurança';
+
+  @override
+  String get backupImport => 'Importar cópia de segurança';
+
+  @override
+  String get backupSaved => 'Cópia guardada.';
+
+  @override
+  String get backupRestored => 'Cópia restaurada.';
+
+  @override
+  String get backupInvalid => 'Este ficheiro não é uma cópia PetTime válida.';
+
+  @override
+  String get restoreConfirm =>
+      'Isto substitui TODOS os dados atuais pela cópia. Continuar?';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

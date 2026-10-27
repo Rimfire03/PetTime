@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../backup.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
@@ -13,7 +14,15 @@ class PetsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(t.myPets)),
+      appBar: AppBar(title: Text(t.myPets), actions: [
+        PopupMenuButton<_Backup>(
+          onSelected: (m) => _runBackup(context, m),
+          itemBuilder: (_) => [
+            PopupMenuItem(value: _Backup.export, child: Text(t.backupExport)),
+            PopupMenuItem(value: _Backup.import, child: Text(t.backupImport)),
+          ],
+        ),
+      ]),
       body: StreamBuilder<List<Pet>>(
         stream: db.watchPets(),
         builder: (context, snap) {
@@ -40,6 +49,37 @@ class PetsScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
     );
+  }
+}
+
+enum _Backup { export, import }
+
+Future<void> _runBackup(BuildContext context, _Backup action) async {
+  final t = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  void say(String s) => messenger.showSnackBar(SnackBar(content: Text(s)));
+  try {
+    if (action == _Backup.export) {
+      if (await exportBackupFile()) say(t.backupSaved);
+      return;
+    }
+    final json = await pickBackupFile();
+    if (json == null || !context.mounted) return;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        content: Text(t.restoreConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(t.cancel)),
+          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(t.backupImport)),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    await restoreBackup(json);
+    say(t.backupRestored);
+  } catch (_) {
+    say(t.backupInvalid);
   }
 }
 

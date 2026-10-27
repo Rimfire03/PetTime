@@ -23,6 +23,19 @@ void deletePhoto(String? name) {
   if (f.existsSync()) f.deleteSync();
 }
 
+/// Only names we generate ourselves; guards restores from untrusted files
+/// against path tricks like "../x".
+final _photoName = RegExp(r'^\d+\.jpg$');
+bool isValidPhotoName(String name) => _photoName.hasMatch(name);
+
+/// Replaces every stored photo with [photos] (name -> bytes).
+void replaceAllPhotos(Map<String, List<int>> photos) {
+  for (final f in _dir.listSync().whereType<File>()) {
+    f.deleteSync();
+  }
+  photos.forEach((name, bytes) => photoFile(name).writeAsBytesSync(bytes));
+}
+
 bool get _hasCamera => Platform.isAndroid || Platform.isIOS;
 
 /// Asks camera or gallery (gallery only on desktop), copies the image into the

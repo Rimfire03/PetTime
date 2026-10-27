@@ -44,6 +44,13 @@
   "chooseFromGallery": "Aus der Galerie wählen",
   "removePhoto": "Foto entfernen",
   "exportPdf": "Als PDF exportieren",
+  "backupExport": "Backup exportieren",
+  "backupImport": "Backup importieren",
+  "backupSaved": "Backup gespeichert.",
+  "backupRestored": "Backup wiederhergestellt.",
+  "backupInvalid": "Diese Datei ist kein gültiges PetTime-Backup.",
+  "restoreConfirm": "Dadurch werden ALLE aktuellen Daten durch das Backup ersetzt. Fortfahren?",
+  "cancel": "Abbrechen",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }
