@@ -7,8 +7,7 @@ import 'package:printing/printing.dart';
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'photos.dart';
-import 'screens/pet_detail_screen.dart' show recordLabel;
-import 'screens/pets_screen.dart' show speciesLabel;
+import 'labels.dart';
 
 /// Builds the pet's health book (identity, vaccines/treatments, weights) as a
 /// PDF and hands it to the system share / save dialog.
@@ -31,6 +30,8 @@ Future<void> exportHealthBookPdf(BuildContext context, Pet pet) async {
   final info = <(String, String?)>[
     (t.species, speciesLabel(t, pet.species)),
     (t.breed, pet.breed),
+    (t.sex, pet.sex == null ? null : (pet.sex == 'male' ? t.male : t.female)),
+    (t.color, pet.color),
     (t.birthDate, pet.birthDate == null ? null : fmt.format(pet.birthDate!)),
     (t.chip, pet.chip),
     (t.vetName, pet.vetName),

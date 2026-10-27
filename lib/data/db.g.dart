@@ -147,6 +147,24 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _sexMeta = const VerificationMeta('sex');
+  @override
+  late final GeneratedColumn<String> sex = GeneratedColumn<String>(
+    'sex',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+    'color',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     remoteId,
@@ -162,6 +180,8 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
     vetPhone,
     photoPath,
     notes,
+    sex,
+    color,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -252,6 +272,18 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
         notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
       );
     }
+    if (data.containsKey('sex')) {
+      context.handle(
+        _sexMeta,
+        sex.isAcceptableOrUnknown(data['sex']!, _sexMeta),
+      );
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
     return context;
   }
 
@@ -313,6 +345,14 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
         DriftSqlType.string,
         data['${effectivePrefix}notes'],
       ),
+      sex: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sex'],
+      ),
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color'],
+      ),
     );
   }
 
@@ -336,6 +376,8 @@ class Pet extends DataClass implements Insertable<Pet> {
   final String? vetPhone;
   final String? photoPath;
   final String? notes;
+  final String? sex;
+  final String? color;
   const Pet({
     this.remoteId,
     this.updatedAt,
@@ -350,6 +392,8 @@ class Pet extends DataClass implements Insertable<Pet> {
     this.vetPhone,
     this.photoPath,
     this.notes,
+    this.sex,
+    this.color,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -387,6 +431,12 @@ class Pet extends DataClass implements Insertable<Pet> {
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
     }
+    if (!nullToAbsent || sex != null) {
+      map['sex'] = Variable<String>(sex);
+    }
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<String>(color);
+    }
     return map;
   }
 
@@ -423,6 +473,10 @@ class Pet extends DataClass implements Insertable<Pet> {
       notes: notes == null && nullToAbsent
           ? const Value.absent()
           : Value(notes),
+      sex: sex == null && nullToAbsent ? const Value.absent() : Value(sex),
+      color: color == null && nullToAbsent
+          ? const Value.absent()
+          : Value(color),
     );
   }
 
@@ -445,6 +499,8 @@ class Pet extends DataClass implements Insertable<Pet> {
       vetPhone: serializer.fromJson<String?>(json['vetPhone']),
       photoPath: serializer.fromJson<String?>(json['photoPath']),
       notes: serializer.fromJson<String?>(json['notes']),
+      sex: serializer.fromJson<String?>(json['sex']),
+      color: serializer.fromJson<String?>(json['color']),
     );
   }
   @override
@@ -464,6 +520,8 @@ class Pet extends DataClass implements Insertable<Pet> {
       'vetPhone': serializer.toJson<String?>(vetPhone),
       'photoPath': serializer.toJson<String?>(photoPath),
       'notes': serializer.toJson<String?>(notes),
+      'sex': serializer.toJson<String?>(sex),
+      'color': serializer.toJson<String?>(color),
     };
   }
 
@@ -481,6 +539,8 @@ class Pet extends DataClass implements Insertable<Pet> {
     Value<String?> vetPhone = const Value.absent(),
     Value<String?> photoPath = const Value.absent(),
     Value<String?> notes = const Value.absent(),
+    Value<String?> sex = const Value.absent(),
+    Value<String?> color = const Value.absent(),
   }) => Pet(
     remoteId: remoteId.present ? remoteId.value : this.remoteId,
     updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
@@ -495,6 +555,8 @@ class Pet extends DataClass implements Insertable<Pet> {
     vetPhone: vetPhone.present ? vetPhone.value : this.vetPhone,
     photoPath: photoPath.present ? photoPath.value : this.photoPath,
     notes: notes.present ? notes.value : this.notes,
+    sex: sex.present ? sex.value : this.sex,
+    color: color.present ? color.value : this.color,
   );
   Pet copyWithCompanion(PetsCompanion data) {
     return Pet(
@@ -511,6 +573,8 @@ class Pet extends DataClass implements Insertable<Pet> {
       vetPhone: data.vetPhone.present ? data.vetPhone.value : this.vetPhone,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
       notes: data.notes.present ? data.notes.value : this.notes,
+      sex: data.sex.present ? data.sex.value : this.sex,
+      color: data.color.present ? data.color.value : this.color,
     );
   }
 
@@ -529,7 +593,9 @@ class Pet extends DataClass implements Insertable<Pet> {
           ..write('vetName: $vetName, ')
           ..write('vetPhone: $vetPhone, ')
           ..write('photoPath: $photoPath, ')
-          ..write('notes: $notes')
+          ..write('notes: $notes, ')
+          ..write('sex: $sex, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
@@ -549,6 +615,8 @@ class Pet extends DataClass implements Insertable<Pet> {
     vetPhone,
     photoPath,
     notes,
+    sex,
+    color,
   );
   @override
   bool operator ==(Object other) =>
@@ -566,7 +634,9 @@ class Pet extends DataClass implements Insertable<Pet> {
           other.vetName == this.vetName &&
           other.vetPhone == this.vetPhone &&
           other.photoPath == this.photoPath &&
-          other.notes == this.notes);
+          other.notes == this.notes &&
+          other.sex == this.sex &&
+          other.color == this.color);
 }
 
 class PetsCompanion extends UpdateCompanion<Pet> {
@@ -583,6 +653,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
   final Value<String?> vetPhone;
   final Value<String?> photoPath;
   final Value<String?> notes;
+  final Value<String?> sex;
+  final Value<String?> color;
   const PetsCompanion({
     this.remoteId = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -597,6 +669,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     this.vetPhone = const Value.absent(),
     this.photoPath = const Value.absent(),
     this.notes = const Value.absent(),
+    this.sex = const Value.absent(),
+    this.color = const Value.absent(),
   });
   PetsCompanion.insert({
     this.remoteId = const Value.absent(),
@@ -612,6 +686,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     this.vetPhone = const Value.absent(),
     this.photoPath = const Value.absent(),
     this.notes = const Value.absent(),
+    this.sex = const Value.absent(),
+    this.color = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Pet> custom({
     Expression<String>? remoteId,
@@ -627,6 +703,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     Expression<String>? vetPhone,
     Expression<String>? photoPath,
     Expression<String>? notes,
+    Expression<String>? sex,
+    Expression<String>? color,
   }) {
     return RawValuesInsertable({
       if (remoteId != null) 'remote_id': remoteId,
@@ -642,6 +720,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
       if (vetPhone != null) 'vet_phone': vetPhone,
       if (photoPath != null) 'photo_path': photoPath,
       if (notes != null) 'notes': notes,
+      if (sex != null) 'sex': sex,
+      if (color != null) 'color': color,
     });
   }
 
@@ -659,6 +739,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     Value<String?>? vetPhone,
     Value<String?>? photoPath,
     Value<String?>? notes,
+    Value<String?>? sex,
+    Value<String?>? color,
   }) {
     return PetsCompanion(
       remoteId: remoteId ?? this.remoteId,
@@ -674,6 +756,8 @@ class PetsCompanion extends UpdateCompanion<Pet> {
       vetPhone: vetPhone ?? this.vetPhone,
       photoPath: photoPath ?? this.photoPath,
       notes: notes ?? this.notes,
+      sex: sex ?? this.sex,
+      color: color ?? this.color,
     );
   }
 
@@ -719,6 +803,12 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
+    if (sex.present) {
+      map['sex'] = Variable<String>(sex.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
     return map;
   }
 
@@ -737,7 +827,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
           ..write('vetName: $vetName, ')
           ..write('vetPhone: $vetPhone, ')
           ..write('photoPath: $photoPath, ')
-          ..write('notes: $notes')
+          ..write('notes: $notes, ')
+          ..write('sex: $sex, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
@@ -3533,6 +3625,8 @@ typedef $$PetsTableCreateCompanionBuilder = PetsCompanion Function({
   Value<String?> vetPhone,
   Value<String?> photoPath,
   Value<String?> notes,
+  Value<String?> sex,
+  Value<String?> color,
 });
 typedef $$PetsTableUpdateCompanionBuilder = PetsCompanion Function({
   Value<String?> remoteId,
@@ -3548,6 +3642,8 @@ typedef $$PetsTableUpdateCompanionBuilder = PetsCompanion Function({
   Value<String?> vetPhone,
   Value<String?> photoPath,
   Value<String?> notes,
+  Value<String?> sex,
+  Value<String?> color,
 });
 
 final class $$PetsTableReferences
@@ -3698,6 +3794,16 @@ class $$PetsTableFilterComposer extends Composer<_$AppDb, $PetsTable> {
 
   ColumnFilters<String> get notes => $composableBuilder(
     column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sex => $composableBuilder(
+    column: $table.sex,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get color => $composableBuilder(
+    column: $table.color,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3874,6 +3980,16 @@ class $$PetsTableOrderingComposer extends Composer<_$AppDb, $PetsTable> {
     column: $table.notes,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get sex => $composableBuilder(
+    column: $table.sex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PetsTableAnnotationComposer extends Composer<_$AppDb, $PetsTable> {
@@ -3922,6 +4038,12 @@ class $$PetsTableAnnotationComposer extends Composer<_$AppDb, $PetsTable> {
 
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<String> get sex =>
+      $composableBuilder(column: $table.sex, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
 
   Expression<T> healthRecordsRefs<T extends Object>(
     Expression<T> Function($$HealthRecordsTableAnnotationComposer a) f,
@@ -4070,6 +4192,8 @@ class $$PetsTableTableManager
                 Value<String?> vetPhone = const Value.absent(),
                 Value<String?> photoPath = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
+                Value<String?> sex = const Value.absent(),
+                Value<String?> color = const Value.absent(),
               }) => PetsCompanion(
                 remoteId: remoteId,
                 updatedAt: updatedAt,
@@ -4084,6 +4208,8 @@ class $$PetsTableTableManager
                 vetPhone: vetPhone,
                 photoPath: photoPath,
                 notes: notes,
+                sex: sex,
+                color: color,
               ),
           createCompanionCallback:
               ({
@@ -4100,6 +4226,8 @@ class $$PetsTableTableManager
                 Value<String?> vetPhone = const Value.absent(),
                 Value<String?> photoPath = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
+                Value<String?> sex = const Value.absent(),
+                Value<String?> color = const Value.absent(),
               }) => PetsCompanion.insert(
                 remoteId: remoteId,
                 updatedAt: updatedAt,
@@ -4114,6 +4242,8 @@ class $$PetsTableTableManager
                 vetPhone: vetPhone,
                 photoPath: photoPath,
                 notes: notes,
+                sex: sex,
+                color: color,
               ),
           withReferenceMapper: (p0) => p0
               .map(

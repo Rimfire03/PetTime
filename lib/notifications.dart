@@ -11,7 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
 import 'reminder_time.dart';
-import 'screens/pet_detail_screen.dart' show recordLabel;
+import 'labels.dart' show recordLabel;
 
 final _plugin = FlutterLocalNotificationsPlugin();
 

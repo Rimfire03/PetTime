@@ -1,3 +1,5 @@
+import 'suggestions.dart';
+
 /// Breed names offered while typing, per species (the keys of `Pet.species`).
 /// Names are the usual international ones; the field stays free text, so any other breed can be typed.
 /// "other" has no list.
@@ -45,33 +47,7 @@ const _rabbits = [
   'Blanc de Vienne', 'Croisé',
 ];
 
-String _fold(String s) {
-  const from = 'àâäáãåçéèêëíìîïñóòôöõúùûüýÿœæ';
-  const to = 'aaaaaaceeeeiiiinooooouuuuyyoa';
-  final b = StringBuffer();
-  for (final c in s.toLowerCase().split('')) {
-    final i = from.indexOf(c);
-    b.write(i < 0 ? c : to[i]);
-  }
-  return b.toString();
-}
-
-/// Up to [limit] breeds for [species] matching what has been typed so far: names that start with it
-/// first, then names that contain it (also inside a word, "retriever" finds "Golden Retriever").
-/// Ignores case and accents. Nothing for an empty query, an unknown species or an exact match.
-List<String> suggestBreeds(String species, String query, {int limit = 8}) {
-  final q = _fold(query.trim());
-  final all = breedsBySpecies[species];
-  if (q.isEmpty || all == null) return const [];
-  final starts = <String>[], contains = <String>[];
-  for (final name in all) {
-    final n = _fold(name);
-    if (n == q) return const []; // already complete
-    if (n.startsWith(q)) {
-      starts.add(name);
-    } else if (n.contains(q)) {
-      contains.add(name);
-    }
-  }
-  return [...starts, ...contains].take(limit).toList();
-}
+/// Up to [limit] breeds for [species] matching what has been typed so far (see [filterSuggestions]).
+/// Nothing for an empty query, an unknown species or an exact match.
+List<String> suggestBreeds(String species, String query, {int limit = 8}) =>
+    filterSuggestions(breedsBySpecies[species] ?? const [], query, limit: limit);

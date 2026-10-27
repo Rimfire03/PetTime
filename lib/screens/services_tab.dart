@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import '../contact_links.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
-
-String contactKindLabel(AppLocalizations t, ContactKind k) => switch (k) {
-      ContactKind.groomer => t.groomer,
-      ContactKind.petSitter => t.petSitter,
-      ContactKind.boarding => t.boarding,
-      ContactKind.other => t.other,
-    };
+import '../labels.dart' show contactKindLabel;
+import '../suggestions.dart';
+import '../widgets/suggest_field.dart';
 
 IconData _icon(ContactKind k) => switch (k) {
       ContactKind.groomer => Icons.content_cut,
@@ -103,13 +99,26 @@ class _ServiceDialogState extends State<_ServiceDialog> {
   late final _website = TextEditingController(text: widget.contact?.website);
   late final _notes = TextEditingController(text: widget.contact?.notes);
   late ContactKind _kind = widget.contact?.kind ?? ContactKind.groomer;
-  bool _nameMissing = false;
+  final _form = GlobalKey<FormState>();
+  List<String> _names = const [], _addresses = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.wait([usedValues('pet_contacts', 'name'), usedValues('pet_contacts', 'address')]).then((v) {
+      if (!mounted) return;
+      setState(() {
+        _names = v[0];
+        _addresses = v[1];
+      });
+    });
+  }
 
   String? _orNull(TextEditingController c) => c.text.trim().isEmpty ? null : c.text.trim();
 
   Future<void> _save() async {
+    if (!_form.currentState!.validate()) return;
     final name = _name.text.trim();
-    if (name.isEmpty) return setState(() => _nameMissing = true);
     final c = PetContactsCompanion(
       petId: Value(widget.petId),
       kind: Value(_kind),
@@ -139,7 +148,7 @@ class _ServiceDialogState extends State<_ServiceDialog> {
     return AlertDialog(
       title: Text(t.addService),
       content: SingleChildScrollView(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
+        child: Form(key: _form, child: Column(mainAxisSize: MainAxisSize.min, children: [
           DropdownButtonFormField<ContactKind>(
             initialValue: _kind,
             decoration: InputDecoration(labelText: t.serviceKind),
@@ -149,12 +158,14 @@ class _ServiceDialogState extends State<_ServiceDialog> {
             ],
             onChanged: (k) => setState(() => _kind = k!),
           ),
-          TextField(
+          SuggestField(
             controller: _name,
             autofocus: true,
-            decoration: InputDecoration(labelText: t.name, errorText: _nameMissing ? t.required : null),
+            label: t.name,
+            validator: (v) => (v == null || v.trim().isEmpty) ? t.required : null,
+            options: (q) => filterSuggestions(_names, q),
           ),
-          TextField(controller: _address, decoration: InputDecoration(labelText: t.address)),
+          SuggestField(controller: _address, label: t.address, options: (q) => filterSuggestions(_addresses, q)),
           TextField(
             controller: _phone,
             keyboardType: TextInputType.phone,
@@ -166,7 +177,7 @@ class _ServiceDialogState extends State<_ServiceDialog> {
             decoration: InputDecoration(labelText: t.bookingLink),
           ),
           TextField(controller: _notes, maxLines: 2, decoration: InputDecoration(labelText: t.notes)),
-        ]),
+        ])),
       ),
       actions: [
         if (widget.contact != null) TextButton(onPressed: _delete, child: Text(t.delete)),

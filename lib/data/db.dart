@@ -29,6 +29,8 @@ class Pets extends Table with SyncColumns {
   TextColumn get vetPhone => text().nullable()();
   TextColumn get photoPath => text().nullable()();
   TextColumn get notes => text().nullable()();
+  TextColumn get sex => text().nullable()(); // 'male' | 'female', null = unknown
+  TextColumn get color => text().nullable()();
 }
 
 class HealthRecords extends Table with SyncColumns {
@@ -96,7 +98,7 @@ class AppDb extends _$AppDb {
   AppDb.forTesting(super.e);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -126,6 +128,10 @@ class AppDb extends _$AppDb {
           if (from < 3) {
             await m.createTable(petContacts);
             await _createSyncTriggers('pet_contacts');
+          }
+          if (from < 4) {
+            await m.addColumn(pets, pets.sex);
+            await m.addColumn(pets, pets.color);
           }
         },
         beforeOpen: (_) => customStatement('PRAGMA foreign_keys = ON'),

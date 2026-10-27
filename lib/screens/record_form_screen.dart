@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../care_catalog.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
-import 'pet_detail_screen.dart' show recordLabel;
+import '../labels.dart' show recordLabel;
 
 class RecordFormScreen extends StatefulWidget {
   const RecordFormScreen({super.key, required this.petId, this.record});

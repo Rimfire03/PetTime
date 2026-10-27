@@ -310,6 +310,97 @@ class AppLocalizationsIt extends AppLocalizations {
   String get appointmentSaved => 'Appuntamento salvato.';
 
   @override
+  String get wizardNameQ => 'Come si chiama il tuo animale?';
+
+  @override
+  String wizardSpeciesQ(String name) {
+    return 'Che tipo di animale è $name?';
+  }
+
+  @override
+  String wizardSexQ(String name) {
+    return '$name è maschio o femmina?';
+  }
+
+  @override
+  String wizardBreedQ(String name) {
+    return 'Di che razza è $name?';
+  }
+
+  @override
+  String wizardBirthQ(String name) {
+    return 'Quando è nato $name?';
+  }
+
+  @override
+  String wizardColorQ(String name) {
+    return 'Di che colore è il pelo di $name?';
+  }
+
+  @override
+  String wizardPhotoQ(String name) {
+    return 'Aggiungi una foto di $name';
+  }
+
+  @override
+  String wizardChipQ(String name) {
+    return 'Qual è il numero di microchip o tatuaggio di $name?';
+  }
+
+  @override
+  String wizardWeightQ(String name) {
+    return 'Quanto pesa $name?';
+  }
+
+  @override
+  String wizardVetQ(String name) {
+    return 'Chi è il veterinario di $name?';
+  }
+
+  @override
+  String get wizardVetPhoneQ => 'Qual è il numero di telefono del veterinario?';
+
+  @override
+  String wizardVaccineQ(String name) {
+    return '$name ha fatto un vaccino di recente?';
+  }
+
+  @override
+  String wizardNotesQ(String name) {
+    return 'Qualcosa da ricordare su $name?';
+  }
+
+  @override
+  String get next => 'Avanti';
+
+  @override
+  String get skip => 'Salta';
+
+  @override
+  String get finish => 'Fine';
+
+  @override
+  String get male => 'Maschio';
+
+  @override
+  String get female => 'Femmina';
+
+  @override
+  String get unknown => 'Sconosciuto';
+
+  @override
+  String get sex => 'Sesso';
+
+  @override
+  String get color => 'Colore';
+
+  @override
+  String get chooseDate => 'Scegli una data';
+
+  @override
+  String get addPhoto => 'Aggiungi una foto';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

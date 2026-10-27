@@ -652,6 +652,144 @@ abstract class AppLocalizations {
   /// **'Appointment saved.'**
   String get appointmentSaved;
 
+  /// No description provided for @wizardNameQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your pet\'s name?'**
+  String get wizardNameQ;
+
+  /// No description provided for @wizardSpeciesQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What kind of animal is {name}?'**
+  String wizardSpeciesQ(String name);
+
+  /// No description provided for @wizardSexQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Is {name} a male or a female?'**
+  String wizardSexQ(String name);
+
+  /// No description provided for @wizardBreedQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What breed is {name}?'**
+  String wizardBreedQ(String name);
+
+  /// No description provided for @wizardBirthQ.
+  ///
+  /// In en, this message translates to:
+  /// **'When was {name} born?'**
+  String wizardBirthQ(String name);
+
+  /// No description provided for @wizardColorQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What colour is {name}\'s coat?'**
+  String wizardColorQ(String name);
+
+  /// No description provided for @wizardPhotoQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo of {name}'**
+  String wizardPhotoQ(String name);
+
+  /// No description provided for @wizardChipQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What is {name}\'s microchip or tattoo number?'**
+  String wizardChipQ(String name);
+
+  /// No description provided for @wizardWeightQ.
+  ///
+  /// In en, this message translates to:
+  /// **'How much does {name} weigh?'**
+  String wizardWeightQ(String name);
+
+  /// No description provided for @wizardVetQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is {name}\'s vet?'**
+  String wizardVetQ(String name);
+
+  /// No description provided for @wizardVetPhoneQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What is the vet\'s phone number?'**
+  String get wizardVetPhoneQ;
+
+  /// No description provided for @wizardVaccineQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Has {name} had a vaccine recently?'**
+  String wizardVaccineQ(String name);
+
+  /// No description provided for @wizardNotesQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything to remember about {name}?'**
+  String wizardNotesQ(String name);
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
+
+  /// No description provided for @male.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get male;
+
+  /// No description provided for @female.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get female;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @sex.
+  ///
+  /// In en, this message translates to:
+  /// **'Sex'**
+  String get sex;
+
+  /// No description provided for @color.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get color;
+
+  /// No description provided for @chooseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date'**
+  String get chooseDate;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo'**
+  String get addPhoto;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

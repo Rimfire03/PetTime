@@ -311,6 +311,98 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appointmentSaved => 'Rendez-vous enregistré.';
 
   @override
+  String get wizardNameQ => 'Comment s\'appelle ton animal ?';
+
+  @override
+  String wizardSpeciesQ(String name) {
+    return 'Quel type d\'animal est $name ?';
+  }
+
+  @override
+  String wizardSexQ(String name) {
+    return '$name est-il un mâle ou une femelle ?';
+  }
+
+  @override
+  String wizardBreedQ(String name) {
+    return 'De quelle race est $name ?';
+  }
+
+  @override
+  String wizardBirthQ(String name) {
+    return 'Quand $name est-il né ?';
+  }
+
+  @override
+  String wizardColorQ(String name) {
+    return 'De quelle couleur est le pelage de $name ?';
+  }
+
+  @override
+  String wizardPhotoQ(String name) {
+    return 'Ajoute une photo de $name';
+  }
+
+  @override
+  String wizardChipQ(String name) {
+    return 'Quel est le numéro de puce ou de tatouage de $name ?';
+  }
+
+  @override
+  String wizardWeightQ(String name) {
+    return 'Combien pèse $name ?';
+  }
+
+  @override
+  String wizardVetQ(String name) {
+    return 'Qui est le vétérinaire de $name ?';
+  }
+
+  @override
+  String get wizardVetPhoneQ =>
+      'Quel est le numéro de téléphone du vétérinaire ?';
+
+  @override
+  String wizardVaccineQ(String name) {
+    return '$name a-t-il eu un vaccin récemment ?';
+  }
+
+  @override
+  String wizardNotesQ(String name) {
+    return 'Quelque chose à retenir sur $name ?';
+  }
+
+  @override
+  String get next => 'Suivant';
+
+  @override
+  String get skip => 'Passer';
+
+  @override
+  String get finish => 'Terminer';
+
+  @override
+  String get male => 'Mâle';
+
+  @override
+  String get female => 'Femelle';
+
+  @override
+  String get unknown => 'Inconnu';
+
+  @override
+  String get sex => 'Sexe';
+
+  @override
+  String get color => 'Couleur';
+
+  @override
+  String get chooseDate => 'Choisir une date';
+
+  @override
+  String get addPhoto => 'Ajouter une photo';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

@@ -1,4 +1,5 @@
 import 'data/db.dart';
+import 'suggestions.dart' show foldText;
 
 /// One suggestion in the "add a care" form: a name and how often it is usually repeated.
 /// [repeatMonths] only proposes the next due date; the vet's advice always wins, and the person
@@ -82,27 +83,16 @@ const careCatalog = <String, Map<RecordType, List<CareSuggestion>>>{
   },
 };
 
-String _fold(String s) {
-  const from = 'àâäáãåçéèêëíìîïñóòôöõúùûüýÿœæ';
-  const to = 'aaaaaaceeeeiiiinooooouuuuyyoa';
-  final b = StringBuffer();
-  for (final c in s.toLowerCase().split('')) {
-    final i = from.indexOf(c);
-    b.write(i < 0 ? c : to[i]);
-  }
-  return b.toString();
-}
-
 /// Suggestions for [species] and [type] that match the typed [query] (ignoring case and accents).
 /// An empty query returns the whole list, so the field offers the catalogue as soon as it is opened.
 List<CareSuggestion> suggestCare(String species, RecordType type, String query, String languageCode) {
   final all = careCatalog[species]?[type];
   if (all == null) return const [];
-  final q = _fold(query.trim());
+  final q = foldText(query.trim());
   if (q.isEmpty) return all;
   return [
     for (final s in all)
-      if (_fold(s.nameFor(languageCode)).contains(q) || _fold(s.fr).contains(q) || _fold(s.en).contains(q)) s,
+      if (foldText(s.nameFor(languageCode)).contains(q) || foldText(s.fr).contains(q) || foldText(s.en).contains(q)) s,
   ];
 }
 

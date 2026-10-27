@@ -6,7 +6,9 @@ import '../breeds.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
-import 'pets_screen.dart' show speciesLabel;
+import '../suggestions.dart';
+import '../widgets/suggest_field.dart';
+import '../labels.dart' show speciesLabel;
 
 class PetFormScreen extends StatefulWidget {
   const PetFormScreen({super.key, this.pet});
@@ -21,12 +23,14 @@ class _PetFormScreenState extends State<PetFormScreen> {
   late final _name = TextEditingController(text: widget.pet?.name);
   late final _breed = TextEditingController(text: widget.pet?.breed);
   late final _chip = TextEditingController(text: widget.pet?.chip);
+  late final _color = TextEditingController(text: widget.pet?.color);
   late final _vet = TextEditingController(text: widget.pet?.vetName);
   late final _vetPhone = TextEditingController(text: widget.pet?.vetPhone);
   late final _notes = TextEditingController(text: widget.pet?.notes);
   late String _species = widget.pet?.species ?? 'dog';
   late DateTime? _birth = widget.pet?.birthDate;
-  final _breedFocus = FocusNode();
+  late String? _sex = widget.pet?.sex;
+  List<String> _vets = const [];
   late String? _photo = widget.pet?.photoPath;
   bool _saved = false;
 
@@ -46,9 +50,16 @@ class _PetFormScreenState extends State<PetFormScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    usedValues('pets', 'vet_name').then((v) {
+      if (mounted) setState(() => _vets = v);
+    });
+  }
+
+  @override
   void dispose() {
     if (!_saved && _photoIsDraft) deletePhoto(_photo);
-    _breedFocus.dispose();
     super.dispose();
   }
 
@@ -62,6 +73,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
       species: Value(_species),
       breed: Value(_nullIfEmpty(_breed)),
       birthDate: Value(_birth),
+      sex: Value(_sex),
+      color: Value(_nullIfEmpty(_color)),
       chip: Value(_nullIfEmpty(_chip)),
       vetName: Value(_nullIfEmpty(_vet)),
       vetPhone: Value(_nullIfEmpty(_vetPhone)),
@@ -92,6 +105,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
+    final lang = Localizations.localeOf(context).languageCode;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.pet == null ? t.addPet : t.editPet),
@@ -140,31 +154,27 @@ class _PetFormScreenState extends State<PetFormScreen> {
             ),
             const SizedBox(height: 12),
             // suggestions follow the chosen species; any other breed can still be typed freely
-            RawAutocomplete<String>(
-              textEditingController: _breed,
-              focusNode: _breedFocus,
-              optionsBuilder: (value) => suggestBreeds(_species, value.text),
-              fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
-                controller: controller,
-                focusNode: focusNode,
-                decoration: InputDecoration(labelText: t.breed),
-              ),
-              optionsViewBuilder: (context, onSelected, options) => Align(
-                alignment: Alignment.topLeft,
-                child: Material(
-                  elevation: 4,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 240, maxWidth: 360),
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      children: [
-                        for (final o in options) ListTile(dense: true, title: Text(o), onTap: () => onSelected(o)),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            SuggestField(
+              controller: _breed,
+              label: t.breed,
+              options: (q) => suggestBreeds(_species, q),
+            ),
+            const SizedBox(height: 12),
+            SuggestField(
+              controller: _color,
+              label: t.color,
+              options: (q) => filterSuggestions(colorsFor(_species, lang), q, allWhenEmpty: true),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String?>(
+              initialValue: _sex,
+              decoration: InputDecoration(labelText: t.sex),
+              items: [
+                DropdownMenuItem(value: null, child: Text(t.unknown)),
+                DropdownMenuItem(value: 'male', child: Text(t.male)),
+                DropdownMenuItem(value: 'female', child: Text(t.female)),
+              ],
+              onChanged: (v) => _sex = v,
             ),
             const SizedBox(height: 12),
             ListTile(
@@ -184,7 +194,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
             ),
             TextFormField(controller: _chip, decoration: InputDecoration(labelText: t.chip)),
             const SizedBox(height: 12),
-            TextFormField(controller: _vet, decoration: InputDecoration(labelText: t.vetName)),
+            SuggestField(controller: _vet, label: t.vetName, options: (q) => filterSuggestions(_vets, q)),
             const SizedBox(height: 12),
             TextFormField(
               controller: _vetPhone,

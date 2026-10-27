@@ -6,6 +6,8 @@ import '../calendar_link.dart';
 import '../contact_links.dart' show openUri;
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../suggestions.dart';
+import '../widgets/suggest_field.dart';
 
 class AppointmentsTab extends StatefulWidget {
   const AppointmentsTab({super.key, required this.petId});
@@ -73,11 +75,30 @@ class _AppointmentDialogState extends State<_AppointmentDialog> {
   late final _place = TextEditingController(text: widget.appointment?.place);
   late final _days = TextEditingController(text: '${widget.appointment?.remindDaysBefore ?? 1}');
   late DateTime _at = widget.appointment?.at ?? DateTime.now().add(const Duration(days: 1));
-  bool _titleMissing = false;
+  final _form = GlobalKey<FormState>();
+  List<String> _reasons = const [], _places = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final reasons = await usedValues('appointments', 'title');
+    final places = await usedValues('appointments', 'place');
+    final pet = await (db.select(db.pets)..where((p) => p.id.equals(widget.petId))).getSingleOrNull();
+    final vet = pet?.vetName?.trim();
+    if (!mounted) return;
+    setState(() {
+      _reasons = reasons;
+      _places = [if (vet != null && vet.isNotEmpty) vet, ...places.where((p) => p != vet)];
+    });
+  }
 
   Future<void> _save() async {
+    if (!_form.currentState!.validate()) return;
     final title = _title.text.trim();
-    if (title.isEmpty) return setState(() => _titleMissing = true);
     final place = _place.text.trim();
     final c = AppointmentsCompanion(
       petId: Value(widget.petId),
@@ -118,21 +139,23 @@ class _AppointmentDialogState extends State<_AppointmentDialog> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
+    final lang = Localizations.localeOf(context).languageCode;
     return AlertDialog(
       title: Text(t.addAppointment),
       content: SingleChildScrollView(
-        child: Column(
+        child: Form(
+          key: _form,
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
+            SuggestField(
               controller: _title,
               autofocus: true,
-              decoration: InputDecoration(
-                labelText: t.appointmentTitle,
-                errorText: _titleMissing ? t.required : null,
-              ),
+              label: t.appointmentTitle,
+              validator: (v) => (v == null || v.trim().isEmpty) ? t.required : null,
+              options: (q) => filterSuggestions([...reasonsFor(lang), ..._reasons], q, allWhenEmpty: true),
             ),
-            TextField(controller: _place, decoration: InputDecoration(labelText: t.place)),
+            SuggestField(controller: _place, label: t.place, options: (q) => filterSuggestions(_places, q)),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(t.date),
@@ -165,6 +188,7 @@ class _AppointmentDialogState extends State<_AppointmentDialog> {
               decoration: InputDecoration(labelText: t.remindDaysBefore),
             ),
           ],
+        ),
         ),
       ),
       actions: [

@@ -10,17 +10,10 @@ import '../photos.dart';
 import '../watermark.dart';
 import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
-import 'pets_screen.dart' show speciesLabel;
+import '../labels.dart';
 import 'record_form_screen.dart';
 import 'services_tab.dart';
 import 'weights_tab.dart';
-
-String recordLabel(AppLocalizations t, RecordType r) => switch (r) {
-      RecordType.vaccine => t.vaccine,
-      RecordType.dewormer => t.dewormer,
-      RecordType.flea => t.flea,
-      RecordType.operation => t.operation,
-    };
 
 class PetDetailScreen extends StatefulWidget {
   const PetDetailScreen({super.key, required this.petId});
@@ -109,6 +102,8 @@ class _Info extends StatelessWidget {
     final rows = <(String, String?)>[
       (t.species, speciesLabel(t, pet.species)),
       (t.breed, pet.breed),
+      (t.sex, pet.sex == null ? null : (pet.sex == 'male' ? t.male : t.female)),
+      (t.color, pet.color),
       (t.birthDate, pet.birthDate == null ? null : DateFormat.yMd(locale).format(pet.birthDate!)),
       (t.chip, pet.chip),
       (t.vetName, pet.vetName),
