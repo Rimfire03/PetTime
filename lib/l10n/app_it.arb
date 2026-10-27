@@ -40,6 +40,9 @@
   "place": "Luogo",
   "time": "Ora",
   "noAppointments": "Nessun appuntamento.",
+  "takePhoto": "Scatta una foto",
+  "chooseFromGallery": "Scegli dalla galleria",
+  "removePhoto": "Rimuovi foto",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

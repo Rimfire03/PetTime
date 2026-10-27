@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../photos.dart';
 import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
 import 'pets_screen.dart' show speciesLabel;
@@ -91,6 +92,10 @@ class _Info extends StatelessWidget {
     ];
     return ListView(
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Center(child: PetAvatar(name: pet.name, photo: pet.photoPath, radius: 56)),
+        ),
         for (final (label, value) in rows)
           if (value != null) ListTile(title: Text(label), subtitle: Text(value)),
       ],

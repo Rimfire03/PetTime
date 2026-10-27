@@ -40,6 +40,9 @@
   "place": "Local",
   "time": "Hora",
   "noAppointments": "Sem consultas.",
+  "takePhoto": "Tirar uma foto",
+  "chooseFromGallery": "Escolher da galeria",
+  "removePhoto": "Remover foto",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../photos.dart';
 import 'pets_screen.dart' show speciesLabel;
 
 class PetFormScreen extends StatefulWidget {
@@ -24,6 +25,29 @@ class _PetFormScreenState extends State<PetFormScreen> {
   late final _notes = TextEditingController(text: widget.pet?.notes);
   late String _species = widget.pet?.species ?? 'dog';
   late DateTime? _birth = widget.pet?.birthDate;
+  late String? _photo = widget.pet?.photoPath;
+  bool _saved = false;
+
+  /// A photo picked in this form but not saved yet; safe to delete.
+  bool get _photoIsDraft => _photo != null && _photo != widget.pet?.photoPath;
+
+  Future<void> _pickPhoto() async {
+    final name = await pickPhoto(context);
+    if (name == null) return;
+    if (_photoIsDraft) deletePhoto(_photo);
+    setState(() => _photo = name);
+  }
+
+  void _removePhoto() {
+    if (_photoIsDraft) deletePhoto(_photo);
+    setState(() => _photo = null);
+  }
+
+  @override
+  void dispose() {
+    if (!_saved && _photoIsDraft) deletePhoto(_photo);
+    super.dispose();
+  }
 
   String? _nullIfEmpty(TextEditingController c) =>
       c.text.trim().isEmpty ? null : c.text.trim();
@@ -39,6 +63,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
       vetName: Value(_nullIfEmpty(_vet)),
       vetPhone: Value(_nullIfEmpty(_vetPhone)),
       notes: Value(_nullIfEmpty(_notes)),
+      photoPath: Value(_photo),
     );
     final id = widget.pet?.id;
     if (id == null) {
@@ -46,11 +71,16 @@ class _PetFormScreenState extends State<PetFormScreen> {
     } else {
       await (db.update(db.pets)..where((p) => p.id.equals(id))).write(companion);
     }
+    _saved = true;
+    if (widget.pet?.photoPath != _photo) deletePhoto(widget.pet?.photoPath);
     if (mounted) Navigator.pop(context);
   }
 
   Future<void> _delete() async {
     await (db.delete(db.pets)..where((p) => p.id.equals(widget.pet!.id))).go();
+    _saved = true;
+    deletePhoto(widget.pet!.photoPath);
+    if (_photoIsDraft) deletePhoto(_photo);
     if (!mounted) return;
     Navigator.of(context).popUntil((r) => r.isFirst);
   }
@@ -75,6 +105,21 @@ class _PetFormScreenState extends State<PetFormScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            Center(
+              child: GestureDetector(
+                onTap: _pickPhoto,
+                child: Stack(alignment: Alignment.bottomRight, children: [
+                  PetAvatar(
+                      name: _name.text.trim().isEmpty ? '?' : _name.text.trim(),
+                      photo: _photo,
+                      radius: 48),
+                  const CircleAvatar(radius: 14, child: Icon(Icons.photo_camera, size: 16)),
+                ]),
+              ),
+            ),
+            if (_photo != null)
+              TextButton(onPressed: _removePhoto, child: Text(t.removePhoto)),
+            const SizedBox(height: 12),
             TextFormField(
               controller: _name,
               decoration: InputDecoration(labelText: t.name),

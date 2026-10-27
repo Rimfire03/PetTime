@@ -3,10 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'l10n/app_localizations.dart';
 import 'notifications.dart';
+import 'photos.dart';
 import 'screens/pets_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initPhotos();
   try {
     await initNotifications();
     watchReminders();

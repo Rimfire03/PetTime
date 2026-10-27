@@ -40,6 +40,9 @@
   "place": "Lieu",
   "time": "Heure",
   "noAppointments": "Aucun rendez-vous.",
+  "takePhoto": "Prendre une photo",
+  "chooseFromGallery": "Choisir dans la galerie",
+  "removePhoto": "Supprimer la photo",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

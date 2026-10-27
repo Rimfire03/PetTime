@@ -130,6 +130,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noAppointments => 'Aucun rendez-vous.';
 
   @override
+  String get takePhoto => 'Prendre une photo';
+
+  @override
+  String get chooseFromGallery => 'Choisir dans la galerie';
+
+  @override
+  String get removePhoto => 'Supprimer la photo';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

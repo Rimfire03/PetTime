@@ -40,6 +40,9 @@
   "place": "Ort",
   "time": "Uhrzeit",
   "noAppointments": "Keine Termine.",
+  "takePhoto": "Foto aufnehmen",
+  "chooseFromGallery": "Aus der Galerie wählen",
+  "removePhoto": "Foto entfernen",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

@@ -130,6 +130,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noAppointments => 'Sin citas.';
 
   @override
+  String get takePhoto => 'Hacer una foto';
+
+  @override
+  String get chooseFromGallery => 'Elegir de la galería';
+
+  @override
+  String get removePhoto => 'Quitar foto';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

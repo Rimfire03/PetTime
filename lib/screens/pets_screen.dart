@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../photos.dart';
 import 'pet_detail_screen.dart';
 import 'pet_form_screen.dart';
 
@@ -22,7 +23,7 @@ class PetsScreen extends StatelessWidget {
             children: [
               for (final p in pets)
                 ListTile(
-                  leading: CircleAvatar(child: Text(p.name.characters.first.toUpperCase())),
+                  leading: PetAvatar(name: p.name, photo: p.photoPath),
                   title: Text(p.name),
                   subtitle: Text(p.breed ?? speciesLabel(t, p.species)),
                   onTap: () => Navigator.push(context,
