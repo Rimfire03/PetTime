@@ -196,6 +196,45 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo conectar con el servidor. Revisa tu conexión.';
 
   @override
+  String get operation => 'Operación';
+
+  @override
+  String get services => 'Servicios';
+
+  @override
+  String get addService => 'Añadir un servicio';
+
+  @override
+  String get serviceKind => 'Tipo';
+
+  @override
+  String get groomer => 'Peluquería';
+
+  @override
+  String get petSitter => 'Cuidador';
+
+  @override
+  String get boarding => 'Residencia';
+
+  @override
+  String get address => 'Dirección';
+
+  @override
+  String get phone => 'Teléfono';
+
+  @override
+  String get bookingLink => 'Enlace de reserva o sitio web';
+
+  @override
+  String get noServices => 'Sin servicios.';
+
+  @override
+  String get call => 'Llamar';
+
+  @override
+  String get openLink => 'Abrir enlace';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

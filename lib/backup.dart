@@ -32,6 +32,7 @@ Future<Map<String, Object?>> buildBackup([AppDb? database]) async {
     'healthRecords': [for (final r in await db.select(db.healthRecords).get()) r.toJson()],
     'weights': [for (final w in await db.select(db.weights).get()) w.toJson()],
     'appointments': [for (final a in await db.select(db.appointments).get()) a.toJson()],
+    'contacts': [for (final c in await db.select(db.petContacts).get()) c.toJson()],
     'photos': photos,
   };
 }
@@ -42,8 +43,9 @@ Future<void> restoreBackup(Map<String, Object?> json, [AppDb? database]) async {
   if (json['format'] != _format || json['version'] != _version) {
     throw const FormatException('not a PetTime backup');
   }
+  // 'contacts' is missing from backups made before services existed
   List<Map<String, Object?>> rows(String key) =>
-      [for (final e in json[key]! as List) (e as Map).cast<String, Object?>()];
+      [for (final e in (json[key] ?? const []) as List) (e as Map).cast<String, Object?>()];
 
   final photos = <String, List<int>>{
     for (final e in (json['photos']! as Map).entries)
@@ -79,6 +81,11 @@ Future<void> restoreBackup(Map<String, Object?> json, [AppDb? database]) async {
 
   final db = database ?? _defaultDb;
   // applyingRemote: wiping shared pets here must not tell the server to delete them
+  final contacts = [
+    for (final r in rows('contacts'))
+      PetContact.fromJson(r).copyWith(
+          remoteId: noSync.remoteId, updatedAt: noSync.updatedAt, dirty: noSync.dirty),
+  ];
   await db.applyingRemote(() async {
     await db.delete(db.pets).go(); // cascades to the other tables
     await db.batch((b) {
@@ -86,6 +93,7 @@ Future<void> restoreBackup(Map<String, Object?> json, [AppDb? database]) async {
       b.insertAll(db.healthRecords, records, mode: InsertMode.insertOrReplace);
       b.insertAll(db.weights, weights, mode: InsertMode.insertOrReplace);
       b.insertAll(db.appointments, appointments, mode: InsertMode.insertOrReplace);
+      b.insertAll(db.petContacts, contacts, mode: InsertMode.insertOrReplace);
     });
   });
   replaceAllPhotos(photos);

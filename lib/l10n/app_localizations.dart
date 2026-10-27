@@ -472,6 +472,84 @@ abstract class AppLocalizations {
   /// **'Could not reach the server. Check your connection.'**
   String get syncFailed;
 
+  /// No description provided for @operation.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation'**
+  String get operation;
+
+  /// No description provided for @services.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get services;
+
+  /// No description provided for @addService.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a service'**
+  String get addService;
+
+  /// No description provided for @serviceKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get serviceKind;
+
+  /// No description provided for @groomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Groomer'**
+  String get groomer;
+
+  /// No description provided for @petSitter.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet sitter'**
+  String get petSitter;
+
+  /// No description provided for @boarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Boarding'**
+  String get boarding;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @bookingLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking link or website'**
+  String get bookingLink;
+
+  /// No description provided for @noServices.
+  ///
+  /// In en, this message translates to:
+  /// **'No service yet.'**
+  String get noServices;
+
+  /// No description provided for @call.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get call;
+
+  /// No description provided for @openLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get openLink;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

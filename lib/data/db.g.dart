@@ -2347,6 +2347,658 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
   }
 }
 
+class $PetContactsTable extends PetContacts
+    with TableInfo<$PetContactsTable, PetContact> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PetContactsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  @override
+  late final GeneratedColumn<int> petId = GeneratedColumn<int>(
+    'pet_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES pets (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<ContactKind, int> kind =
+      GeneratedColumn<int>(
+        'kind',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<ContactKind>($PetContactsTable.$converterkind);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _addressMeta = const VerificationMeta(
+    'address',
+  );
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+    'address',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
+    'phone',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _websiteMeta = const VerificationMeta(
+    'website',
+  );
+  @override
+  late final GeneratedColumn<String> website = GeneratedColumn<String>(
+    'website',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    remoteId,
+    updatedAt,
+    dirty,
+    id,
+    petId,
+    kind,
+    name,
+    address,
+    phone,
+    website,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'pet_contacts';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PetContact> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_petIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('address')) {
+      context.handle(
+        _addressMeta,
+        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+        _phoneMeta,
+        phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta),
+      );
+    }
+    if (data.containsKey('website')) {
+      context.handle(
+        _websiteMeta,
+        website.isAcceptableOrUnknown(data['website']!, _websiteMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PetContact map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PetContact(
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      ),
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      ),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}pet_id'],
+      )!,
+      kind: $PetContactsTable.$converterkind.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}kind'],
+        )!,
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      address: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address'],
+      ),
+      phone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone'],
+      ),
+      website: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}website'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+    );
+  }
+
+  @override
+  $PetContactsTable createAlias(String alias) {
+    return $PetContactsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ContactKind, int, int> $converterkind =
+      const EnumIndexConverter<ContactKind>(ContactKind.values);
+}
+
+class PetContact extends DataClass implements Insertable<PetContact> {
+  final String? remoteId;
+  final int? updatedAt;
+  final bool? dirty;
+  final int id;
+  final int petId;
+  final ContactKind kind;
+  final String name;
+  final String? address;
+  final String? phone;
+  final String? website;
+  final String? notes;
+  const PetContact({
+    this.remoteId,
+    this.updatedAt,
+    this.dirty,
+    required this.id,
+    required this.petId,
+    required this.kind,
+    required this.name,
+    this.address,
+    this.phone,
+    this.website,
+    this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<int>(updatedAt);
+    }
+    if (!nullToAbsent || dirty != null) {
+      map['dirty'] = Variable<bool>(dirty);
+    }
+    map['id'] = Variable<int>(id);
+    map['pet_id'] = Variable<int>(petId);
+    {
+      map['kind'] = Variable<int>($PetContactsTable.$converterkind.toSql(kind));
+    }
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || phone != null) {
+      map['phone'] = Variable<String>(phone);
+    }
+    if (!nullToAbsent || website != null) {
+      map['website'] = Variable<String>(website);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  PetContactsCompanion toCompanion(bool nullToAbsent) {
+    return PetContactsCompanion(
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      dirty: dirty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dirty),
+      id: Value(id),
+      petId: Value(petId),
+      kind: Value(kind),
+      name: Value(name),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      phone: phone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phone),
+      website: website == null && nullToAbsent
+          ? const Value.absent()
+          : Value(website),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+    );
+  }
+
+  factory PetContact.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PetContact(
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
+      updatedAt: serializer.fromJson<int?>(json['updatedAt']),
+      dirty: serializer.fromJson<bool?>(json['dirty']),
+      id: serializer.fromJson<int>(json['id']),
+      petId: serializer.fromJson<int>(json['petId']),
+      kind: $PetContactsTable.$converterkind.fromJson(
+        serializer.fromJson<int>(json['kind']),
+      ),
+      name: serializer.fromJson<String>(json['name']),
+      address: serializer.fromJson<String?>(json['address']),
+      phone: serializer.fromJson<String?>(json['phone']),
+      website: serializer.fromJson<String?>(json['website']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'remoteId': serializer.toJson<String?>(remoteId),
+      'updatedAt': serializer.toJson<int?>(updatedAt),
+      'dirty': serializer.toJson<bool?>(dirty),
+      'id': serializer.toJson<int>(id),
+      'petId': serializer.toJson<int>(petId),
+      'kind': serializer.toJson<int>(
+        $PetContactsTable.$converterkind.toJson(kind),
+      ),
+      'name': serializer.toJson<String>(name),
+      'address': serializer.toJson<String?>(address),
+      'phone': serializer.toJson<String?>(phone),
+      'website': serializer.toJson<String?>(website),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  PetContact copyWith({
+    Value<String?> remoteId = const Value.absent(),
+    Value<int?> updatedAt = const Value.absent(),
+    Value<bool?> dirty = const Value.absent(),
+    int? id,
+    int? petId,
+    ContactKind? kind,
+    String? name,
+    Value<String?> address = const Value.absent(),
+    Value<String?> phone = const Value.absent(),
+    Value<String?> website = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+  }) => PetContact(
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    dirty: dirty.present ? dirty.value : this.dirty,
+    id: id ?? this.id,
+    petId: petId ?? this.petId,
+    kind: kind ?? this.kind,
+    name: name ?? this.name,
+    address: address.present ? address.value : this.address,
+    phone: phone.present ? phone.value : this.phone,
+    website: website.present ? website.value : this.website,
+    notes: notes.present ? notes.value : this.notes,
+  );
+  PetContact copyWithCompanion(PetContactsCompanion data) {
+    return PetContact(
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
+      id: data.id.present ? data.id.value : this.id,
+      petId: data.petId.present ? data.petId.value : this.petId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      name: data.name.present ? data.name.value : this.name,
+      address: data.address.present ? data.address.value : this.address,
+      phone: data.phone.present ? data.phone.value : this.phone,
+      website: data.website.present ? data.website.value : this.website,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PetContact(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
+          ..write('id: $id, ')
+          ..write('petId: $petId, ')
+          ..write('kind: $kind, ')
+          ..write('name: $name, ')
+          ..write('address: $address, ')
+          ..write('phone: $phone, ')
+          ..write('website: $website, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    remoteId,
+    updatedAt,
+    dirty,
+    id,
+    petId,
+    kind,
+    name,
+    address,
+    phone,
+    website,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PetContact &&
+          other.remoteId == this.remoteId &&
+          other.updatedAt == this.updatedAt &&
+          other.dirty == this.dirty &&
+          other.id == this.id &&
+          other.petId == this.petId &&
+          other.kind == this.kind &&
+          other.name == this.name &&
+          other.address == this.address &&
+          other.phone == this.phone &&
+          other.website == this.website &&
+          other.notes == this.notes);
+}
+
+class PetContactsCompanion extends UpdateCompanion<PetContact> {
+  final Value<String?> remoteId;
+  final Value<int?> updatedAt;
+  final Value<bool?> dirty;
+  final Value<int> id;
+  final Value<int> petId;
+  final Value<ContactKind> kind;
+  final Value<String> name;
+  final Value<String?> address;
+  final Value<String?> phone;
+  final Value<String?> website;
+  final Value<String?> notes;
+  const PetContactsCompanion({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
+    this.id = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.name = const Value.absent(),
+    this.address = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.website = const Value.absent(),
+    this.notes = const Value.absent(),
+  });
+  PetContactsCompanion.insert({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
+    this.id = const Value.absent(),
+    required int petId,
+    required ContactKind kind,
+    required String name,
+    this.address = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.website = const Value.absent(),
+    this.notes = const Value.absent(),
+  }) : petId = Value(petId),
+       kind = Value(kind),
+       name = Value(name);
+  static Insertable<PetContact> custom({
+    Expression<String>? remoteId,
+    Expression<int>? updatedAt,
+    Expression<bool>? dirty,
+    Expression<int>? id,
+    Expression<int>? petId,
+    Expression<int>? kind,
+    Expression<String>? name,
+    Expression<String>? address,
+    Expression<String>? phone,
+    Expression<String>? website,
+    Expression<String>? notes,
+  }) {
+    return RawValuesInsertable({
+      if (remoteId != null) 'remote_id': remoteId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (dirty != null) 'dirty': dirty,
+      if (id != null) 'id': id,
+      if (petId != null) 'pet_id': petId,
+      if (kind != null) 'kind': kind,
+      if (name != null) 'name': name,
+      if (address != null) 'address': address,
+      if (phone != null) 'phone': phone,
+      if (website != null) 'website': website,
+      if (notes != null) 'notes': notes,
+    });
+  }
+
+  PetContactsCompanion copyWith({
+    Value<String?>? remoteId,
+    Value<int?>? updatedAt,
+    Value<bool?>? dirty,
+    Value<int>? id,
+    Value<int>? petId,
+    Value<ContactKind>? kind,
+    Value<String>? name,
+    Value<String?>? address,
+    Value<String?>? phone,
+    Value<String?>? website,
+    Value<String?>? notes,
+  }) {
+    return PetContactsCompanion(
+      remoteId: remoteId ?? this.remoteId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      dirty: dirty ?? this.dirty,
+      id: id ?? this.id,
+      petId: petId ?? this.petId,
+      kind: kind ?? this.kind,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      phone: phone ?? this.phone,
+      website: website ?? this.website,
+      notes: notes ?? this.notes,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<int>(petId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<int>(
+        $PetContactsTable.$converterkind.toSql(kind.value),
+      );
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
+    }
+    if (website.present) {
+      map['website'] = Variable<String>(website.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PetContactsCompanion(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
+          ..write('id: $id, ')
+          ..write('petId: $petId, ')
+          ..write('kind: $kind, ')
+          ..write('name: $name, ')
+          ..write('address: $address, ')
+          ..write('phone: $phone, ')
+          ..write('website: $website, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SyncDeletesTable extends SyncDeletes
     with TableInfo<$SyncDeletesTable, SyncDelete> {
   @override
@@ -2818,6 +3470,7 @@ abstract class _$AppDb extends GeneratedDatabase {
   late final $HealthRecordsTable healthRecords = $HealthRecordsTable(this);
   late final $WeightsTable weights = $WeightsTable(this);
   late final $AppointmentsTable appointments = $AppointmentsTable(this);
+  late final $PetContactsTable petContacts = $PetContactsTable(this);
   late final $SyncDeletesTable syncDeletes = $SyncDeletesTable(this);
   late final $SyncFlagsTable syncFlags = $SyncFlagsTable(this);
   @override
@@ -2829,6 +3482,7 @@ abstract class _$AppDb extends GeneratedDatabase {
     healthRecords,
     weights,
     appointments,
+    petContacts,
     syncDeletes,
     syncFlags,
   ];
@@ -2854,6 +3508,13 @@ abstract class _$AppDb extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('appointments', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'pets',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('pet_contacts', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -2943,6 +3604,24 @@ final class $$PetsTableReferences
     ).filter((f) => f.petId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_appointmentsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$PetContactsTable, List<PetContact>>
+  _petContactsRefsTable(_$AppDb db) => MultiTypedResultKey.fromTable(
+    db.petContacts,
+    aliasName: 'pets__id__pet_contacts__pet_id',
+  );
+
+  $$PetContactsTableProcessedTableManager get petContactsRefs {
+    final manager = $$PetContactsTableTableManager(
+      $_db,
+      $_db.petContacts,
+    ).filter((f) => f.petId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_petContactsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -3088,6 +3767,31 @@ class $$PetsTableFilterComposer extends Composer<_$AppDb, $PetsTable> {
           }) => $$AppointmentsTableFilterComposer(
             $db: $db,
             $table: $db.appointments,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> petContactsRefs(
+    Expression<bool> Function($$PetContactsTableFilterComposer f) f,
+  ) {
+    final $$PetContactsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.petContacts,
+      getReferencedColumn: (t) => t.petId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PetContactsTableFilterComposer(
+            $db: $db,
+            $table: $db.petContacts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3293,6 +3997,31 @@ class $$PetsTableAnnotationComposer extends Composer<_$AppDb, $PetsTable> {
     );
     return f(composer);
   }
+
+  Expression<T> petContactsRefs<T extends Object>(
+    Expression<T> Function($$PetContactsTableAnnotationComposer a) f,
+  ) {
+    final $$PetContactsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.petContacts,
+      getReferencedColumn: (t) => t.petId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PetContactsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.petContacts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$PetsTableTableManager
@@ -3312,6 +4041,7 @@ class $$PetsTableTableManager
             bool healthRecordsRefs,
             bool weightsRefs,
             bool appointmentsRefs,
+            bool petContactsRefs,
           })
         > {
   $$PetsTableTableManager(_$AppDb db, $PetsTable table)
@@ -3398,6 +4128,7 @@ class $$PetsTableTableManager
                 healthRecordsRefs = false,
                 weightsRefs = false,
                 appointmentsRefs = false,
+                petContactsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -3405,6 +4136,7 @@ class $$PetsTableTableManager
                     if (healthRecordsRefs) db.healthRecords,
                     if (weightsRefs) db.weights,
                     if (appointmentsRefs) db.appointments,
+                    if (petContactsRefs) db.petContacts,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -3463,6 +4195,25 @@ class $$PetsTableTableManager
                           referencedColumn: 'pet_id',
                           typedResults: items,
                         ),
+                      if (petContactsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Pet,
+                          $PetsTable,
+                          PetContact,
+                          $PetContactsTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$PetsTableReferences
+                              ._petContactsRefsTable(db),
+                          managerFromTypedResult: (p0) => $$PetsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).petContactsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'pet_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3487,6 +4238,7 @@ typedef $$PetsTableProcessedTableManager =
         bool healthRecordsRefs,
         bool weightsRefs,
         bool appointmentsRefs,
+        bool petContactsRefs,
       })
     >;
 typedef $$HealthRecordsTableCreateCompanionBuilder =
@@ -4631,6 +5383,430 @@ typedef $$AppointmentsTableProcessedTableManager =
       Appointment,
       PrefetchHooks Function({bool petId})
     >;
+typedef $$PetContactsTableCreateCompanionBuilder =
+    PetContactsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
+      Value<int> id,
+      required int petId,
+      required ContactKind kind,
+      required String name,
+      Value<String?> address,
+      Value<String?> phone,
+      Value<String?> website,
+      Value<String?> notes,
+    });
+typedef $$PetContactsTableUpdateCompanionBuilder =
+    PetContactsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
+      Value<int> id,
+      Value<int> petId,
+      Value<ContactKind> kind,
+      Value<String> name,
+      Value<String?> address,
+      Value<String?> phone,
+      Value<String?> website,
+      Value<String?> notes,
+    });
+
+final class $$PetContactsTableReferences
+    extends BaseReferences<_$AppDb, $PetContactsTable, PetContact> {
+  $$PetContactsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $PetsTable _petIdTable(_$AppDb db) =>
+      db.pets.createAlias('pet_contacts__pet_id__pets__id');
+
+  $$PetsTableProcessedTableManager get petId {
+    final $_column = $_itemColumn<int>('pet_id')!;
+
+    final manager = $$PetsTableTableManager(
+      $_db,
+      $_db.pets,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_petIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$PetContactsTableFilterComposer
+    extends Composer<_$AppDb, $PetContactsTable> {
+  $$PetContactsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<ContactKind, ContactKind, int> get kind =>
+      $composableBuilder(
+        column: $table.kind,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get phone => $composableBuilder(
+    column: $table.phone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get website => $composableBuilder(
+    column: $table.website,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$PetsTableFilterComposer get petId {
+    final $$PetsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.petId,
+      referencedTable: $db.pets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PetsTableFilterComposer(
+            $db: $db,
+            $table: $db.pets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PetContactsTableOrderingComposer
+    extends Composer<_$AppDb, $PetContactsTable> {
+  $$PetContactsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get phone => $composableBuilder(
+    column: $table.phone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get website => $composableBuilder(
+    column: $table.website,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$PetsTableOrderingComposer get petId {
+    final $$PetsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.petId,
+      referencedTable: $db.pets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PetsTableOrderingComposer(
+            $db: $db,
+            $table: $db.pets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PetContactsTableAnnotationComposer
+    extends Composer<_$AppDb, $PetContactsTable> {
+  $$PetContactsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ContactKind, int> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get phone =>
+      $composableBuilder(column: $table.phone, builder: (column) => column);
+
+  GeneratedColumn<String> get website =>
+      $composableBuilder(column: $table.website, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$PetsTableAnnotationComposer get petId {
+    final $$PetsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.petId,
+      referencedTable: $db.pets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$PetsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.pets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$PetContactsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDb,
+          $PetContactsTable,
+          PetContact,
+          $$PetContactsTableFilterComposer,
+          $$PetContactsTableOrderingComposer,
+          $$PetContactsTableAnnotationComposer,
+          $$PetContactsTableCreateCompanionBuilder,
+          $$PetContactsTableUpdateCompanionBuilder,
+          (PetContact, $$PetContactsTableReferences),
+          PetContact,
+          PrefetchHooks Function({bool petId})
+        > {
+  $$PetContactsTableTableManager(_$AppDb db, $PetContactsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PetContactsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PetContactsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PetContactsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<int> petId = const Value.absent(),
+                Value<ContactKind> kind = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String?> address = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
+                Value<String?> website = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+              }) => PetContactsCompanion(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
+                id: id,
+                petId: petId,
+                kind: kind,
+                name: name,
+                address: address,
+                phone: phone,
+                website: website,
+                notes: notes,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                required int petId,
+                required ContactKind kind,
+                required String name,
+                Value<String?> address = const Value.absent(),
+                Value<String?> phone = const Value.absent(),
+                Value<String?> website = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+              }) => PetContactsCompanion.insert(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
+                id: id,
+                petId: petId,
+                kind: kind,
+                name: name,
+                address: address,
+                phone: phone,
+                website: website,
+                notes: notes,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$PetContactsTable, PetContact>(table),
+                  $$PetContactsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({petId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (petId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.petId,
+                        referencedTable: $$PetContactsTableReferences
+                            ._petIdTable(db),
+                        referencedColumn: $$PetContactsTableReferences
+                            ._petIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$PetContactsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDb,
+      $PetContactsTable,
+      PetContact,
+      $$PetContactsTableFilterComposer,
+      $$PetContactsTableOrderingComposer,
+      $$PetContactsTableAnnotationComposer,
+      $$PetContactsTableCreateCompanionBuilder,
+      $$PetContactsTableUpdateCompanionBuilder,
+      (PetContact, $$PetContactsTableReferences),
+      PetContact,
+      PrefetchHooks Function({bool petId})
+    >;
 typedef $$SyncDeletesTableCreateCompanionBuilder =
     SyncDeletesCompanion Function({
       Value<int> id,
@@ -4939,6 +6115,8 @@ class $AppDbManager {
       $$WeightsTableTableManager(_db, _db.weights);
   $$AppointmentsTableTableManager get appointments =>
       $$AppointmentsTableTableManager(_db, _db.appointments);
+  $$PetContactsTableTableManager get petContacts =>
+      $$PetContactsTableTableManager(_db, _db.petContacts);
   $$SyncDeletesTableTableManager get syncDeletes =>
       $$SyncDeletesTableTableManager(_db, _db.syncDeletes);
   $$SyncFlagsTableTableManager get syncFlags =>

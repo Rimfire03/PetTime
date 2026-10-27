@@ -3,7 +3,11 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'db.g.dart';
 
-enum RecordType { vaccine, dewormer, flea }
+// new values go at the END: the index is what is stored in the database and on the server
+enum RecordType { vaccine, dewormer, flea, operation }
+
+/// Habitual services around the pet. Same rule: append only.
+enum ContactKind { groomer, petSitter, boarding, other }
 
 /// Sync bookkeeping. All three are null for data that never left this phone.
 /// updatedAt (ms) and dirty are maintained by SQL triggers (see AppDb), so
@@ -53,6 +57,18 @@ class Appointments extends Table with SyncColumns {
   IntColumn get remindDaysBefore => integer().withDefault(const Constant(1))();
 }
 
+/// A groomer, pet sitter or boarding the pet usually goes to.
+class PetContacts extends Table with SyncColumns {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get petId => integer().references(Pets, #id, onDelete: KeyAction.cascade)();
+  IntColumn get kind => intEnum<ContactKind>()();
+  TextColumn get name => text()();
+  TextColumn get address => text().nullable()();
+  TextColumn get phone => text().nullable()();
+  TextColumn get website => text().nullable()();
+  TextColumn get notes => text().nullable()();
+}
+
 /// Rows deleted locally that the server must still hear about.
 /// [kind] is the table name ('pets', 'health_records', 'weights', 'appointments').
 class SyncDeletes extends Table {
@@ -72,7 +88,7 @@ final db = AppDb();
 
 const _syncTables = ['pets', 'health_records', 'weights', 'appointments'];
 
-@DriftDatabase(tables: [Pets, HealthRecords, Weights, Appointments, SyncDeletes, SyncFlags])
+@DriftDatabase(tables: [Pets, HealthRecords, Weights, Appointments, PetContacts, SyncDeletes, SyncFlags])
 class AppDb extends _$AppDb {
   AppDb() : super(driftDatabase(name: 'pettime'));
 
@@ -80,13 +96,14 @@ class AppDb extends _$AppDb {
   AppDb.forTesting(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async {
           await m.createAll();
           await _initSync();
+          await _createSyncTriggers('pet_contacts');
         },
         onUpgrade: (m, from, to) async {
           if (from < 2) {
@@ -106,28 +123,36 @@ class AppDb extends _$AppDb {
             await m.createTable(syncFlags);
             await _initSync();
           }
+          if (from < 3) {
+            await m.createTable(petContacts);
+            await _createSyncTriggers('pet_contacts');
+          }
         },
         beforeOpen: (_) => customStatement('PRAGMA foreign_keys = ON'),
       );
 
   Future<void> _initSync() async {
     await customStatement('INSERT INTO sync_flags (applying) VALUES (0)');
+    for (final t in _syncTables) {
+      await _createSyncTriggers(t);
+    }
+  }
+
+  Future<void> _createSyncTriggers(String t) async {
     const applying = '(SELECT applying FROM sync_flags) = 0';
     const now = "CAST(strftime('%s','now') AS INTEGER) * 1000";
-    for (final t in _syncTables) {
-      for (final op in ['INSERT', 'UPDATE']) {
-        await customStatement('CREATE TRIGGER ${t}_${op.toLowerCase()}_sync AFTER $op ON $t '
-            'WHEN $applying BEGIN '
-            'UPDATE $t SET dirty = 1, updated_at = $now WHERE id = NEW.id; END');
-      }
-      // a child's tombstone needs its pet's remote id; a pet is its own parent
-      final parent = t == 'pets'
-          ? "SELECT OLD.remote_id, OLD.remote_id"
-          : 'SELECT remote_id, OLD.remote_id FROM pets WHERE id = OLD.pet_id AND remote_id IS NOT NULL';
-      await customStatement('CREATE TRIGGER ${t}_delete_sync AFTER DELETE ON $t '
-          'WHEN $applying AND OLD.remote_id IS NOT NULL BEGIN '
-          "INSERT INTO sync_deletes (kind, pet_remote_id, remote_id) SELECT '$t', * FROM ($parent); END");
+    for (final op in ['INSERT', 'UPDATE']) {
+      await customStatement('CREATE TRIGGER ${t}_${op.toLowerCase()}_sync AFTER $op ON $t '
+          'WHEN $applying BEGIN '
+          'UPDATE $t SET dirty = 1, updated_at = $now WHERE id = NEW.id; END');
     }
+    // a child's tombstone needs its pet's remote id; a pet is its own parent
+    final parent = t == 'pets'
+        ? "SELECT OLD.remote_id, OLD.remote_id"
+        : 'SELECT remote_id, OLD.remote_id FROM pets WHERE id = OLD.pet_id AND remote_id IS NOT NULL';
+    await customStatement('CREATE TRIGGER ${t}_delete_sync AFTER DELETE ON $t '
+        'WHEN $applying AND OLD.remote_id IS NOT NULL BEGIN '
+        "INSERT INTO sync_deletes (kind, pet_remote_id, remote_id) SELECT '$t', * FROM ($parent); END");
   }
 
   /// Runs [body] with the triggers silenced: use for every write that comes
@@ -142,6 +167,11 @@ class AppDb extends _$AppDb {
       });
 
   Stream<List<Pet>> watchPets() => select(pets).watch();
+
+  Stream<List<PetContact>> watchContacts(int petId) => (select(petContacts)
+        ..where((c) => c.petId.equals(petId))
+        ..orderBy([(c) => OrderingTerm.asc(c.kind), (c) => OrderingTerm.asc(c.name)]))
+      .watch();
 
   Stream<List<Weight>> watchWeights(int petId) => (select(weights)
         ..where((w) => w.petId.equals(petId))

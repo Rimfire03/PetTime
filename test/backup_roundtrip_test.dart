@@ -53,6 +53,16 @@ void main() {
           place: const Value('Vet clinic'),
         ));
 
+    await source.into(source.petContacts).insert(PetContactsCompanion.insert(
+          petId: petId,
+          kind: ContactKind.boarding,
+          name: 'Happy Paws',
+          phone: const Value('+33612345678'),
+          website: const Value('happypaws.example/book'),
+        ));
+    await source.into(source.healthRecords).insert(HealthRecordsCompanion.insert(
+          petId: petId, type: RecordType.operation, product: 'Sterilisation', date: DateTime(2026, 3, 3)));
+
     // data already on the target must be replaced, not merged
     await target.into(target.pets).insert(PetsCompanion.insert(name: 'Old pet'));
 
@@ -69,7 +79,14 @@ void main() {
     expect(pets.single.photoPath, photo);
     expect(photoFile(photo).readAsBytesSync(), [1, 2, 3, 4]);
 
-    final record = (await target.select(target.healthRecords).get()).single;
+    final contact = (await target.select(target.petContacts).get()).single;
+    expect(contact.kind, ContactKind.boarding);
+    expect(contact.phone, '+33612345678');
+    expect(contact.website, 'happypaws.example/book');
+
+    final records = await target.select(target.healthRecords).get();
+    expect(records.map((r) => r.type), containsAll([RecordType.vaccine, RecordType.operation]));
+    final record = records.firstWhere((r) => r.type == RecordType.vaccine);
     expect(record.petId, pets.single.id);
     expect(record.type, RecordType.vaccine);
     expect(record.product, 'Rabies');

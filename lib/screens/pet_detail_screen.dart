@@ -11,12 +11,14 @@ import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
 import 'pets_screen.dart' show speciesLabel;
 import 'record_form_screen.dart';
+import 'services_tab.dart';
 import 'weights_tab.dart';
 
 String recordLabel(AppLocalizations t, RecordType r) => switch (r) {
       RecordType.vaccine => t.vaccine,
       RecordType.dewormer => t.dewormer,
       RecordType.flea => t.flea,
+      RecordType.operation => t.operation,
     };
 
 class PetDetailScreen extends StatefulWidget {
@@ -44,7 +46,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
         final pet = snap.data;
         if (pet == null) return const Scaffold(body: SizedBox());
         return DefaultTabController(
-          length: 4,
+          length: 5,
           child: Scaffold(
             appBar: AppBar(
               title: Text(pet.name),
@@ -53,6 +55,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 Tab(text: t.healthBook),
                 Tab(text: t.weight),
                 Tab(text: t.appointments),
+                Tab(text: t.services),
               ]),
               actions: [
                 ValueListenableBuilder<bool>(
@@ -83,6 +86,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               _Records(petId: petId),
               WeightsTab(petId: petId),
               AppointmentsTab(petId: petId),
+              ServicesTab(petId: petId),
             ]),
           ),
         );
@@ -144,6 +148,7 @@ class _Records extends StatelessWidget {
                     RecordType.vaccine => Icons.vaccines,
                     RecordType.dewormer => Icons.bug_report,
                     RecordType.flea => Icons.pest_control,
+                    RecordType.operation => Icons.healing,
                   }),
                   title: Text('${recordLabel(t, r.type)} - ${r.product}'),
                   subtitle: Text([

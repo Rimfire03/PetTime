@@ -195,6 +195,45 @@ class AppLocalizationsDe extends AppLocalizations {
   String get syncFailed => 'Server nicht erreichbar. Prüfe deine Verbindung.';
 
   @override
+  String get operation => 'Operation';
+
+  @override
+  String get services => 'Dienste';
+
+  @override
+  String get addService => 'Dienst hinzufügen';
+
+  @override
+  String get serviceKind => 'Art';
+
+  @override
+  String get groomer => 'Hundefriseur';
+
+  @override
+  String get petSitter => 'Tiersitter';
+
+  @override
+  String get boarding => 'Tierpension';
+
+  @override
+  String get address => 'Adresse';
+
+  @override
+  String get phone => 'Telefon';
+
+  @override
+  String get bookingLink => 'Buchungslink oder Website';
+
+  @override
+  String get noServices => 'Noch keine Dienste.';
+
+  @override
+  String get call => 'Anrufen';
+
+  @override
+  String get openLink => 'Link öffnen';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

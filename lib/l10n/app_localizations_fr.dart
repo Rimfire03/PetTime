@@ -196,6 +196,45 @@ class AppLocalizationsFr extends AppLocalizations {
   String get syncFailed => 'Serveur injoignable. Vérifie ta connexion.';
 
   @override
+  String get operation => 'Opération';
+
+  @override
+  String get services => 'Services';
+
+  @override
+  String get addService => 'Ajouter un service';
+
+  @override
+  String get serviceKind => 'Type';
+
+  @override
+  String get groomer => 'Toiletteur';
+
+  @override
+  String get petSitter => 'Pet sitter';
+
+  @override
+  String get boarding => 'Pension';
+
+  @override
+  String get address => 'Adresse';
+
+  @override
+  String get phone => 'Téléphone';
+
+  @override
+  String get bookingLink => 'Lien de réservation ou site web';
+
+  @override
+  String get noServices => 'Aucun service enregistré.';
+
+  @override
+  String get call => 'Appeler';
+
+  @override
+  String get openLink => 'Ouvrir le lien';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

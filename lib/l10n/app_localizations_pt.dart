@@ -196,6 +196,45 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não foi possível contactar o servidor. Verifica a ligação.';
 
   @override
+  String get operation => 'Operação';
+
+  @override
+  String get services => 'Serviços';
+
+  @override
+  String get addService => 'Adicionar um serviço';
+
+  @override
+  String get serviceKind => 'Tipo';
+
+  @override
+  String get groomer => 'Tosquiador';
+
+  @override
+  String get petSitter => 'Pet sitter';
+
+  @override
+  String get boarding => 'Hotel para animais';
+
+  @override
+  String get address => 'Morada';
+
+  @override
+  String get phone => 'Telefone';
+
+  @override
+  String get bookingLink => 'Ligação de reserva ou site';
+
+  @override
+  String get noServices => 'Sem serviços.';
+
+  @override
+  String get call => 'Ligar';
+
+  @override
+  String get openLink => 'Abrir ligação';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

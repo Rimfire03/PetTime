@@ -195,6 +195,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncFailed => 'Could not reach the server. Check your connection.';
 
   @override
+  String get operation => 'Operation';
+
+  @override
+  String get services => 'Services';
+
+  @override
+  String get addService => 'Add a service';
+
+  @override
+  String get serviceKind => 'Type';
+
+  @override
+  String get groomer => 'Groomer';
+
+  @override
+  String get petSitter => 'Pet sitter';
+
+  @override
+  String get boarding => 'Boarding';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get bookingLink => 'Booking link or website';
+
+  @override
+  String get noServices => 'No service yet.';
+
+  @override
+  String get call => 'Call';
+
+  @override
+  String get openLink => 'Open link';
+
+  @override
   String get noRecords => 'No record yet.';
 
   @override

@@ -196,6 +196,45 @@ class AppLocalizationsIt extends AppLocalizations {
       'Server non raggiungibile. Controlla la connessione.';
 
   @override
+  String get operation => 'Operazione';
+
+  @override
+  String get services => 'Servizi';
+
+  @override
+  String get addService => 'Aggiungi un servizio';
+
+  @override
+  String get serviceKind => 'Tipo';
+
+  @override
+  String get groomer => 'Toelettatore';
+
+  @override
+  String get petSitter => 'Pet sitter';
+
+  @override
+  String get boarding => 'Pensione';
+
+  @override
+  String get address => 'Indirizzo';
+
+  @override
+  String get phone => 'Telefono';
+
+  @override
+  String get bookingLink => 'Link di prenotazione o sito web';
+
+  @override
+  String get noServices => 'Nessun servizio.';
+
+  @override
+  String get call => 'Chiama';
+
+  @override
+  String get openLink => 'Apri il link';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override
