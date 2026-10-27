@@ -45,6 +45,11 @@ Future<User> ensureSignedIn() async {
 
 class JoinFailed implements Exception {}
 
+/// Short technical reason shown under the generic message, so a failure on a
+/// user's phone can be reported without needing a debugger.
+String describeError(Object e) =>
+    e is FirebaseException ? '${e.plugin}/${e.code}: ${e.message ?? ''}' : e.toString();
+
 String _uuid() {
   final r = Random.secure();
   return List.generate(16, (_) => r.nextInt(256).toRadixString(16).padLeft(2, '0')).join();

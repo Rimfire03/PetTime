@@ -27,7 +27,13 @@ class _ShareDialogState extends State<_ShareDialog> {
       content: FutureBuilder<String>(
         future: _code,
         builder: (context, snap) {
-          if (snap.hasError) return Text(t.syncFailed);
+          if (snap.hasError) {
+            return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(t.syncFailed),
+              const SizedBox(height: 8),
+              SelectableText(describeError(snap.error!), style: Theme.of(context).textTheme.bodySmall),
+            ]);
+          }
           final code = snap.data;
           if (code == null) {
             return const SizedBox(height: 56, child: Center(child: CircularProgressIndicator()));
@@ -86,8 +92,8 @@ class _JoinDialogState extends State<_JoinDialog> {
       if (mounted) Navigator.pop(context);
     } on JoinFailed {
       if (mounted) setState(() => _error = t.joinFailed);
-    } catch (_) {
-      if (mounted) setState(() => _error = t.syncFailed);
+    } catch (e) {
+      if (mounted) setState(() => _error = '${t.syncFailed}\n${describeError(e)}');
     } finally {
       if (mounted) setState(() => _busy = false);
     }
