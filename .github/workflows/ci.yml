@@ -65,16 +65,5 @@ jobs:
           path: build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 7
 
-  ios:
-    name: Build iOS
-    needs: check
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - run: flutter pub get
-      # compiles only: signing and App Store upload need an Apple developer account
-      - run: flutter build ios --release --no-codesign
+  # iOS is left out for now (slow macOS runner). To bring it back, add a job on `macos-latest` that runs
+  # `flutter pub get` then `flutter build ios --release --no-codesign` (compile check only, no Apple account needed).
