@@ -30,6 +30,10 @@
   "nextDue": "Prochaine échéance",
   "remindDaysBefore": "Me rappeler (jours avant)",
   "reminderChannel": "Rappels",
+  "weight": "Poids",
+  "addWeight": "Ajouter un poids",
+  "weightKg": "Poids (kg)",
+  "noWeights": "Aucun poids enregistré.",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

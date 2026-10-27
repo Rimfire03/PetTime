@@ -30,6 +30,10 @@
   "nextDue": "Próxima fecha",
   "remindDaysBefore": "Recordarme (días antes)",
   "reminderChannel": "Recordatorios",
+  "weight": "Peso",
+  "addWeight": "Añadir peso",
+  "weightKg": "Peso (kg)",
+  "noWeights": "Sin pesos.",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

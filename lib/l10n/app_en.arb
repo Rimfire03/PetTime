@@ -30,6 +30,10 @@
   "nextDue": "Next due date",
   "remindDaysBefore": "Remind me (days before)",
   "reminderChannel": "Reminders",
+  "weight": "Weight",
+  "addWeight": "Add weight",
+  "weightKg": "Weight (kg)",
+  "noWeights": "No weight yet.",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

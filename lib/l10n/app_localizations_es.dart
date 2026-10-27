@@ -100,6 +100,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reminderChannel => 'Recordatorios';
 
   @override
+  String get weight => 'Peso';
+
+  @override
+  String get addWeight => 'Añadir peso';
+
+  @override
+  String get weightKg => 'Peso (kg)';
+
+  @override
+  String get noWeights => 'Sin pesos.';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

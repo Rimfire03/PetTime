@@ -100,6 +100,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reminderChannel => 'Erinnerungen';
 
   @override
+  String get weight => 'Gewicht';
+
+  @override
+  String get addWeight => 'Gewicht hinzufügen';
+
+  @override
+  String get weightKg => 'Gewicht (kg)';
+
+  @override
+  String get noWeights => 'Noch kein Gewicht.';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

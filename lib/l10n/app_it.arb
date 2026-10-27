@@ -30,6 +30,10 @@
   "nextDue": "Prossima scadenza",
   "remindDaysBefore": "Ricordami (giorni prima)",
   "reminderChannel": "Promemoria",
+  "weight": "Peso",
+  "addWeight": "Aggiungi peso",
+  "weightKg": "Peso (kg)",
+  "noWeights": "Nessun peso.",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

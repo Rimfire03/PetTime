@@ -100,6 +100,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reminderChannel => 'Promemoria';
 
   @override
+  String get weight => 'Peso';
+
+  @override
+  String get addWeight => 'Aggiungi peso';
+
+  @override
+  String get weightKg => 'Peso (kg)';
+
+  @override
+  String get noWeights => 'Nessun peso.';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

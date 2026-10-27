@@ -286,6 +286,30 @@ abstract class AppLocalizations {
   /// **'Reminders'**
   String get reminderChannel;
 
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @addWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Add weight'**
+  String get addWeight;
+
+  /// No description provided for @weightKg.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight (kg)'**
+  String get weightKg;
+
+  /// No description provided for @noWeights.
+  ///
+  /// In en, this message translates to:
+  /// **'No weight yet.'**
+  String get noWeights;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:
