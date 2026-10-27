@@ -76,6 +76,7 @@
   "openLink": "Link öffnen",
   "removeAds": "Werbung entfernen ({price})",
   "restorePurchases": "Käufe wiederherstellen",
+  "rabbit": "Kaninchen",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

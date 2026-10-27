@@ -562,6 +562,12 @@ abstract class AppLocalizations {
   /// **'Restore purchases'**
   String get restorePurchases;
 
+  /// No description provided for @rabbit.
+  ///
+  /// In en, this message translates to:
+  /// **'Rabbit'**
+  String get rabbit;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

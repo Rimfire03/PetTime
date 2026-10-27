@@ -110,5 +110,6 @@ Future<void> _runBackup(BuildContext context, _Backup action) async {
 String speciesLabel(AppLocalizations t, String s) => switch (s) {
       'dog' => t.dog,
       'cat' => t.cat,
+      'rabbit' => t.rabbit,
       _ => t.other,
     };

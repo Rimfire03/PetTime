@@ -243,6 +243,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get restorePurchases => 'Restaurar compras';
 
   @override
+  String get rabbit => 'Conejo';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

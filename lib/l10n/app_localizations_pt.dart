@@ -243,6 +243,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get restorePurchases => 'Restaurar compras';
 
   @override
+  String get rabbit => 'Coelho';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

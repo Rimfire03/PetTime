@@ -76,6 +76,7 @@
   "openLink": "Abrir enlace",
   "removeAds": "Quitar anuncios ({price})",
   "restorePurchases": "Restaurar compras",
+  "rabbit": "Conejo",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

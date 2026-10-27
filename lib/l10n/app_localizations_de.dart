@@ -242,6 +242,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get restorePurchases => 'Käufe wiederherstellen';
 
   @override
+  String get rabbit => 'Kaninchen';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

@@ -76,6 +76,7 @@
   "openLink": "Ouvrir le lien",
   "removeAds": "Retirer les pubs ({price})",
   "restorePurchases": "Restaurer mes achats",
+  "rabbit": "Lapin",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

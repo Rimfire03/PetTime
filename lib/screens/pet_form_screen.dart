@@ -130,7 +130,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
               initialValue: _species,
               decoration: InputDecoration(labelText: t.species),
               items: [
-                for (final s in ['dog', 'cat', 'other'])
+                for (final s in ['dog', 'cat', 'rabbit', 'other'])
                   DropdownMenuItem(value: s, child: Text(speciesLabel(t, s))),
               ],
               onChanged: (v) => setState(() => _species = v!),

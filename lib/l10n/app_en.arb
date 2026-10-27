@@ -77,6 +77,7 @@
   "removeAds": "Remove ads ({price})",
   "@removeAds": { "placeholders": { "price": { "type": "String" } } },
   "restorePurchases": "Restore purchases",
+  "rabbit": "Rabbit",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

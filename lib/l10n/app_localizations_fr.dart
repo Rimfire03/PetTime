@@ -243,6 +243,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get restorePurchases => 'Restaurer mes achats';
 
   @override
+  String get rabbit => 'Lapin';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override
