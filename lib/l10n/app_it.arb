@@ -74,6 +74,8 @@
   "noServices": "Nessun servizio.",
   "call": "Chiama",
   "openLink": "Apri il link",
+  "removeAds": "Rimuovi la pubblicità ({price})",
+  "restorePurchases": "Ripristina acquisti",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

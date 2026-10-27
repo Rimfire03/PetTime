@@ -74,6 +74,8 @@
   "noServices": "Sin servicios.",
   "call": "Llamar",
   "openLink": "Abrir enlace",
+  "removeAds": "Quitar anuncios ({price})",
+  "restorePurchases": "Restaurar compras",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

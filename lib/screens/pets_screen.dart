@@ -5,6 +5,7 @@ import '../backup.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
+import '../purchases.dart';
 import '../watermark.dart';
 import '../sync/sync_service.dart' show syncAvailable;
 import 'share_dialogs.dart';
@@ -19,12 +20,14 @@ class PetsScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(t.myPets), actions: [
-        ValueListenableBuilder<bool>(
-          valueListenable: privacyOptionsRequired,
-          builder: (_, privacy, _) => PopupMenuButton<_Backup>(
+        ListenableBuilder(
+          listenable: Listenable.merge([privacyOptionsRequired, adsRemoved, removeAdsPrice]),
+          builder: (_, _) => PopupMenuButton<_Backup>(
             onSelected: (m) => switch (m) {
               _Backup.privacy => showPrivacyOptions(),
               _Backup.join => showJoinDialog(context),
+              _Backup.removeAds => buyRemoveAds(),
+              _Backup.restore => restorePurchases(),
               _ => _runBackup(context, m),
             },
             itemBuilder: (_) => [
@@ -32,7 +35,13 @@ class PetsScreen extends StatelessWidget {
                 PopupMenuItem(value: _Backup.join, child: Text(t.joinWithCode)),
               PopupMenuItem(value: _Backup.export, child: Text(t.backupExport)),
               PopupMenuItem(value: _Backup.import, child: Text(t.backupImport)),
-              if (privacy) PopupMenuItem(value: _Backup.privacy, child: Text(t.privacySettings)),
+              // only when the store really offers the product, and not to someone who already bought it
+              if (!adsRemoved.value && removeAdsPrice.value != null) ...[
+                PopupMenuItem(value: _Backup.removeAds, child: Text(t.removeAds(removeAdsPrice.value!))),
+                PopupMenuItem(value: _Backup.restore, child: Text(t.restorePurchases)),
+              ],
+              if (privacyOptionsRequired.value)
+                PopupMenuItem(value: _Backup.privacy, child: Text(t.privacySettings)),
             ],
           ),
         ),
@@ -67,7 +76,7 @@ class PetsScreen extends StatelessWidget {
   }
 }
 
-enum _Backup { export, import, privacy, join }
+enum _Backup { export, import, privacy, join, removeAds, restore }
 
 Future<void> _runBackup(BuildContext context, _Backup action) async {
   final t = AppLocalizations.of(context);

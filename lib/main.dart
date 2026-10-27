@@ -7,6 +7,7 @@ import 'l10n/app_localizations.dart';
 import 'ads.dart';
 import 'notifications.dart';
 import 'photos.dart';
+import 'purchases.dart';
 import 'sync/sync_service.dart';
 import 'screens/pets_screen.dart';
 
@@ -25,8 +26,15 @@ Future<void> main() async {
     debugPrint('notifications disabled: $e'); // the app must still open
   }
   runApp(const PetTimeApp());
-  // after runApp: the iOS tracking prompt needs a visible app
-  unawaited(initAds().catchError((Object e) => debugPrint('ads disabled: $e')));
+  // after runApp: the iOS tracking prompt needs a visible app. Purchases first: a buyer gets no ads at all.
+  unawaited(() async {
+    try {
+      await initPurchases();
+    } catch (e) {
+      debugPrint('purchases disabled: $e');
+    }
+    await initAds();
+  }().catchError((Object e) => debugPrint('ads disabled: $e')));
 }
 
 class PetTimeApp extends StatelessWidget {

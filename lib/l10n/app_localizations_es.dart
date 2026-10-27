@@ -235,6 +235,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get openLink => 'Abrir enlace';
 
   @override
+  String removeAds(String price) {
+    return 'Quitar anuncios ($price)';
+  }
+
+  @override
+  String get restorePurchases => 'Restaurar compras';
+
+  @override
   String get noRecords => 'Sin registros.';
 
   @override

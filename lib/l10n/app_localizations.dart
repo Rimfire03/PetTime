@@ -550,6 +550,18 @@ abstract class AppLocalizations {
   /// **'Open link'**
   String get openLink;
 
+  /// No description provided for @removeAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove ads ({price})'**
+  String removeAds(String price);
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

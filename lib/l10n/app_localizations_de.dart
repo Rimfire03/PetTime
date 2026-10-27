@@ -234,6 +234,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get openLink => 'Link öffnen';
 
   @override
+  String removeAds(String price) {
+    return 'Werbung entfernen ($price)';
+  }
+
+  @override
+  String get restorePurchases => 'Käufe wiederherstellen';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

@@ -234,6 +234,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openLink => 'Open link';
 
   @override
+  String removeAds(String price) {
+    return 'Remove ads ($price)';
+  }
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
   String get noRecords => 'No record yet.';
 
   @override

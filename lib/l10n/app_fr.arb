@@ -74,6 +74,8 @@
   "noServices": "Aucun service enregistré.",
   "call": "Appeler",
   "openLink": "Ouvrir le lien",
+  "removeAds": "Retirer les pubs ({price})",
+  "restorePurchases": "Restaurer mes achats",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

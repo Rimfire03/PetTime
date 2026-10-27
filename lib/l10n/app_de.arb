@@ -74,6 +74,8 @@
   "noServices": "Noch keine Dienste.",
   "call": "Anrufen",
   "openLink": "Link öffnen",
+  "removeAds": "Werbung entfernen ({price})",
+  "restorePurchases": "Käufe wiederherstellen",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

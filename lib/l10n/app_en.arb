@@ -74,6 +74,9 @@
   "noServices": "No service yet.",
   "call": "Call",
   "openLink": "Open link",
+  "removeAds": "Remove ads ({price})",
+  "@removeAds": { "placeholders": { "price": { "type": "String" } } },
+  "restorePurchases": "Restore purchases",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }
