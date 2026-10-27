@@ -7,12 +7,16 @@ import 'package:file_picker/file_picker.dart';
 import 'data/db.dart';
 import 'photos.dart';
 
+// the app's global database; resolved lazily so tests can pass their own
+AppDb get _defaultDb => db;
+
 const _format = 'pettime-backup';
 const _version = 1;
 
 /// All data plus photos as one JSON document, so a backup restores on any
 /// platform (Android <-> iOS) and does not depend on the SQLite file layout.
-Future<Map<String, Object?>> buildBackup() async {
+Future<Map<String, Object?>> buildBackup([AppDb? database]) async {
+  final db = database ?? _defaultDb;
   final pets = await db.select(db.pets).get();
   final photos = <String, String>{};
   for (final p in pets) {
@@ -34,7 +38,7 @@ Future<Map<String, Object?>> buildBackup() async {
 
 /// Replaces ALL current data with the backup. Throws [FormatException] on a
 /// file that is not a PetTime backup; in that case nothing is changed.
-Future<void> restoreBackup(Map<String, Object?> json) async {
+Future<void> restoreBackup(Map<String, Object?> json, [AppDb? database]) async {
   if (json['format'] != _format || json['version'] != _version) {
     throw const FormatException('not a PetTime backup');
   }
@@ -56,6 +60,7 @@ Future<void> restoreBackup(Map<String, Object?> json) async {
   final weights = [for (final r in rows('weights')) Weight.fromJson(r)];
   final appointments = [for (final r in rows('appointments')) Appointment.fromJson(r)];
 
+  final db = database ?? _defaultDb;
   await db.transaction(() async {
     await db.delete(db.pets).go(); // cascades to the other tables
     await db.batch((b) {

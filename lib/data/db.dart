@@ -50,6 +50,9 @@ final db = AppDb();
 class AppDb extends _$AppDb {
   AppDb() : super(driftDatabase(name: 'pettime'));
 
+  /// For tests: pass e.g. NativeDatabase.memory().
+  AppDb.forTesting(super.e);
+
   @override
   int get schemaVersion => 1;
 

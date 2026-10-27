@@ -10,10 +10,11 @@ import 'l10n/app_localizations.dart';
 /// app's documents path can change between iOS updates.
 late final Directory _dir;
 
-Future<void> initPhotos() async {
-  _dir = Directory('${(await getApplicationDocumentsDirectory()).path}/photos')
-    ..createSync(recursive: true);
-}
+Future<void> initPhotos() async =>
+    initPhotosAt(Directory('${(await getApplicationDocumentsDirectory()).path}/photos'));
+
+/// Also used by tests with a temp folder. Can only be called once per run.
+void initPhotosAt(Directory dir) => _dir = dir..createSync(recursive: true);
 
 File photoFile(String name) => File('${_dir.path}/$name');
 
