@@ -276,6 +276,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get recordType => 'Type de soin';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

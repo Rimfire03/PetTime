@@ -604,6 +604,12 @@ abstract class AppLocalizations {
   /// **'{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}'**
   String logoutUnsynced(int n);
 
+  /// No description provided for @recordType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type of care'**
+  String get recordType;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

@@ -85,6 +85,7 @@
   "logoutConfirm": "Log out and remove this account's data from this phone? It stays safe in the cloud and comes back when you sign in again. Photos are not saved in the cloud and will be removed.",
   "logoutUnsynced": "{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}",
   "@logoutUnsynced": { "placeholders": { "n": { "type": "int" } } },
+  "recordType": "Type of care",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

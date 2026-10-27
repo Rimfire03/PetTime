@@ -83,6 +83,7 @@
   "logout": "Esci",
   "logoutConfirm": "Uscire e rimuovere i dati di questo account da questo telefono? Restano al sicuro nel cloud e tornano quando accedi di nuovo. Le foto non sono salvate nel cloud e verranno rimosse.",
   "logoutUnsynced": "{n, plural, =1{1 modifica non è ancora stata inviata al cloud e andrà persa.} other{{n} modifiche non sono ancora state inviate al cloud e andranno perse.}}",
+  "recordType": "Tipo di cura",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

@@ -274,6 +274,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get recordType => 'Art der Behandlung';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

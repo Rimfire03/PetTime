@@ -74,13 +74,14 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            SegmentedButton<RecordType>(
-              segments: [
+            DropdownButtonFormField<RecordType>(
+              initialValue: _type,
+              decoration: InputDecoration(labelText: t.recordType),
+              items: [
                 for (final r in RecordType.values)
-                  ButtonSegment(value: r, label: Text(recordLabel(t, r))),
+                  DropdownMenuItem(value: r, child: Text(recordLabel(t, r))),
               ],
-              selected: {_type},
-              onSelectionChanged: (s) => setState(() => _type = s.first),
+              onChanged: (r) => setState(() => _type = r!),
             ),
             const SizedBox(height: 12),
             TextFormField(

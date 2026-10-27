@@ -275,6 +275,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get recordType => 'Tipo de cuidado';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override
