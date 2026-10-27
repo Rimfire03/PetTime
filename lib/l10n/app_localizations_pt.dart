@@ -112,6 +112,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noWeights => 'Sem pesos.';
 
   @override
+  String get appointments => 'Consultas';
+
+  @override
+  String get addAppointment => 'Adicionar consulta';
+
+  @override
+  String get appointmentTitle => 'Motivo';
+
+  @override
+  String get place => 'Local';
+
+  @override
+  String get time => 'Hora';
+
+  @override
+  String get noAppointments => 'Sem consultas.';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

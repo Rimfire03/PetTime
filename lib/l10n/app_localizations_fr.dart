@@ -112,6 +112,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noWeights => 'Aucun poids enregistré.';
 
   @override
+  String get appointments => 'Rendez-vous';
+
+  @override
+  String get addAppointment => 'Ajouter un rendez-vous';
+
+  @override
+  String get appointmentTitle => 'Motif';
+
+  @override
+  String get place => 'Lieu';
+
+  @override
+  String get time => 'Heure';
+
+  @override
+  String get noAppointments => 'Aucun rendez-vous.';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

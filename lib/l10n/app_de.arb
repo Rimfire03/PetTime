@@ -34,6 +34,12 @@
   "addWeight": "Gewicht hinzufügen",
   "weightKg": "Gewicht (kg)",
   "noWeights": "Noch kein Gewicht.",
+  "appointments": "Termine",
+  "addAppointment": "Termin hinzufügen",
+  "appointmentTitle": "Grund",
+  "place": "Ort",
+  "time": "Uhrzeit",
+  "noAppointments": "Keine Termine.",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

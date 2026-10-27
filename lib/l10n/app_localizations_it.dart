@@ -112,6 +112,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get noWeights => 'Nessun peso.';
 
   @override
+  String get appointments => 'Appuntamenti';
+
+  @override
+  String get addAppointment => 'Aggiungi appuntamento';
+
+  @override
+  String get appointmentTitle => 'Motivo';
+
+  @override
+  String get place => 'Luogo';
+
+  @override
+  String get time => 'Ora';
+
+  @override
+  String get noAppointments => 'Nessun appuntamento.';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

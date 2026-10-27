@@ -112,6 +112,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noWeights => 'Noch kein Gewicht.';
 
   @override
+  String get appointments => 'Termine';
+
+  @override
+  String get addAppointment => 'Termin hinzufügen';
+
+  @override
+  String get appointmentTitle => 'Grund';
+
+  @override
+  String get place => 'Ort';
+
+  @override
+  String get time => 'Uhrzeit';
+
+  @override
+  String get noAppointments => 'Keine Termine.';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

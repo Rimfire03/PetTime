@@ -34,6 +34,12 @@
   "addWeight": "Ajouter un poids",
   "weightKg": "Poids (kg)",
   "noWeights": "Aucun poids enregistré.",
+  "appointments": "Rendez-vous",
+  "addAppointment": "Ajouter un rendez-vous",
+  "appointmentTitle": "Motif",
+  "place": "Lieu",
+  "time": "Heure",
+  "noAppointments": "Aucun rendez-vous.",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

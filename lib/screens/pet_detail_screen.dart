@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
 import 'pets_screen.dart' show speciesLabel;
 import 'record_form_screen.dart';
@@ -39,11 +40,16 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
         final pet = snap.data;
         if (pet == null) return const Scaffold(body: SizedBox());
         return DefaultTabController(
-          length: 3,
+          length: 4,
           child: Scaffold(
             appBar: AppBar(
               title: Text(pet.name),
-              bottom: TabBar(tabs: [Tab(text: t.info), Tab(text: t.healthBook), Tab(text: t.weight)]),
+              bottom: TabBar(isScrollable: true, tabs: [
+                Tab(text: t.info),
+                Tab(text: t.healthBook),
+                Tab(text: t.weight),
+                Tab(text: t.appointments),
+              ]),
               actions: [
                 IconButton(
                   tooltip: t.editPet,
@@ -53,7 +59,12 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 ),
               ],
             ),
-            body: TabBarView(children: [_Info(pet: pet), _Records(petId: petId), WeightsTab(petId: petId)]),
+            body: TabBarView(children: [
+              _Info(pet: pet),
+              _Records(petId: petId),
+              WeightsTab(petId: petId),
+              AppointmentsTab(petId: petId),
+            ]),
           ),
         );
       },

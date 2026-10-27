@@ -34,6 +34,12 @@
   "addWeight": "Adicionar peso",
   "weightKg": "Peso (kg)",
   "noWeights": "Sem pesos.",
+  "appointments": "Consultas",
+  "addAppointment": "Adicionar consulta",
+  "appointmentTitle": "Motivo",
+  "place": "Local",
+  "time": "Hora",
+  "noAppointments": "Sem consultas.",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

@@ -48,23 +48,46 @@ Future<void> rescheduleAll() async {
         ..where(db.healthRecords.nextDue.isNotNull()))
       .get();
 
+  final appts = await (db.select(db.appointments).join([
+    innerJoin(db.pets, db.pets.id.equalsExp(db.appointments.petId)),
+  ])).get();
+
   await _plugin.cancelAll();
-  for (final row in rows) {
-    final r = row.readTable(db.healthRecords);
-    final pet = row.readTable(db.pets);
-    final due = r.nextDue!;
-    final fireAt = reminderTime(due, r.remindDaysBefore, now);
-    if (fireAt == null) continue;
+
+  Future<void> schedule(int id, DateTime? fireAt, String title, String body) async {
+    if (fireAt == null) return;
     await _plugin.zonedSchedule(
-      id: r.id,
+      id: id,
       scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
-      title: '${pet.name} - ${recordLabel(t, r.type)}',
-      body: '${r.product} - ${t.dueOn(fmt.format(due))}',
+      title: title,
+      body: body,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails('reminders', t.reminderChannel),
         iOS: const DarwinNotificationDetails(),
       ),
+    );
+  }
+
+  for (final row in rows) {
+    final r = row.readTable(db.healthRecords);
+    final pet = row.readTable(db.pets);
+    await schedule(
+      r.id,
+      reminderTime(r.nextDue!, r.remindDaysBefore, now),
+      '${pet.name} - ${recordLabel(t, r.type)}',
+      '${r.product} - ${t.dueOn(fmt.format(r.nextDue!))}',
+    );
+  }
+  final dateTime = DateFormat.yMd(PlatformDispatcher.instance.locale.toString()).add_Hm();
+  for (final row in appts) {
+    final a = row.readTable(db.appointments);
+    final pet = row.readTable(db.pets);
+    await schedule(
+      appointmentNotificationBase + a.id, // ids must not collide with health record ids
+      appointmentReminderTime(a.at, a.remindDaysBefore, now),
+      '${pet.name} - ${a.title}',
+      [dateTime.format(a.at), if (a.place != null) a.place!].join(' - '),
     );
   }
 }
@@ -86,4 +109,5 @@ void watchReminders() {
       .catchError((Object e) => debugPrint('reminders: $e'));
   db.select(db.healthRecords).watch().listen((_) => run());
   db.select(db.pets).watch().listen((_) => run());
+  db.select(db.appointments).watch().listen((_) => run());
 }

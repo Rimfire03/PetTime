@@ -310,6 +310,42 @@ abstract class AppLocalizations {
   /// **'No weight yet.'**
   String get noWeights;
 
+  /// No description provided for @appointments.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointments'**
+  String get appointments;
+
+  /// No description provided for @addAppointment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add appointment'**
+  String get addAppointment;
+
+  /// No description provided for @appointmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get appointmentTitle;
+
+  /// No description provided for @place.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get place;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
+  /// No description provided for @noAppointments.
+  ///
+  /// In en, this message translates to:
+  /// **'No appointment.'**
+  String get noAppointments;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

@@ -20,6 +20,15 @@ void main() {
     expect(reminderTime(DateTime(2026, 10, 30), 7, now), isNull);
   });
 
+  test('appointment with days uses 09:00 rule', () {
+    expect(appointmentReminderTime(DateTime(2026, 11, 5, 15, 30), 1, now), DateTime(2026, 11, 4, 9));
+  });
+
+  test('same-day appointment fires 1h before, skipped if too late', () {
+    expect(appointmentReminderTime(DateTime(2026, 10, 27, 15, 30), 0, now), DateTime(2026, 10, 27, 14, 30));
+    expect(appointmentReminderTime(DateTime(2026, 10, 27, 12, 30), 0, now), isNull);
+  });
+
   test('today 09:00 already passed is skipped', () {
     expect(reminderTime(DateTime(2026, 10, 27), 0, now), isNull);
   });

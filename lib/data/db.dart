@@ -65,6 +65,11 @@ class AppDb extends _$AppDb {
         ..orderBy([(w) => OrderingTerm.asc(w.date)]))
       .watch();
 
+  Stream<List<Appointment>> watchAppointments(int petId) => (select(appointments)
+        ..where((a) => a.petId.equals(petId))
+        ..orderBy([(a) => OrderingTerm.asc(a.at)]))
+      .watch();
+
   Stream<List<HealthRecord>> watchRecords(int petId) => (select(healthRecords)
         ..where((r) => r.petId.equals(petId))
         ..orderBy([(r) => OrderingTerm.desc(r.date)]))

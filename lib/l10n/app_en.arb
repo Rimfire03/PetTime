@@ -34,6 +34,12 @@
   "addWeight": "Add weight",
   "weightKg": "Weight (kg)",
   "noWeights": "No weight yet.",
+  "appointments": "Appointments",
+  "addAppointment": "Add appointment",
+  "appointmentTitle": "Reason",
+  "place": "Place",
+  "time": "Time",
+  "noAppointments": "No appointment.",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }
