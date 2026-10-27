@@ -2,15 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'purchases.dart';
 
-// Google's public TEST banner units. Replace with the real AdMob ids before
-// release (and the app ids in AndroidManifest.xml / Info.plist).
-const _bannerAndroid = 'ca-app-pub-3940256099942544/6300978111';
+// Real ad units are used only in release builds. Debug and CI test builds show Google's public TEST
+// units: tapping your own live ads can get an AdMob account suspended.
+const _bannerAndroidTest = 'ca-app-pub-3940256099942544/6300978111';
+const _bannerAndroidLive = 'ca-app-pub-1252968753362892/4244412972'; // PetTime banner, account dev.tlpc
+// no iOS app is registered in AdMob yet, so iOS keeps the test unit (and the test app id in Info.plist)
 const _bannerIos = 'ca-app-pub-3940256099942544/2934735716';
+const _bannerAndroid = kReleaseMode ? _bannerAndroidLive : _bannerAndroidTest;
 
 /// True once consent allows requesting ads and the SDK is initialised.
 final adsReady = ValueNotifier<bool>(false);
