@@ -14,15 +14,27 @@ String recordLabel(AppLocalizations t, RecordType r) => switch (r) {
       RecordType.flea => t.flea,
     };
 
-class PetDetailScreen extends StatelessWidget {
+class PetDetailScreen extends StatefulWidget {
   const PetDetailScreen({super.key, required this.petId});
   final int petId;
+
+  @override
+  State<PetDetailScreen> createState() => _PetDetailScreenState();
+}
+
+class _PetDetailScreenState extends State<PetDetailScreen> {
+  int get petId => widget.petId;
+  // created once: a stream built inside build() would re-subscribe on every redraw
+  late final Stream<Pet> _pet = (db.select(db.pets)..where((p) => p.id.equals(petId)))
+      .watchSingleOrNull()
+      .where((p) => p != null)
+      .cast<Pet>();
 
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     return StreamBuilder<Pet>(
-      stream: (db.select(db.pets)..where((p) => p.id.equals(petId))).watchSingleOrNull().where((p) => p != null).cast<Pet>(),
+      stream: _pet,
       builder: (context, snap) {
         final pet = snap.data;
         if (pet == null) return const Scaffold(body: SizedBox());

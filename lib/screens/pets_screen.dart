@@ -22,7 +22,7 @@ class PetsScreen extends StatelessWidget {
             children: [
               for (final p in pets)
                 ListTile(
-                  leading: CircleAvatar(child: Text(p.name[0].toUpperCase())),
+                  leading: CircleAvatar(child: Text(p.name.characters.first.toUpperCase())),
                   title: Text(p.name),
                   subtitle: Text(p.breed ?? speciesLabel(t, p.species)),
                   onTap: () => Navigator.push(context,

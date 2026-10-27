@@ -7,8 +7,12 @@ import 'screens/pets_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initNotifications();
-  watchReminders();
+  try {
+    await initNotifications();
+    watchReminders();
+  } catch (e) {
+    debugPrint('notifications disabled: $e'); // the app must still open
+  }
   runApp(const PetTimeApp());
 }
 

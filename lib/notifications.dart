@@ -10,11 +10,10 @@ import 'package:timezone/timezone.dart' as tz;
 
 import 'data/db.dart';
 import 'l10n/app_localizations.dart';
+import 'reminder_time.dart';
 import 'screens/pet_detail_screen.dart' show recordLabel;
 
 final _plugin = FlutterLocalNotificationsPlugin();
-
-const _hour = 9; // reminders fire at 09:00 local time
 
 Future<void> initNotifications() async {
   tz.initializeTimeZones();
@@ -42,7 +41,7 @@ Future<void> initNotifications() async {
 Future<void> rescheduleAll() async {
   final t = _l10n();
   final fmt = DateFormat.yMd(PlatformDispatcher.instance.locale.toString());
-  final now = tz.TZDateTime.now(tz.local);
+  final now = DateTime.now();
   final rows = await (db.select(db.healthRecords).join([
     innerJoin(db.pets, db.pets.id.equalsExp(db.healthRecords.petId)),
   ])
@@ -54,16 +53,11 @@ Future<void> rescheduleAll() async {
     final r = row.readTable(db.healthRecords);
     final pet = row.readTable(db.pets);
     final due = r.nextDue!;
-    final fireDay = DateTime(due.year, due.month, due.day - r.remindDaysBefore);
-    var fireAt = tz.TZDateTime(tz.local, fireDay.year, fireDay.month, fireDay.day, _hour);
-    // reminder day already passed but due date still ahead: remind shortly
-    if (fireAt.isBefore(now)) {
-      if (!tz.TZDateTime(tz.local, due.year, due.month, due.day, _hour).isAfter(now)) continue;
-      fireAt = now.add(const Duration(minutes: 1));
-    }
+    final fireAt = reminderTime(due, r.remindDaysBefore, now);
+    if (fireAt == null) continue;
     await _plugin.zonedSchedule(
       id: r.id,
-      scheduledDate: fireAt,
+      scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
       title: '${pet.name} - ${recordLabel(t, r.type)}',
       body: '${r.product} - ${t.dueOn(fmt.format(due))}',
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
@@ -85,7 +79,11 @@ AppLocalizations _l10n() {
 
 /// Re-schedules whenever pets or health records change.
 void watchReminders() {
-  Future<void> run() => rescheduleAll().catchError((Object e) => debugPrint('reminders: $e'));
+  // chained so two runs never overlap and a stale read cannot land last
+  var last = Future<void>.value();
+  void run() => last = last
+      .then((_) => rescheduleAll())
+      .catchError((Object e) => debugPrint('reminders: $e'));
   db.select(db.healthRecords).watch().listen((_) => run());
   db.select(db.pets).watch().listen((_) => run());
 }

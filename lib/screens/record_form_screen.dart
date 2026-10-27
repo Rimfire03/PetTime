@@ -38,7 +38,7 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
       product: Value(_product.text.trim()),
       date: Value(_date),
       nextDue: Value(_next),
-      remindDaysBefore: Value(int.tryParse(_days.text) ?? 7),
+      remindDaysBefore: Value((int.tryParse(_days.text) ?? 7).clamp(0, 365)),
     );
     final id = widget.record?.id;
     if (id == null) {
