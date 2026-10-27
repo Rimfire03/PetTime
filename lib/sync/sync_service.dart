@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:drift/drift.dart' show Value;
+import 'package:drift/drift.dart' show OrderingTerm, Value;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -86,17 +86,28 @@ Future<String> sharePet(int localPetId) async {
   var pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
   if (pet.remoteId == null) {
     final id = _uuid();
-    // the pet document must exist before its children: their rules check membership on it
-    await _pets.doc(id).set({
-      ..._petMap(pet),
-      'members': [user.uid],
-      'ownerUid': user.uid,
-    }).timeout(const Duration(seconds: 20));
+    // 1. Give the local pet its shared id FIRST. When the server copy appears, the sync listener
+    //    must recognise it as this very pet; otherwise it adds a second, duplicate pet.
+    await db.applyingRemote(() => (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
+        .write(PetsCompanion(remoteId: Value(id))));
+    try {
+      // 2. The pet document must exist before its children: their rules check membership on it
+      await _pets.doc(id).set({
+        ..._petMap(pet),
+        'members': [user.uid],
+        'ownerUid': user.uid,
+      }).timeout(const Duration(seconds: 20));
+    } catch (_) {
+      // offline or refused: the pet is not shared after all
+      await db.applyingRemote(() => (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
+          .write(const PetsCompanion(remoteId: Value(null))));
+      rethrow;
+    }
+    // 3. Now that the server has the pet, upload everything it owns
     final now = _nowMs();
     await db.applyingRemote(() async {
       await (db.update(db.pets)..where((p) => p.id.equals(localPetId)))
-          .write(PetsCompanion(remoteId: Value(id), updatedAt: Value(now), dirty: const Value(true)));
-      // everything the pet owns must be uploaded too
+          .write(PetsCompanion(updatedAt: Value(now), dirty: const Value(true)));
       for (final t in ['health_records', 'weights', 'appointments']) {
         await db.customStatement('UPDATE $t SET dirty = 1, updated_at = ? WHERE pet_id = ?', [now, localPetId]);
       }
@@ -202,13 +213,27 @@ class _Sync {
         await (db.delete(db.pets)..where((p) => p.remoteId.equals(petRemoteId))).go();
       });
 
+  /// The local pet for a shared id. An earlier version could create a second copy of a pet right
+  /// after sharing it; if two exist, the original (lowest id) is kept and the copies are removed.
+  /// Must run inside [AppDb.applyingRemote] so the removal is not reported to the server.
+  Future<Pet?> _localPet(String remoteId) async {
+    final all = await (db.select(db.pets)
+          ..where((p) => p.remoteId.equals(remoteId))
+          ..orderBy([(p) => OrderingTerm.asc(p.id)]))
+        .get();
+    for (final copy in all.skip(1)) {
+      await (db.delete(db.pets)..where((p) => p.id.equals(copy.id))).go();
+    }
+    return all.isEmpty ? null : all.first;
+  }
+
   // true when the local copy must be left alone (it is newer and still to be pushed)
   bool _localWins(int? localTs, bool? dirty, int remoteTs) => dirty == true && (localTs ?? 0) > remoteTs;
 
   Future<void> _applyPet(String id, Map<String, dynamic> d) async {
     final ts = (d['updatedAt'] as num?)?.toInt() ?? 0;
     await db.applyingRemote(() async {
-      final local = await (db.select(db.pets)..where((p) => p.remoteId.equals(id))).getSingleOrNull();
+      final local = await _localPet(id);
       if (local != null && (_localWins(local.updatedAt, local.dirty, ts) || (local.updatedAt == ts && local.dirty != true))) {
         return;
       }
@@ -260,7 +285,7 @@ class _Sync {
     final ts = (d['updatedAt'] as num?)?.toInt() ?? 0;
     final gone = d['deleted'] == true;
     await db.applyingRemote(() async {
-      final pet = await (db.select(db.pets)..where((p) => p.remoteId.equals(petRemote))).getSingleOrNull();
+      final pet = await _localPet(petRemote);
       if (pet == null) return;
       switch (kind) {
         case 'records':
