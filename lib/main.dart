@@ -7,11 +7,17 @@ import 'l10n/app_localizations.dart';
 import 'ads.dart';
 import 'notifications.dart';
 import 'photos.dart';
+import 'sync/sync_service.dart';
 import 'screens/pets_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initPhotos();
+  try {
+    await initSync();
+  } catch (e) {
+    debugPrint('sync disabled: $e'); // no Firebase config on this platform: stay local-only
+  }
   try {
     await initNotifications();
     watchReminders();

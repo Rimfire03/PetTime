@@ -52,6 +52,15 @@
   "restoreConfirm": "Questo sostituisce TUTTI i dati attuali con il backup. Continuare?",
   "cancel": "Annulla",
   "privacySettings": "Privacy e pubblicità",
+  "sharePet": "Condividi questo animale",
+  "shareExplain": "Dai questo codice alle persone con cui condividere. Vale 7 giorni. Possono aggiungere e modificare le voci e tutto resta sincronizzato. Tutti accedono con Google.",
+  "copyCode": "Copia codice",
+  "codeCopied": "Codice copiato.",
+  "joinWithCode": "Unisciti con un codice",
+  "codeLabel": "Codice d'invito",
+  "join": "Unisciti",
+  "joinFailed": "Codice non valido o scaduto.",
+  "syncFailed": "Server non raggiungibile. Controlla la connessione.",
   "noRecords": "Nessuna voce.",
   "dueOn": "Scade il {date}"
 }

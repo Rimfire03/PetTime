@@ -5,6 +5,8 @@ import '../backup.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
+import '../sync/sync_service.dart' show syncAvailable;
+import 'share_dialogs.dart';
 import 'pet_detail_screen.dart';
 import 'pet_form_screen.dart';
 
@@ -19,9 +21,14 @@ class PetsScreen extends StatelessWidget {
         ValueListenableBuilder<bool>(
           valueListenable: privacyOptionsRequired,
           builder: (_, privacy, _) => PopupMenuButton<_Backup>(
-            onSelected: (m) =>
-                m == _Backup.privacy ? showPrivacyOptions() : _runBackup(context, m),
+            onSelected: (m) => switch (m) {
+              _Backup.privacy => showPrivacyOptions(),
+              _Backup.join => showJoinDialog(context),
+              _ => _runBackup(context, m),
+            },
             itemBuilder: (_) => [
+              if (syncAvailable.value)
+                PopupMenuItem(value: _Backup.join, child: Text(t.joinWithCode)),
               PopupMenuItem(value: _Backup.export, child: Text(t.backupExport)),
               PopupMenuItem(value: _Backup.import, child: Text(t.backupImport)),
               if (privacy) PopupMenuItem(value: _Backup.privacy, child: Text(t.privacySettings)),
@@ -59,7 +66,7 @@ class PetsScreen extends StatelessWidget {
   }
 }
 
-enum _Backup { export, import, privacy }
+enum _Backup { export, import, privacy, join }
 
 Future<void> _runBackup(BuildContext context, _Backup action) async {
   final t = AppLocalizations.of(context);

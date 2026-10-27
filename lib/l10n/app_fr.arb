@@ -52,6 +52,15 @@
   "restoreConfirm": "Cela remplace TOUTES les données actuelles par la sauvegarde. Continuer ?",
   "cancel": "Annuler",
   "privacySettings": "Confidentialité et publicités",
+  "sharePet": "Partager cet animal",
+  "shareExplain": "Donne ce code aux personnes avec qui partager. Il est valable 7 jours. Elles peuvent ajouter et modifier les soins, et tout reste synchronisé. Chacun se connecte avec Google.",
+  "copyCode": "Copier le code",
+  "codeCopied": "Code copié.",
+  "joinWithCode": "Rejoindre avec un code",
+  "codeLabel": "Code d'invitation",
+  "join": "Rejoindre",
+  "joinFailed": "Code invalide ou expiré.",
+  "syncFailed": "Serveur injoignable. Vérifie ta connexion.",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

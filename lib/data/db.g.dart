@@ -8,6 +8,40 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $PetsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -115,6 +149,9 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
   );
   @override
   List<GeneratedColumn> get $columns => [
+    remoteId,
+    updatedAt,
+    dirty,
     id,
     name,
     species,
@@ -138,6 +175,24 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -206,6 +261,18 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
   Pet map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Pet(
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      ),
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -256,6 +323,9 @@ class $PetsTable extends Pets with TableInfo<$PetsTable, Pet> {
 }
 
 class Pet extends DataClass implements Insertable<Pet> {
+  final String? remoteId;
+  final int? updatedAt;
+  final bool? dirty;
   final int id;
   final String name;
   final String species;
@@ -267,6 +337,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   final String? photoPath;
   final String? notes;
   const Pet({
+    this.remoteId,
+    this.updatedAt,
+    this.dirty,
     required this.id,
     required this.name,
     required this.species,
@@ -281,6 +354,15 @@ class Pet extends DataClass implements Insertable<Pet> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<int>(updatedAt);
+    }
+    if (!nullToAbsent || dirty != null) {
+      map['dirty'] = Variable<bool>(dirty);
+    }
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['species'] = Variable<String>(species);
@@ -310,6 +392,15 @@ class Pet extends DataClass implements Insertable<Pet> {
 
   PetsCompanion toCompanion(bool nullToAbsent) {
     return PetsCompanion(
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      dirty: dirty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dirty),
       id: Value(id),
       name: Value(name),
       species: Value(species),
@@ -341,6 +432,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Pet(
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
+      updatedAt: serializer.fromJson<int?>(json['updatedAt']),
+      dirty: serializer.fromJson<bool?>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       species: serializer.fromJson<String>(json['species']),
@@ -357,6 +451,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'remoteId': serializer.toJson<String?>(remoteId),
+      'updatedAt': serializer.toJson<int?>(updatedAt),
+      'dirty': serializer.toJson<bool?>(dirty),
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'species': serializer.toJson<String>(species),
@@ -371,6 +468,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   }
 
   Pet copyWith({
+    Value<String?> remoteId = const Value.absent(),
+    Value<int?> updatedAt = const Value.absent(),
+    Value<bool?> dirty = const Value.absent(),
     int? id,
     String? name,
     String? species,
@@ -382,6 +482,9 @@ class Pet extends DataClass implements Insertable<Pet> {
     Value<String?> photoPath = const Value.absent(),
     Value<String?> notes = const Value.absent(),
   }) => Pet(
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    dirty: dirty.present ? dirty.value : this.dirty,
     id: id ?? this.id,
     name: name ?? this.name,
     species: species ?? this.species,
@@ -395,6 +498,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   );
   Pet copyWithCompanion(PetsCompanion data) {
     return Pet(
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       species: data.species.present ? data.species.value : this.species,
@@ -411,6 +517,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   @override
   String toString() {
     return (StringBuffer('Pet(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('species: $species, ')
@@ -427,6 +536,9 @@ class Pet extends DataClass implements Insertable<Pet> {
 
   @override
   int get hashCode => Object.hash(
+    remoteId,
+    updatedAt,
+    dirty,
     id,
     name,
     species,
@@ -442,6 +554,9 @@ class Pet extends DataClass implements Insertable<Pet> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Pet &&
+          other.remoteId == this.remoteId &&
+          other.updatedAt == this.updatedAt &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.name == this.name &&
           other.species == this.species &&
@@ -455,6 +570,9 @@ class Pet extends DataClass implements Insertable<Pet> {
 }
 
 class PetsCompanion extends UpdateCompanion<Pet> {
+  final Value<String?> remoteId;
+  final Value<int?> updatedAt;
+  final Value<bool?> dirty;
   final Value<int> id;
   final Value<String> name;
   final Value<String> species;
@@ -466,6 +584,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
   final Value<String?> photoPath;
   final Value<String?> notes;
   const PetsCompanion({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.species = const Value.absent(),
@@ -478,6 +599,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     this.notes = const Value.absent(),
   });
   PetsCompanion.insert({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required String name,
     this.species = const Value.absent(),
@@ -490,6 +614,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     this.notes = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Pet> custom({
+    Expression<String>? remoteId,
+    Expression<int>? updatedAt,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? species,
@@ -502,6 +629,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     Expression<String>? notes,
   }) {
     return RawValuesInsertable({
+      if (remoteId != null) 'remote_id': remoteId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (species != null) 'species': species,
@@ -516,6 +646,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
   }
 
   PetsCompanion copyWith({
+    Value<String?>? remoteId,
+    Value<int?>? updatedAt,
+    Value<bool?>? dirty,
     Value<int>? id,
     Value<String>? name,
     Value<String>? species,
@@ -528,6 +661,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
     Value<String?>? notes,
   }) {
     return PetsCompanion(
+      remoteId: remoteId ?? this.remoteId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       name: name ?? this.name,
       species: species ?? this.species,
@@ -544,6 +680,15 @@ class PetsCompanion extends UpdateCompanion<Pet> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -580,6 +725,9 @@ class PetsCompanion extends UpdateCompanion<Pet> {
   @override
   String toString() {
     return (StringBuffer('PetsCompanion(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('species: $species, ')
@@ -601,6 +749,40 @@ class $HealthRecordsTable extends HealthRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $HealthRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -680,6 +862,9 @@ class $HealthRecordsTable extends HealthRecords
   );
   @override
   List<GeneratedColumn> get $columns => [
+    remoteId,
+    updatedAt,
+    dirty,
     id,
     petId,
     type,
@@ -700,6 +885,24 @@ class $HealthRecordsTable extends HealthRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -751,6 +954,18 @@ class $HealthRecordsTable extends HealthRecords
   HealthRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return HealthRecord(
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      ),
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -794,6 +1009,9 @@ class $HealthRecordsTable extends HealthRecords
 }
 
 class HealthRecord extends DataClass implements Insertable<HealthRecord> {
+  final String? remoteId;
+  final int? updatedAt;
+  final bool? dirty;
   final int id;
   final int petId;
   final RecordType type;
@@ -802,6 +1020,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   final DateTime? nextDue;
   final int remindDaysBefore;
   const HealthRecord({
+    this.remoteId,
+    this.updatedAt,
+    this.dirty,
     required this.id,
     required this.petId,
     required this.type,
@@ -813,6 +1034,15 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<int>(updatedAt);
+    }
+    if (!nullToAbsent || dirty != null) {
+      map['dirty'] = Variable<bool>(dirty);
+    }
     map['id'] = Variable<int>(id);
     map['pet_id'] = Variable<int>(petId);
     {
@@ -831,6 +1061,15 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
 
   HealthRecordsCompanion toCompanion(bool nullToAbsent) {
     return HealthRecordsCompanion(
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      dirty: dirty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dirty),
       id: Value(id),
       petId: Value(petId),
       type: Value(type),
@@ -849,6 +1088,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return HealthRecord(
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
+      updatedAt: serializer.fromJson<int?>(json['updatedAt']),
+      dirty: serializer.fromJson<bool?>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       petId: serializer.fromJson<int>(json['petId']),
       type: $HealthRecordsTable.$convertertype.fromJson(
@@ -864,6 +1106,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'remoteId': serializer.toJson<String?>(remoteId),
+      'updatedAt': serializer.toJson<int?>(updatedAt),
+      'dirty': serializer.toJson<bool?>(dirty),
       'id': serializer.toJson<int>(id),
       'petId': serializer.toJson<int>(petId),
       'type': serializer.toJson<int>(
@@ -877,6 +1122,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   }
 
   HealthRecord copyWith({
+    Value<String?> remoteId = const Value.absent(),
+    Value<int?> updatedAt = const Value.absent(),
+    Value<bool?> dirty = const Value.absent(),
     int? id,
     int? petId,
     RecordType? type,
@@ -885,6 +1133,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
     Value<DateTime?> nextDue = const Value.absent(),
     int? remindDaysBefore,
   }) => HealthRecord(
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    dirty: dirty.present ? dirty.value : this.dirty,
     id: id ?? this.id,
     petId: petId ?? this.petId,
     type: type ?? this.type,
@@ -895,6 +1146,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   );
   HealthRecord copyWithCompanion(HealthRecordsCompanion data) {
     return HealthRecord(
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       petId: data.petId.present ? data.petId.value : this.petId,
       type: data.type.present ? data.type.value : this.type,
@@ -910,6 +1164,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   @override
   String toString() {
     return (StringBuffer('HealthRecord(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('type: $type, ')
@@ -922,12 +1179,25 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, petId, type, product, date, nextDue, remindDaysBefore);
+  int get hashCode => Object.hash(
+    remoteId,
+    updatedAt,
+    dirty,
+    id,
+    petId,
+    type,
+    product,
+    date,
+    nextDue,
+    remindDaysBefore,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is HealthRecord &&
+          other.remoteId == this.remoteId &&
+          other.updatedAt == this.updatedAt &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.petId == this.petId &&
           other.type == this.type &&
@@ -938,6 +1208,9 @@ class HealthRecord extends DataClass implements Insertable<HealthRecord> {
 }
 
 class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
+  final Value<String?> remoteId;
+  final Value<int?> updatedAt;
+  final Value<bool?> dirty;
   final Value<int> id;
   final Value<int> petId;
   final Value<RecordType> type;
@@ -946,6 +1219,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
   final Value<DateTime?> nextDue;
   final Value<int> remindDaysBefore;
   const HealthRecordsCompanion({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.petId = const Value.absent(),
     this.type = const Value.absent(),
@@ -955,6 +1231,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
     this.remindDaysBefore = const Value.absent(),
   });
   HealthRecordsCompanion.insert({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required int petId,
     required RecordType type,
@@ -967,6 +1246,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
        product = Value(product),
        date = Value(date);
   static Insertable<HealthRecord> custom({
+    Expression<String>? remoteId,
+    Expression<int>? updatedAt,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<int>? petId,
     Expression<int>? type,
@@ -976,6 +1258,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
     Expression<int>? remindDaysBefore,
   }) {
     return RawValuesInsertable({
+      if (remoteId != null) 'remote_id': remoteId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (petId != null) 'pet_id': petId,
       if (type != null) 'type': type,
@@ -987,6 +1272,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
   }
 
   HealthRecordsCompanion copyWith({
+    Value<String?>? remoteId,
+    Value<int?>? updatedAt,
+    Value<bool?>? dirty,
     Value<int>? id,
     Value<int>? petId,
     Value<RecordType>? type,
@@ -996,6 +1284,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
     Value<int>? remindDaysBefore,
   }) {
     return HealthRecordsCompanion(
+      remoteId: remoteId ?? this.remoteId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       petId: petId ?? this.petId,
       type: type ?? this.type,
@@ -1009,6 +1300,15 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -1038,6 +1338,9 @@ class HealthRecordsCompanion extends UpdateCompanion<HealthRecord> {
   @override
   String toString() {
     return (StringBuffer('HealthRecordsCompanion(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('type: $type, ')
@@ -1055,6 +1358,40 @@ class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $WeightsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1099,7 +1436,15 @@ class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, petId, date, kg];
+  List<GeneratedColumn> get $columns => [
+    remoteId,
+    updatedAt,
+    dirty,
+    id,
+    petId,
+    date,
+    kg,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1112,6 +1457,24 @@ class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -1145,6 +1508,18 @@ class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
   Weight map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Weight(
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      ),
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1171,11 +1546,17 @@ class $WeightsTable extends Weights with TableInfo<$WeightsTable, Weight> {
 }
 
 class Weight extends DataClass implements Insertable<Weight> {
+  final String? remoteId;
+  final int? updatedAt;
+  final bool? dirty;
   final int id;
   final int petId;
   final DateTime date;
   final double kg;
   const Weight({
+    this.remoteId,
+    this.updatedAt,
+    this.dirty,
     required this.id,
     required this.petId,
     required this.date,
@@ -1184,6 +1565,15 @@ class Weight extends DataClass implements Insertable<Weight> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<int>(updatedAt);
+    }
+    if (!nullToAbsent || dirty != null) {
+      map['dirty'] = Variable<bool>(dirty);
+    }
     map['id'] = Variable<int>(id);
     map['pet_id'] = Variable<int>(petId);
     map['date'] = Variable<DateTime>(date);
@@ -1193,6 +1583,15 @@ class Weight extends DataClass implements Insertable<Weight> {
 
   WeightsCompanion toCompanion(bool nullToAbsent) {
     return WeightsCompanion(
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      dirty: dirty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dirty),
       id: Value(id),
       petId: Value(petId),
       date: Value(date),
@@ -1206,6 +1605,9 @@ class Weight extends DataClass implements Insertable<Weight> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Weight(
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
+      updatedAt: serializer.fromJson<int?>(json['updatedAt']),
+      dirty: serializer.fromJson<bool?>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       petId: serializer.fromJson<int>(json['petId']),
       date: serializer.fromJson<DateTime>(json['date']),
@@ -1216,6 +1618,9 @@ class Weight extends DataClass implements Insertable<Weight> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'remoteId': serializer.toJson<String?>(remoteId),
+      'updatedAt': serializer.toJson<int?>(updatedAt),
+      'dirty': serializer.toJson<bool?>(dirty),
       'id': serializer.toJson<int>(id),
       'petId': serializer.toJson<int>(petId),
       'date': serializer.toJson<DateTime>(date),
@@ -1223,7 +1628,18 @@ class Weight extends DataClass implements Insertable<Weight> {
     };
   }
 
-  Weight copyWith({int? id, int? petId, DateTime? date, double? kg}) => Weight(
+  Weight copyWith({
+    Value<String?> remoteId = const Value.absent(),
+    Value<int?> updatedAt = const Value.absent(),
+    Value<bool?> dirty = const Value.absent(),
+    int? id,
+    int? petId,
+    DateTime? date,
+    double? kg,
+  }) => Weight(
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    dirty: dirty.present ? dirty.value : this.dirty,
     id: id ?? this.id,
     petId: petId ?? this.petId,
     date: date ?? this.date,
@@ -1231,6 +1647,9 @@ class Weight extends DataClass implements Insertable<Weight> {
   );
   Weight copyWithCompanion(WeightsCompanion data) {
     return Weight(
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       petId: data.petId.present ? data.petId.value : this.petId,
       date: data.date.present ? data.date.value : this.date,
@@ -1241,6 +1660,9 @@ class Weight extends DataClass implements Insertable<Weight> {
   @override
   String toString() {
     return (StringBuffer('Weight(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('date: $date, ')
@@ -1250,11 +1672,15 @@ class Weight extends DataClass implements Insertable<Weight> {
   }
 
   @override
-  int get hashCode => Object.hash(id, petId, date, kg);
+  int get hashCode =>
+      Object.hash(remoteId, updatedAt, dirty, id, petId, date, kg);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Weight &&
+          other.remoteId == this.remoteId &&
+          other.updatedAt == this.updatedAt &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.petId == this.petId &&
           other.date == this.date &&
@@ -1262,17 +1688,26 @@ class Weight extends DataClass implements Insertable<Weight> {
 }
 
 class WeightsCompanion extends UpdateCompanion<Weight> {
+  final Value<String?> remoteId;
+  final Value<int?> updatedAt;
+  final Value<bool?> dirty;
   final Value<int> id;
   final Value<int> petId;
   final Value<DateTime> date;
   final Value<double> kg;
   const WeightsCompanion({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.petId = const Value.absent(),
     this.date = const Value.absent(),
     this.kg = const Value.absent(),
   });
   WeightsCompanion.insert({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required int petId,
     required DateTime date,
@@ -1281,12 +1716,18 @@ class WeightsCompanion extends UpdateCompanion<Weight> {
        date = Value(date),
        kg = Value(kg);
   static Insertable<Weight> custom({
+    Expression<String>? remoteId,
+    Expression<int>? updatedAt,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<int>? petId,
     Expression<DateTime>? date,
     Expression<double>? kg,
   }) {
     return RawValuesInsertable({
+      if (remoteId != null) 'remote_id': remoteId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (petId != null) 'pet_id': petId,
       if (date != null) 'date': date,
@@ -1295,12 +1736,18 @@ class WeightsCompanion extends UpdateCompanion<Weight> {
   }
 
   WeightsCompanion copyWith({
+    Value<String?>? remoteId,
+    Value<int?>? updatedAt,
+    Value<bool?>? dirty,
     Value<int>? id,
     Value<int>? petId,
     Value<DateTime>? date,
     Value<double>? kg,
   }) {
     return WeightsCompanion(
+      remoteId: remoteId ?? this.remoteId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       petId: petId ?? this.petId,
       date: date ?? this.date,
@@ -1311,6 +1758,15 @@ class WeightsCompanion extends UpdateCompanion<Weight> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -1329,6 +1785,9 @@ class WeightsCompanion extends UpdateCompanion<Weight> {
   @override
   String toString() {
     return (StringBuffer('WeightsCompanion(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('date: $date, ')
@@ -1344,6 +1803,40 @@ class $AppointmentsTable extends Appointments
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AppointmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1410,6 +1903,9 @@ class $AppointmentsTable extends Appointments
   );
   @override
   List<GeneratedColumn> get $columns => [
+    remoteId,
+    updatedAt,
+    dirty,
     id,
     petId,
     at,
@@ -1429,6 +1925,24 @@ class $AppointmentsTable extends Appointments
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -1477,6 +1991,18 @@ class $AppointmentsTable extends Appointments
   Appointment map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Appointment(
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      ),
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      ),
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1511,6 +2037,9 @@ class $AppointmentsTable extends Appointments
 }
 
 class Appointment extends DataClass implements Insertable<Appointment> {
+  final String? remoteId;
+  final int? updatedAt;
+  final bool? dirty;
   final int id;
   final int petId;
   final DateTime at;
@@ -1518,6 +2047,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   final String? place;
   final int remindDaysBefore;
   const Appointment({
+    this.remoteId,
+    this.updatedAt,
+    this.dirty,
     required this.id,
     required this.petId,
     required this.at,
@@ -1528,6 +2060,15 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || remoteId != null) {
+      map['remote_id'] = Variable<String>(remoteId);
+    }
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<int>(updatedAt);
+    }
+    if (!nullToAbsent || dirty != null) {
+      map['dirty'] = Variable<bool>(dirty);
+    }
     map['id'] = Variable<int>(id);
     map['pet_id'] = Variable<int>(petId);
     map['at'] = Variable<DateTime>(at);
@@ -1541,6 +2082,15 @@ class Appointment extends DataClass implements Insertable<Appointment> {
 
   AppointmentsCompanion toCompanion(bool nullToAbsent) {
     return AppointmentsCompanion(
+      remoteId: remoteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(remoteId),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+      dirty: dirty == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dirty),
       id: Value(id),
       petId: Value(petId),
       at: Value(at),
@@ -1558,6 +2108,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Appointment(
+      remoteId: serializer.fromJson<String?>(json['remoteId']),
+      updatedAt: serializer.fromJson<int?>(json['updatedAt']),
+      dirty: serializer.fromJson<bool?>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       petId: serializer.fromJson<int>(json['petId']),
       at: serializer.fromJson<DateTime>(json['at']),
@@ -1570,6 +2123,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'remoteId': serializer.toJson<String?>(remoteId),
+      'updatedAt': serializer.toJson<int?>(updatedAt),
+      'dirty': serializer.toJson<bool?>(dirty),
       'id': serializer.toJson<int>(id),
       'petId': serializer.toJson<int>(petId),
       'at': serializer.toJson<DateTime>(at),
@@ -1580,6 +2136,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   }
 
   Appointment copyWith({
+    Value<String?> remoteId = const Value.absent(),
+    Value<int?> updatedAt = const Value.absent(),
+    Value<bool?> dirty = const Value.absent(),
     int? id,
     int? petId,
     DateTime? at,
@@ -1587,6 +2146,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
     Value<String?> place = const Value.absent(),
     int? remindDaysBefore,
   }) => Appointment(
+    remoteId: remoteId.present ? remoteId.value : this.remoteId,
+    updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+    dirty: dirty.present ? dirty.value : this.dirty,
     id: id ?? this.id,
     petId: petId ?? this.petId,
     at: at ?? this.at,
@@ -1596,6 +2158,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   );
   Appointment copyWithCompanion(AppointmentsCompanion data) {
     return Appointment(
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       petId: data.petId.present ? data.petId.value : this.petId,
       at: data.at.present ? data.at.value : this.at,
@@ -1610,6 +2175,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   @override
   String toString() {
     return (StringBuffer('Appointment(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('at: $at, ')
@@ -1621,12 +2189,24 @@ class Appointment extends DataClass implements Insertable<Appointment> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, petId, at, title, place, remindDaysBefore);
+  int get hashCode => Object.hash(
+    remoteId,
+    updatedAt,
+    dirty,
+    id,
+    petId,
+    at,
+    title,
+    place,
+    remindDaysBefore,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Appointment &&
+          other.remoteId == this.remoteId &&
+          other.updatedAt == this.updatedAt &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.petId == this.petId &&
           other.at == this.at &&
@@ -1636,6 +2216,9 @@ class Appointment extends DataClass implements Insertable<Appointment> {
 }
 
 class AppointmentsCompanion extends UpdateCompanion<Appointment> {
+  final Value<String?> remoteId;
+  final Value<int?> updatedAt;
+  final Value<bool?> dirty;
   final Value<int> id;
   final Value<int> petId;
   final Value<DateTime> at;
@@ -1643,6 +2226,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
   final Value<String?> place;
   final Value<int> remindDaysBefore;
   const AppointmentsCompanion({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.petId = const Value.absent(),
     this.at = const Value.absent(),
@@ -1651,6 +2237,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
     this.remindDaysBefore = const Value.absent(),
   });
   AppointmentsCompanion.insert({
+    this.remoteId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required int petId,
     required DateTime at,
@@ -1661,6 +2250,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
        at = Value(at),
        title = Value(title);
   static Insertable<Appointment> custom({
+    Expression<String>? remoteId,
+    Expression<int>? updatedAt,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<int>? petId,
     Expression<DateTime>? at,
@@ -1669,6 +2261,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
     Expression<int>? remindDaysBefore,
   }) {
     return RawValuesInsertable({
+      if (remoteId != null) 'remote_id': remoteId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (petId != null) 'pet_id': petId,
       if (at != null) 'at': at,
@@ -1679,6 +2274,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
   }
 
   AppointmentsCompanion copyWith({
+    Value<String?>? remoteId,
+    Value<int?>? updatedAt,
+    Value<bool?>? dirty,
     Value<int>? id,
     Value<int>? petId,
     Value<DateTime>? at,
@@ -1687,6 +2285,9 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
     Value<int>? remindDaysBefore,
   }) {
     return AppointmentsCompanion(
+      remoteId: remoteId ?? this.remoteId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       petId: petId ?? this.petId,
       at: at ?? this.at,
@@ -1699,6 +2300,15 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -1723,12 +2333,479 @@ class AppointmentsCompanion extends UpdateCompanion<Appointment> {
   @override
   String toString() {
     return (StringBuffer('AppointmentsCompanion(')
+          ..write('remoteId: $remoteId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('petId: $petId, ')
           ..write('at: $at, ')
           ..write('title: $title, ')
           ..write('place: $place, ')
           ..write('remindDaysBefore: $remindDaysBefore')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncDeletesTable extends SyncDeletes
+    with TableInfo<$SyncDeletesTable, SyncDelete> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncDeletesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _petRemoteIdMeta = const VerificationMeta(
+    'petRemoteId',
+  );
+  @override
+  late final GeneratedColumn<String> petRemoteId = GeneratedColumn<String>(
+    'pet_remote_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _remoteIdMeta = const VerificationMeta(
+    'remoteId',
+  );
+  @override
+  late final GeneratedColumn<String> remoteId = GeneratedColumn<String>(
+    'remote_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, kind, petRemoteId, remoteId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_deletes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncDelete> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('pet_remote_id')) {
+      context.handle(
+        _petRemoteIdMeta,
+        petRemoteId.isAcceptableOrUnknown(
+          data['pet_remote_id']!,
+          _petRemoteIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_petRemoteIdMeta);
+    }
+    if (data.containsKey('remote_id')) {
+      context.handle(
+        _remoteIdMeta,
+        remoteId.isAcceptableOrUnknown(data['remote_id']!, _remoteIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_remoteIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SyncDelete map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncDelete(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      petRemoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_remote_id'],
+      )!,
+      remoteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}remote_id'],
+      )!,
+    );
+  }
+
+  @override
+  $SyncDeletesTable createAlias(String alias) {
+    return $SyncDeletesTable(attachedDatabase, alias);
+  }
+}
+
+class SyncDelete extends DataClass implements Insertable<SyncDelete> {
+  final int id;
+  final String kind;
+  final String petRemoteId;
+  final String remoteId;
+  const SyncDelete({
+    required this.id,
+    required this.kind,
+    required this.petRemoteId,
+    required this.remoteId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['kind'] = Variable<String>(kind);
+    map['pet_remote_id'] = Variable<String>(petRemoteId);
+    map['remote_id'] = Variable<String>(remoteId);
+    return map;
+  }
+
+  SyncDeletesCompanion toCompanion(bool nullToAbsent) {
+    return SyncDeletesCompanion(
+      id: Value(id),
+      kind: Value(kind),
+      petRemoteId: Value(petRemoteId),
+      remoteId: Value(remoteId),
+    );
+  }
+
+  factory SyncDelete.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncDelete(
+      id: serializer.fromJson<int>(json['id']),
+      kind: serializer.fromJson<String>(json['kind']),
+      petRemoteId: serializer.fromJson<String>(json['petRemoteId']),
+      remoteId: serializer.fromJson<String>(json['remoteId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'kind': serializer.toJson<String>(kind),
+      'petRemoteId': serializer.toJson<String>(petRemoteId),
+      'remoteId': serializer.toJson<String>(remoteId),
+    };
+  }
+
+  SyncDelete copyWith({
+    int? id,
+    String? kind,
+    String? petRemoteId,
+    String? remoteId,
+  }) => SyncDelete(
+    id: id ?? this.id,
+    kind: kind ?? this.kind,
+    petRemoteId: petRemoteId ?? this.petRemoteId,
+    remoteId: remoteId ?? this.remoteId,
+  );
+  SyncDelete copyWithCompanion(SyncDeletesCompanion data) {
+    return SyncDelete(
+      id: data.id.present ? data.id.value : this.id,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      petRemoteId: data.petRemoteId.present
+          ? data.petRemoteId.value
+          : this.petRemoteId,
+      remoteId: data.remoteId.present ? data.remoteId.value : this.remoteId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncDelete(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('petRemoteId: $petRemoteId, ')
+          ..write('remoteId: $remoteId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, kind, petRemoteId, remoteId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncDelete &&
+          other.id == this.id &&
+          other.kind == this.kind &&
+          other.petRemoteId == this.petRemoteId &&
+          other.remoteId == this.remoteId);
+}
+
+class SyncDeletesCompanion extends UpdateCompanion<SyncDelete> {
+  final Value<int> id;
+  final Value<String> kind;
+  final Value<String> petRemoteId;
+  final Value<String> remoteId;
+  const SyncDeletesCompanion({
+    this.id = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.petRemoteId = const Value.absent(),
+    this.remoteId = const Value.absent(),
+  });
+  SyncDeletesCompanion.insert({
+    this.id = const Value.absent(),
+    required String kind,
+    required String petRemoteId,
+    required String remoteId,
+  }) : kind = Value(kind),
+       petRemoteId = Value(petRemoteId),
+       remoteId = Value(remoteId);
+  static Insertable<SyncDelete> custom({
+    Expression<int>? id,
+    Expression<String>? kind,
+    Expression<String>? petRemoteId,
+    Expression<String>? remoteId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (kind != null) 'kind': kind,
+      if (petRemoteId != null) 'pet_remote_id': petRemoteId,
+      if (remoteId != null) 'remote_id': remoteId,
+    });
+  }
+
+  SyncDeletesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? kind,
+    Value<String>? petRemoteId,
+    Value<String>? remoteId,
+  }) {
+    return SyncDeletesCompanion(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      petRemoteId: petRemoteId ?? this.petRemoteId,
+      remoteId: remoteId ?? this.remoteId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (petRemoteId.present) {
+      map['pet_remote_id'] = Variable<String>(petRemoteId.value);
+    }
+    if (remoteId.present) {
+      map['remote_id'] = Variable<String>(remoteId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncDeletesCompanion(')
+          ..write('id: $id, ')
+          ..write('kind: $kind, ')
+          ..write('petRemoteId: $petRemoteId, ')
+          ..write('remoteId: $remoteId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncFlagsTable extends SyncFlags
+    with TableInfo<$SyncFlagsTable, SyncFlag> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncFlagsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _applyingMeta = const VerificationMeta(
+    'applying',
+  );
+  @override
+  late final GeneratedColumn<int> applying = GeneratedColumn<int>(
+    'applying',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [applying];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_flags';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SyncFlag> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('applying')) {
+      context.handle(
+        _applyingMeta,
+        applying.isAcceptableOrUnknown(data['applying']!, _applyingMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  SyncFlag map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncFlag(
+      applying: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}applying'],
+      )!,
+    );
+  }
+
+  @override
+  $SyncFlagsTable createAlias(String alias) {
+    return $SyncFlagsTable(attachedDatabase, alias);
+  }
+}
+
+class SyncFlag extends DataClass implements Insertable<SyncFlag> {
+  final int applying;
+  const SyncFlag({required this.applying});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['applying'] = Variable<int>(applying);
+    return map;
+  }
+
+  SyncFlagsCompanion toCompanion(bool nullToAbsent) {
+    return SyncFlagsCompanion(applying: Value(applying));
+  }
+
+  factory SyncFlag.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncFlag(applying: serializer.fromJson<int>(json['applying']));
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{'applying': serializer.toJson<int>(applying)};
+  }
+
+  SyncFlag copyWith({int? applying}) =>
+      SyncFlag(applying: applying ?? this.applying);
+  SyncFlag copyWithCompanion(SyncFlagsCompanion data) {
+    return SyncFlag(
+      applying: data.applying.present ? data.applying.value : this.applying,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncFlag(')
+          ..write('applying: $applying')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => applying.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncFlag && other.applying == this.applying);
+}
+
+class SyncFlagsCompanion extends UpdateCompanion<SyncFlag> {
+  final Value<int> applying;
+  final Value<int> rowid;
+  const SyncFlagsCompanion({
+    this.applying = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SyncFlagsCompanion.insert({
+    this.applying = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  static Insertable<SyncFlag> custom({
+    Expression<int>? applying,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (applying != null) 'applying': applying,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SyncFlagsCompanion copyWith({Value<int>? applying, Value<int>? rowid}) {
+    return SyncFlagsCompanion(
+      applying: applying ?? this.applying,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (applying.present) {
+      map['applying'] = Variable<int>(applying.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncFlagsCompanion(')
+          ..write('applying: $applying, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1741,6 +2818,8 @@ abstract class _$AppDb extends GeneratedDatabase {
   late final $HealthRecordsTable healthRecords = $HealthRecordsTable(this);
   late final $WeightsTable weights = $WeightsTable(this);
   late final $AppointmentsTable appointments = $AppointmentsTable(this);
+  late final $SyncDeletesTable syncDeletes = $SyncDeletesTable(this);
+  late final $SyncFlagsTable syncFlags = $SyncFlagsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1750,6 +2829,8 @@ abstract class _$AppDb extends GeneratedDatabase {
     healthRecords,
     weights,
     appointments,
+    syncDeletes,
+    syncFlags,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -1778,6 +2859,9 @@ abstract class _$AppDb extends GeneratedDatabase {
 }
 
 typedef $$PetsTableCreateCompanionBuilder = PetsCompanion Function({
+  Value<String?> remoteId,
+  Value<int?> updatedAt,
+  Value<bool?> dirty,
   Value<int> id,
   required String name,
   Value<String> species,
@@ -1790,6 +2874,9 @@ typedef $$PetsTableCreateCompanionBuilder = PetsCompanion Function({
   Value<String?> notes,
 });
 typedef $$PetsTableUpdateCompanionBuilder = PetsCompanion Function({
+  Value<String?> remoteId,
+  Value<int?> updatedAt,
+  Value<bool?> dirty,
   Value<int> id,
   Value<String> name,
   Value<String> species,
@@ -1870,6 +2957,21 @@ class $$PetsTableFilterComposer extends Composer<_$AppDb, $PetsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -2004,6 +3106,21 @@ class $$PetsTableOrderingComposer extends Composer<_$AppDb, $PetsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -2063,6 +3180,15 @@ class $$PetsTableAnnotationComposer extends Composer<_$AppDb, $PetsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -2201,6 +3327,9 @@ class $$PetsTableTableManager
               $$PetsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> species = const Value.absent(),
@@ -2212,6 +3341,9 @@ class $$PetsTableTableManager
                 Value<String?> photoPath = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
               }) => PetsCompanion(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 name: name,
                 species: species,
@@ -2225,6 +3357,9 @@ class $$PetsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required String name,
                 Value<String> species = const Value.absent(),
@@ -2236,6 +3371,9 @@ class $$PetsTableTableManager
                 Value<String?> photoPath = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
               }) => PetsCompanion.insert(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 name: name,
                 species: species,
@@ -2353,6 +3491,9 @@ typedef $$PetsTableProcessedTableManager =
     >;
 typedef $$HealthRecordsTableCreateCompanionBuilder =
     HealthRecordsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
       Value<int> id,
       required int petId,
       required RecordType type,
@@ -2363,6 +3504,9 @@ typedef $$HealthRecordsTableCreateCompanionBuilder =
     });
 typedef $$HealthRecordsTableUpdateCompanionBuilder =
     HealthRecordsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
       Value<int> id,
       Value<int> petId,
       Value<RecordType> type,
@@ -2407,6 +3551,21 @@ class $$HealthRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -2471,6 +3630,21 @@ class $$HealthRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -2534,6 +3708,15 @@ class $$HealthRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -2606,6 +3789,9 @@ class $$HealthRecordsTableTableManager
               $$HealthRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int> petId = const Value.absent(),
                 Value<RecordType> type = const Value.absent(),
@@ -2614,6 +3800,9 @@ class $$HealthRecordsTableTableManager
                 Value<DateTime?> nextDue = const Value.absent(),
                 Value<int> remindDaysBefore = const Value.absent(),
               }) => HealthRecordsCompanion(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 petId: petId,
                 type: type,
@@ -2624,6 +3813,9 @@ class $$HealthRecordsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required int petId,
                 required RecordType type,
@@ -2632,6 +3824,9 @@ class $$HealthRecordsTableTableManager
                 Value<DateTime?> nextDue = const Value.absent(),
                 Value<int> remindDaysBefore = const Value.absent(),
               }) => HealthRecordsCompanion.insert(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 petId: petId,
                 type: type,
@@ -2706,12 +3901,18 @@ typedef $$HealthRecordsTableProcessedTableManager =
       PrefetchHooks Function({bool petId})
     >;
 typedef $$WeightsTableCreateCompanionBuilder = WeightsCompanion Function({
+  Value<String?> remoteId,
+  Value<int?> updatedAt,
+  Value<bool?> dirty,
   Value<int> id,
   required int petId,
   required DateTime date,
   required double kg,
 });
 typedef $$WeightsTableUpdateCompanionBuilder = WeightsCompanion Function({
+  Value<String?> remoteId,
+  Value<int?> updatedAt,
+  Value<bool?> dirty,
   Value<int> id,
   Value<int> petId,
   Value<DateTime> date,
@@ -2748,6 +3949,21 @@ class $$WeightsTableFilterComposer extends Composer<_$AppDb, $WeightsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -2795,6 +4011,21 @@ class $$WeightsTableOrderingComposer extends Composer<_$AppDb, $WeightsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -2843,6 +4074,15 @@ class $$WeightsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -2902,19 +4142,37 @@ class $$WeightsTableTableManager
               $$WeightsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$WeightsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> petId = const Value.absent(),
-            Value<DateTime> date = const Value.absent(),
-            Value<double> kg = const Value.absent(),
-          }) => WeightsCompanion(id: id, petId: petId, date: date, kg: kg),
+          updateCompanionCallback:
+              ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<int> petId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<double> kg = const Value.absent(),
+              }) => WeightsCompanion(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
+                id: id,
+                petId: petId,
+                date: date,
+                kg: kg,
+              ),
           createCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required int petId,
                 required DateTime date,
                 required double kg,
               }) => WeightsCompanion.insert(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 petId: petId,
                 date: date,
@@ -2988,6 +4246,9 @@ typedef $$WeightsTableProcessedTableManager =
     >;
 typedef $$AppointmentsTableCreateCompanionBuilder =
     AppointmentsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
       Value<int> id,
       required int petId,
       required DateTime at,
@@ -2997,6 +4258,9 @@ typedef $$AppointmentsTableCreateCompanionBuilder =
     });
 typedef $$AppointmentsTableUpdateCompanionBuilder =
     AppointmentsCompanion Function({
+      Value<String?> remoteId,
+      Value<int?> updatedAt,
+      Value<bool?> dirty,
       Value<int> id,
       Value<int> petId,
       Value<DateTime> at,
@@ -3036,6 +4300,21 @@ class $$AppointmentsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -3094,6 +4373,21 @@ class $$AppointmentsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -3152,6 +4446,15 @@ class $$AppointmentsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -3221,6 +4524,9 @@ class $$AppointmentsTableTableManager
               $$AppointmentsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int> petId = const Value.absent(),
                 Value<DateTime> at = const Value.absent(),
@@ -3228,6 +4534,9 @@ class $$AppointmentsTableTableManager
                 Value<String?> place = const Value.absent(),
                 Value<int> remindDaysBefore = const Value.absent(),
               }) => AppointmentsCompanion(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 petId: petId,
                 at: at,
@@ -3237,6 +4546,9 @@ class $$AppointmentsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String?> remoteId = const Value.absent(),
+                Value<int?> updatedAt = const Value.absent(),
+                Value<bool?> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required int petId,
                 required DateTime at,
@@ -3244,6 +4556,9 @@ class $$AppointmentsTableTableManager
                 Value<String?> place = const Value.absent(),
                 Value<int> remindDaysBefore = const Value.absent(),
               }) => AppointmentsCompanion.insert(
+                remoteId: remoteId,
+                updatedAt: updatedAt,
+                dirty: dirty,
                 id: id,
                 petId: petId,
                 at: at,
@@ -3316,6 +4631,303 @@ typedef $$AppointmentsTableProcessedTableManager =
       Appointment,
       PrefetchHooks Function({bool petId})
     >;
+typedef $$SyncDeletesTableCreateCompanionBuilder =
+    SyncDeletesCompanion Function({
+      Value<int> id,
+      required String kind,
+      required String petRemoteId,
+      required String remoteId,
+    });
+typedef $$SyncDeletesTableUpdateCompanionBuilder =
+    SyncDeletesCompanion Function({
+      Value<int> id,
+      Value<String> kind,
+      Value<String> petRemoteId,
+      Value<String> remoteId,
+    });
+
+class $$SyncDeletesTableFilterComposer
+    extends Composer<_$AppDb, $SyncDeletesTable> {
+  $$SyncDeletesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get petRemoteId => $composableBuilder(
+    column: $table.petRemoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncDeletesTableOrderingComposer
+    extends Composer<_$AppDb, $SyncDeletesTable> {
+  $$SyncDeletesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get petRemoteId => $composableBuilder(
+    column: $table.petRemoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get remoteId => $composableBuilder(
+    column: $table.remoteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncDeletesTableAnnotationComposer
+    extends Composer<_$AppDb, $SyncDeletesTable> {
+  $$SyncDeletesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<String> get petRemoteId => $composableBuilder(
+    column: $table.petRemoteId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get remoteId =>
+      $composableBuilder(column: $table.remoteId, builder: (column) => column);
+}
+
+class $$SyncDeletesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDb,
+          $SyncDeletesTable,
+          SyncDelete,
+          $$SyncDeletesTableFilterComposer,
+          $$SyncDeletesTableOrderingComposer,
+          $$SyncDeletesTableAnnotationComposer,
+          $$SyncDeletesTableCreateCompanionBuilder,
+          $$SyncDeletesTableUpdateCompanionBuilder,
+          (SyncDelete, BaseReferences<_$AppDb, $SyncDeletesTable, SyncDelete>),
+          SyncDelete,
+          PrefetchHooks Function()
+        > {
+  $$SyncDeletesTableTableManager(_$AppDb db, $SyncDeletesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncDeletesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncDeletesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncDeletesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<String> petRemoteId = const Value.absent(),
+                Value<String> remoteId = const Value.absent(),
+              }) => SyncDeletesCompanion(
+                id: id,
+                kind: kind,
+                petRemoteId: petRemoteId,
+                remoteId: remoteId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String kind,
+                required String petRemoteId,
+                required String remoteId,
+              }) => SyncDeletesCompanion.insert(
+                id: id,
+                kind: kind,
+                petRemoteId: petRemoteId,
+                remoteId: remoteId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SyncDeletesTable, SyncDelete>(table),
+                  BaseReferences<_$AppDb, $SyncDeletesTable, SyncDelete>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncDeletesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDb,
+      $SyncDeletesTable,
+      SyncDelete,
+      $$SyncDeletesTableFilterComposer,
+      $$SyncDeletesTableOrderingComposer,
+      $$SyncDeletesTableAnnotationComposer,
+      $$SyncDeletesTableCreateCompanionBuilder,
+      $$SyncDeletesTableUpdateCompanionBuilder,
+      (SyncDelete, BaseReferences<_$AppDb, $SyncDeletesTable, SyncDelete>),
+      SyncDelete,
+      PrefetchHooks Function()
+    >;
+typedef $$SyncFlagsTableCreateCompanionBuilder = SyncFlagsCompanion Function({
+  Value<int> applying,
+  Value<int> rowid,
+});
+typedef $$SyncFlagsTableUpdateCompanionBuilder = SyncFlagsCompanion Function({
+  Value<int> applying,
+  Value<int> rowid,
+});
+
+class $$SyncFlagsTableFilterComposer
+    extends Composer<_$AppDb, $SyncFlagsTable> {
+  $$SyncFlagsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get applying => $composableBuilder(
+    column: $table.applying,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$SyncFlagsTableOrderingComposer
+    extends Composer<_$AppDb, $SyncFlagsTable> {
+  $$SyncFlagsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get applying => $composableBuilder(
+    column: $table.applying,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SyncFlagsTableAnnotationComposer
+    extends Composer<_$AppDb, $SyncFlagsTable> {
+  $$SyncFlagsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get applying =>
+      $composableBuilder(column: $table.applying, builder: (column) => column);
+}
+
+class $$SyncFlagsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDb,
+          $SyncFlagsTable,
+          SyncFlag,
+          $$SyncFlagsTableFilterComposer,
+          $$SyncFlagsTableOrderingComposer,
+          $$SyncFlagsTableAnnotationComposer,
+          $$SyncFlagsTableCreateCompanionBuilder,
+          $$SyncFlagsTableUpdateCompanionBuilder,
+          (SyncFlag, BaseReferences<_$AppDb, $SyncFlagsTable, SyncFlag>),
+          SyncFlag,
+          PrefetchHooks Function()
+        > {
+  $$SyncFlagsTableTableManager(_$AppDb db, $SyncFlagsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncFlagsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncFlagsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncFlagsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> applying = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => SyncFlagsCompanion(applying: applying, rowid: rowid),
+          createCompanionCallback: ({
+            Value<int> applying = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => SyncFlagsCompanion.insert(applying: applying, rowid: rowid),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$SyncFlagsTable, SyncFlag>(table),
+                  BaseReferences<_$AppDb, $SyncFlagsTable, SyncFlag>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$SyncFlagsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDb,
+      $SyncFlagsTable,
+      SyncFlag,
+      $$SyncFlagsTableFilterComposer,
+      $$SyncFlagsTableOrderingComposer,
+      $$SyncFlagsTableAnnotationComposer,
+      $$SyncFlagsTableCreateCompanionBuilder,
+      $$SyncFlagsTableUpdateCompanionBuilder,
+      (SyncFlag, BaseReferences<_$AppDb, $SyncFlagsTable, SyncFlag>),
+      SyncFlag,
+      PrefetchHooks Function()
+    >;
 
 class $AppDbManager {
   final _$AppDb _db;
@@ -3327,4 +4939,8 @@ class $AppDbManager {
       $$WeightsTableTableManager(_db, _db.weights);
   $$AppointmentsTableTableManager get appointments =>
       $$AppointmentsTableTableManager(_db, _db.appointments);
+  $$SyncDeletesTableTableManager get syncDeletes =>
+      $$SyncDeletesTableTableManager(_db, _db.syncDeletes);
+  $$SyncFlagsTableTableManager get syncFlags =>
+      $$SyncFlagsTableTableManager(_db, _db.syncFlags);
 }

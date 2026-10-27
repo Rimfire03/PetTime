@@ -52,6 +52,15 @@
   "restoreConfirm": "Isto substitui TODOS os dados atuais pela cópia. Continuar?",
   "cancel": "Cancelar",
   "privacySettings": "Privacidade e anúncios",
+  "sharePet": "Partilhar este animal",
+  "shareExplain": "Dá este código às pessoas com quem queres partilhar. Vale 7 dias. Podem adicionar e editar registos e tudo fica sincronizado. Todos iniciam sessão com Google.",
+  "copyCode": "Copiar código",
+  "codeCopied": "Código copiado.",
+  "joinWithCode": "Juntar-se com um código",
+  "codeLabel": "Código de convite",
+  "join": "Juntar-se",
+  "joinFailed": "Código inválido ou expirado.",
+  "syncFailed": "Não foi possível contactar o servidor. Verifica a ligação.",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

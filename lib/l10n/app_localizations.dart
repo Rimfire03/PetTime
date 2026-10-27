@@ -418,6 +418,60 @@ abstract class AppLocalizations {
   /// **'Privacy & ads settings'**
   String get privacySettings;
 
+  /// No description provided for @sharePet.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this pet'**
+  String get sharePet;
+
+  /// No description provided for @shareExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Give this code to the people you want to share with. It works for 7 days. They can add and edit records and everything stays in sync. Everyone signs in with Google.'**
+  String get shareExplain;
+
+  /// No description provided for @copyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy code'**
+  String get copyCode;
+
+  /// No description provided for @codeCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Code copied.'**
+  String get codeCopied;
+
+  /// No description provided for @joinWithCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Join with a code'**
+  String get joinWithCode;
+
+  /// No description provided for @codeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation code'**
+  String get codeLabel;
+
+  /// No description provided for @join.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get join;
+
+  /// No description provided for @joinFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or expired code.'**
+  String get joinFailed;
+
+  /// No description provided for @syncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your connection.'**
+  String get syncFailed;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

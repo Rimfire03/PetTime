@@ -52,6 +52,15 @@
   "restoreConfirm": "Dadurch werden ALLE aktuellen Daten durch das Backup ersetzt. Fortfahren?",
   "cancel": "Abbrechen",
   "privacySettings": "Datenschutz & Werbung",
+  "sharePet": "Dieses Tier teilen",
+  "shareExplain": "Gib diesen Code an die Personen weiter, mit denen du teilen möchtest. Er gilt 7 Tage. Sie können Einträge hinzufügen und bearbeiten, alles bleibt synchron. Alle melden sich mit Google an.",
+  "copyCode": "Code kopieren",
+  "codeCopied": "Code kopiert.",
+  "joinWithCode": "Mit Code beitreten",
+  "codeLabel": "Einladungscode",
+  "join": "Beitreten",
+  "joinFailed": "Ungültiger oder abgelaufener Code.",
+  "syncFailed": "Server nicht erreichbar. Prüfe deine Verbindung.",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

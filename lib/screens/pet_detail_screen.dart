@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../pdf_export.dart';
+import '../sync/sync_service.dart' show syncAvailable;
+import 'share_dialogs.dart';
 import '../photos.dart';
 import 'appointments_tab.dart';
 import 'pet_form_screen.dart';
@@ -53,6 +55,16 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 Tab(text: t.appointments),
               ]),
               actions: [
+                ValueListenableBuilder<bool>(
+                  valueListenable: syncAvailable,
+                  builder: (_, on, _) => on
+                      ? IconButton(
+                          tooltip: t.sharePet,
+                          icon: const Icon(Icons.group_add),
+                          onPressed: () => showShareDialog(context, petId),
+                        )
+                      : const SizedBox.shrink(),
+                ),
                 IconButton(
                   tooltip: t.exportPdf,
                   icon: const Icon(Icons.picture_as_pdf),

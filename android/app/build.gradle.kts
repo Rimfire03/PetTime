@@ -11,6 +11,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// google-services.json is git-ignored (it holds the Firebase API key); without it the
+// app still builds and runs, with sharing switched off
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "com.tomline.pettime"
     compileSdk = flutter.compileSdkVersion

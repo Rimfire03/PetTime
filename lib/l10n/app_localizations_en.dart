@@ -167,6 +167,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacySettings => 'Privacy & ads settings';
 
   @override
+  String get sharePet => 'Share this pet';
+
+  @override
+  String get shareExplain =>
+      'Give this code to the people you want to share with. It works for 7 days. They can add and edit records and everything stays in sync. Everyone signs in with Google.';
+
+  @override
+  String get copyCode => 'Copy code';
+
+  @override
+  String get codeCopied => 'Code copied.';
+
+  @override
+  String get joinWithCode => 'Join with a code';
+
+  @override
+  String get codeLabel => 'Invitation code';
+
+  @override
+  String get join => 'Join';
+
+  @override
+  String get joinFailed => 'Invalid or expired code.';
+
+  @override
+  String get syncFailed => 'Could not reach the server. Check your connection.';
+
+  @override
   String get noRecords => 'No record yet.';
 
   @override

@@ -52,6 +52,15 @@
   "restoreConfirm": "Esto reemplaza TODOS los datos actuales por la copia. ¿Continuar?",
   "cancel": "Cancelar",
   "privacySettings": "Privacidad y anuncios",
+  "sharePet": "Compartir esta mascota",
+  "shareExplain": "Da este código a quienes quieras compartir. Vale 7 días. Pueden añadir y editar registros y todo se mantiene sincronizado. Todos inician sesión con Google.",
+  "copyCode": "Copiar código",
+  "codeCopied": "Código copiado.",
+  "joinWithCode": "Unirse con un código",
+  "codeLabel": "Código de invitación",
+  "join": "Unirse",
+  "joinFailed": "Código no válido o caducado.",
+  "syncFailed": "No se pudo conectar con el servidor. Revisa tu conexión.",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

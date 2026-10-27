@@ -50,18 +50,36 @@ Future<void> restoreBackup(Map<String, Object?> json, [AppDb? database]) async {
       if (isValidPhotoName(e.key as String)) e.key as String: base64Decode(e.value as String),
   };
   // parse everything before touching the database
+  // restored data is local only: sharing must be set up again
+  const noSync = (remoteId: Value<String?>(null), updatedAt: Value<int?>(null), dirty: Value<bool?>(null));
   final pets = [
     for (final r in rows('pets'))
       Pet.fromJson(r).copyWith(
         photoPath: Value(photos.containsKey(r['photoPath']) ? r['photoPath'] as String? : null),
+        remoteId: noSync.remoteId,
+        updatedAt: noSync.updatedAt,
+        dirty: noSync.dirty,
       ),
   ];
-  final records = [for (final r in rows('healthRecords')) HealthRecord.fromJson(r)];
-  final weights = [for (final r in rows('weights')) Weight.fromJson(r)];
-  final appointments = [for (final r in rows('appointments')) Appointment.fromJson(r)];
+  final records = [
+    for (final r in rows('healthRecords'))
+      HealthRecord.fromJson(r).copyWith(
+          remoteId: noSync.remoteId, updatedAt: noSync.updatedAt, dirty: noSync.dirty),
+  ];
+  final weights = [
+    for (final r in rows('weights'))
+      Weight.fromJson(r).copyWith(
+          remoteId: noSync.remoteId, updatedAt: noSync.updatedAt, dirty: noSync.dirty),
+  ];
+  final appointments = [
+    for (final r in rows('appointments'))
+      Appointment.fromJson(r).copyWith(
+          remoteId: noSync.remoteId, updatedAt: noSync.updatedAt, dirty: noSync.dirty),
+  ];
 
   final db = database ?? _defaultDb;
-  await db.transaction(() async {
+  // applyingRemote: wiping shared pets here must not tell the server to delete them
+  await db.applyingRemote(() async {
     await db.delete(db.pets).go(); // cascades to the other tables
     await db.batch((b) {
       b.insertAll(db.pets, pets, mode: InsertMode.insertOrReplace);

@@ -167,6 +167,35 @@ class AppLocalizationsIt extends AppLocalizations {
   String get privacySettings => 'Privacy e pubblicità';
 
   @override
+  String get sharePet => 'Condividi questo animale';
+
+  @override
+  String get shareExplain =>
+      'Dai questo codice alle persone con cui condividere. Vale 7 giorni. Possono aggiungere e modificare le voci e tutto resta sincronizzato. Tutti accedono con Google.';
+
+  @override
+  String get copyCode => 'Copia codice';
+
+  @override
+  String get codeCopied => 'Codice copiato.';
+
+  @override
+  String get joinWithCode => 'Unisciti con un codice';
+
+  @override
+  String get codeLabel => 'Codice d\'invito';
+
+  @override
+  String get join => 'Unisciti';
+
+  @override
+  String get joinFailed => 'Codice non valido o scaduto.';
+
+  @override
+  String get syncFailed =>
+      'Server non raggiungibile. Controlla la connessione.';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override
