@@ -39,6 +39,14 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      # Firebase config is git-ignored; rebuilt from a repo secret. Absent (forks, PRs): the app builds with sharing off.
+      - name: Firebase config
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          fi
       # debug build: no release keystore in CI (android/key.properties is git-ignored)
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
