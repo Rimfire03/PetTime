@@ -39,6 +39,16 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      # Fixed debug signing key: every CI APK gets the same signature, so a new build installs over the old one
+      # (a fresh random key per run makes Android refuse the update). Absent: Gradle makes its own, as before.
+      - name: Debug signing key
+        env:
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$DEBUG_KEYSTORE_BASE64" ]; then
+            mkdir -p ~/.android
+            printf '%s' "$DEBUG_KEYSTORE_BASE64" | base64 -d > ~/.android/debug.keystore
+          fi
       # Firebase config is git-ignored; rebuilt from a repo secret. Absent (forks, PRs): the app builds with sharing off.
       - name: Firebase config
         env:
