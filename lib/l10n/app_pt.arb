@@ -51,6 +51,7 @@
   "backupInvalid": "Este ficheiro não é uma cópia PetTime válida.",
   "restoreConfirm": "Isto substitui TODOS os dados atuais pela cópia. Continuar?",
   "cancel": "Cancelar",
+  "privacySettings": "Privacidade e anúncios",
   "noRecords": "Sem registos.",
   "dueOn": "Vence em {date}"
 }

@@ -165,6 +165,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
+  String get privacySettings => 'Confidentialité et publicités';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

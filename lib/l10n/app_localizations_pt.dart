@@ -164,6 +164,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get privacySettings => 'Privacidade e anúncios';
+
+  @override
   String get noRecords => 'Sem registos.';
 
   @override

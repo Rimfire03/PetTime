@@ -51,6 +51,7 @@
   "backupInvalid": "Ce fichier n'est pas une sauvegarde PetTime valide.",
   "restoreConfirm": "Cela remplace TOUTES les données actuelles par la sauvegarde. Continuer ?",
   "cancel": "Annuler",
+  "privacySettings": "Confidentialité et publicités",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

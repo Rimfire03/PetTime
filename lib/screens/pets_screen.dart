@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ads.dart';
 import '../backup.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
@@ -15,14 +16,20 @@ class PetsScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(t.myPets), actions: [
-        PopupMenuButton<_Backup>(
-          onSelected: (m) => _runBackup(context, m),
-          itemBuilder: (_) => [
-            PopupMenuItem(value: _Backup.export, child: Text(t.backupExport)),
-            PopupMenuItem(value: _Backup.import, child: Text(t.backupImport)),
-          ],
+        ValueListenableBuilder<bool>(
+          valueListenable: privacyOptionsRequired,
+          builder: (_, privacy, _) => PopupMenuButton<_Backup>(
+            onSelected: (m) =>
+                m == _Backup.privacy ? showPrivacyOptions() : _runBackup(context, m),
+            itemBuilder: (_) => [
+              PopupMenuItem(value: _Backup.export, child: Text(t.backupExport)),
+              PopupMenuItem(value: _Backup.import, child: Text(t.backupImport)),
+              if (privacy) PopupMenuItem(value: _Backup.privacy, child: Text(t.privacySettings)),
+            ],
+          ),
         ),
       ]),
+      bottomNavigationBar: const AdBanner(),
       body: StreamBuilder<List<Pet>>(
         stream: db.watchPets(),
         builder: (context, snap) {
@@ -52,7 +59,7 @@ class PetsScreen extends StatelessWidget {
   }
 }
 
-enum _Backup { export, import }
+enum _Backup { export, import, privacy }
 
 Future<void> _runBackup(BuildContext context, _Backup action) async {
   final t = AppLocalizations.of(context);

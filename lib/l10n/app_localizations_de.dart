@@ -164,6 +164,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cancel => 'Abbrechen';
 
   @override
+  String get privacySettings => 'Datenschutz & Werbung';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

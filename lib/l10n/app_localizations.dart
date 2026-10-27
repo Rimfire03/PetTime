@@ -412,6 +412,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @privacySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & ads settings'**
+  String get privacySettings;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:

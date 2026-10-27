@@ -51,6 +51,7 @@
   "backupInvalid": "This file is not a valid PetTime backup.",
   "restoreConfirm": "This replaces ALL current data with the backup. Continue?",
   "cancel": "Cancel",
+  "privacySettings": "Privacy & ads settings",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }
