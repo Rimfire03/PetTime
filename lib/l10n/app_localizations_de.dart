@@ -303,6 +303,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get addToCalendar => 'Zu Google Kalender hinzufügen';
+
+  @override
+  String get appointmentSaved => 'Termin gespeichert.';
+
+  @override
   String get noRecords => 'Noch keine Einträge.';
 
   @override

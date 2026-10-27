@@ -304,6 +304,12 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get addToCalendar => 'Aggiungi a Google Calendar';
+
+  @override
+  String get appointmentSaved => 'Appuntamento salvato.';
+
+  @override
   String get noRecords => 'Nessuna voce.';
 
   @override

@@ -305,6 +305,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get addToCalendar => 'Ajouter à Google Agenda';
+
+  @override
+  String get appointmentSaved => 'Rendez-vous enregistré.';
+
+  @override
   String get noRecords => 'Aucun soin enregistré.';
 
   @override

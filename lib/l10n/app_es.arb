@@ -89,6 +89,8 @@
   "weighedOn": "Pesado el",
   "saveAndAddAnother": "Guardar y añadir otro",
   "savedLine": "Guardado: {text}",
+  "addToCalendar": "Añadir a Google Calendar",
+  "appointmentSaved": "Cita guardada.",
   "noRecords": "Sin registros.",
   "dueOn": "Vence {date}"
 }

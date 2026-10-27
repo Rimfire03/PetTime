@@ -89,6 +89,8 @@
   "weighedOn": "Gewogen am",
   "saveAndAddAnother": "Speichern und weiteres hinzufügen",
   "savedLine": "Gespeichert: {text}",
+  "addToCalendar": "Zu Google Kalender hinzufügen",
+  "appointmentSaved": "Termin gespeichert.",
   "noRecords": "Noch keine Einträge.",
   "dueOn": "Fällig am {date}"
 }

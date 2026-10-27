@@ -93,6 +93,8 @@
   "saveAndAddAnother": "Save and add another",
   "savedLine": "Saved: {text}",
   "@savedLine": { "placeholders": { "text": { "type": "String" } } },
+  "addToCalendar": "Add to Google Calendar",
+  "appointmentSaved": "Appointment saved.",
   "noRecords": "No record yet.",
   "dueOn": "Due {date}",
   "@dueOn": { "placeholders": { "date": { "type": "String" } } }

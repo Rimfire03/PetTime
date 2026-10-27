@@ -89,6 +89,8 @@
   "weighedOn": "Pesé le",
   "saveAndAddAnother": "Enregistrer et ajouter une autre",
   "savedLine": "Enregistré : {text}",
+  "addToCalendar": "Ajouter à Google Agenda",
+  "appointmentSaved": "Rendez-vous enregistré.",
   "noRecords": "Aucun soin enregistré.",
   "dueOn": "Échéance {date}"
 }

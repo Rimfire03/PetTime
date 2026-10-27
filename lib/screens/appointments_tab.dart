@@ -2,6 +2,8 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../calendar_link.dart';
+import '../contact_links.dart' show openUri;
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 
@@ -35,6 +37,11 @@ class _AppointmentsTabState extends State<AppointmentsTab> {
                   title: Text(a.title),
                   subtitle: Text([fmt.format(a.at), if (a.place != null) a.place!].join(' - ')),
                   onTap: () => _edit(context, widget.petId, a),
+                  trailing: IconButton(
+                    tooltip: t.addToCalendar,
+                    icon: const Icon(Icons.edit_calendar),
+                    onPressed: () async => openUri(await appointmentCalendarUri(a)),
+                  ),
                 ),
             ],
           );
@@ -80,12 +87,26 @@ class _AppointmentDialogState extends State<_AppointmentDialog> {
       remindDaysBefore: Value((int.tryParse(_days.text) ?? 1).clamp(0, 365)),
     );
     final id = widget.appointment?.id;
-    if (id == null) {
-      await db.into(db.appointments).insert(c);
-    } else {
-      await (db.update(db.appointments)..where((x) => x.id.equals(id))).write(c);
-    }
+    final messenger = ScaffoldMessenger.of(context);
+    final t = AppLocalizations.of(context);
+    final isNew = id == null;
+    final newId = isNew ? await db.into(db.appointments).insert(c) : id;
+    if (!isNew) await (db.update(db.appointments)..where((x) => x.id.equals(id))).write(c);
     if (mounted) Navigator.pop(context);
+    if (isNew) {
+      // offer the calendar right after creating it, from the screen behind the closed dialog
+      messenger.showSnackBar(SnackBar(
+        content: Text(t.appointmentSaved),
+        duration: const Duration(seconds: 8),
+        action: SnackBarAction(
+          label: t.addToCalendar,
+          onPressed: () async {
+            final saved = await (db.select(db.appointments)..where((x) => x.id.equals(newId))).getSingle();
+            await openUri(await appointmentCalendarUri(saved));
+          },
+        ),
+      ));
+    }
   }
 
   Future<void> _delete() async {

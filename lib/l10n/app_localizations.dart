@@ -640,6 +640,18 @@ abstract class AppLocalizations {
   /// **'Saved: {text}'**
   String savedLine(String text);
 
+  /// No description provided for @addToCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Google Calendar'**
+  String get addToCalendar;
+
+  /// No description provided for @appointmentSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment saved.'**
+  String get appointmentSaved;
+
   /// No description provided for @noRecords.
   ///
   /// In en, this message translates to:
