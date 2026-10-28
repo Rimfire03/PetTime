@@ -480,4 +480,23 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get cameraUnavailable =>
       'Appareil photo indisponible. Autorisez l\'accès à la caméra dans les réglages du téléphone.';
+
+  @override
+  String get sharesTransfer => 'Transférer la propriété';
+
+  @override
+  String get sharesTransferDo => 'Transférer';
+
+  @override
+  String sharesTransferConfirm(String name) {
+    return '$name deviendra propriétaire de cet animal : seul le propriétaire peut le supprimer pour tout le monde, retirer des accès et créer des codes d\'invitation.';
+  }
+
+  @override
+  String get sharesTransferLeave =>
+      'Retirer cet animal de mon compte après le transfert';
+
+  @override
+  String get sharesTransferHelp =>
+      'Pour céder cet animal : partagez-le avec la personne (code d\'invitation), puis choisissez « Transférer la propriété » sur son nom.';
 }

@@ -479,4 +479,23 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get cameraUnavailable =>
       'Câmara indisponível. Permita o acesso à câmara nas definições do telemóvel.';
+
+  @override
+  String get sharesTransfer => 'Transferir a propriedade';
+
+  @override
+  String get sharesTransferDo => 'Transferir';
+
+  @override
+  String sharesTransferConfirm(String name) {
+    return '$name passará a ser o proprietário deste animal: só o proprietário o pode eliminar para todos, remover acessos e criar códigos de convite.';
+  }
+
+  @override
+  String get sharesTransferLeave =>
+      'Remover este animal da minha conta após a transferência';
+
+  @override
+  String get sharesTransferHelp =>
+      'Para ceder este animal: partilhe-o com a pessoa (código de convite) e escolha \"Transferir a propriedade\" no nome dela.';
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../data/db.dart';
 import '../l10n/app_localizations.dart';
+import '../photos.dart' show deletePhoto;
 import '../sync/sync_service.dart';
 import 'share_dialogs.dart';
 
@@ -19,15 +21,19 @@ class _SharesScreenState extends State<SharesScreen> {
 
   void _reload() => setState(() => _shares = loadShares(widget.petId));
 
-  Future<void> _run(Future<void> Function() action) async {
+  /// Runs a server change and refreshes the list (unless [reload] is false); false when it failed.
+  Future<bool> _run(Future<void> Function() action, {bool reload = true}) async {
     final messenger = ScaffoldMessenger.of(context);
     final t = AppLocalizations.of(context);
+    var ok = true;
     try {
       await action();
     } catch (e) {
+      ok = false;
       messenger.showSnackBar(SnackBar(content: Text('${t.syncFailed}\n${describeError(e)}')));
     }
-    if (mounted) _reload();
+    if (reload && mounted) _reload();
+    return ok;
   }
 
   Future<void> _revokeMember(ShareMember m) async {
@@ -45,6 +51,45 @@ class _SharesScreenState extends State<SharesScreen> {
       ),
     );
     if (ok == true) await _run(() => revokeMember(widget.petId, m.uid));
+  }
+
+  Future<void> _transfer(ShareMember m) async {
+    final t = AppLocalizations.of(context);
+    final name = m.label.isEmpty ? t.sharesUnknown : m.label;
+    var leave = true; // a hand-over normally means the former owner lets go of the pet
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setLocal) => AlertDialog(
+          title: Text(t.sharesTransfer),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(t.sharesTransferConfirm(name)),
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              value: leave,
+              title: Text(t.sharesTransferLeave),
+              onChanged: (v) => setLocal(() => leave = v ?? true),
+            ),
+          ]),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(t.cancel)),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(t.sharesTransferDo)),
+          ],
+        ),
+      ),
+    );
+    if (ok != true) return;
+    final pet = await (db.select(db.pets)..where((p) => p.id.equals(widget.petId))).getSingle();
+    if (!mounted) return;
+    final nav = Navigator.of(context);
+    final done = await _run(() => transferOwnership(widget.petId, m.uid, leave: leave), reload: !leave);
+    if (!done || !leave) {
+      if (!done && mounted) _reload(); // partial failure: show the real state
+      return;
+    }
+    deletePhoto(pet.photoPath); // the cloud copy never carries photos; this one goes with the pet
+    nav.popUntil((r) => r.isFirst);
   }
 
   @override
@@ -82,8 +127,19 @@ class _SharesScreenState extends State<SharesScreen> {
                 title: Text(m.label.isEmpty ? t.sharesUnknown : m.label),
                 subtitle: Text([if (m.isOwner) t.sharesOwnerTag, if (m.isMe) t.sharesYouTag].join(' - ')),
                 trailing: s.iAmOwner && !m.isOwner
-                    ? TextButton(onPressed: () => _revokeMember(m), child: Text(t.sharesRevoke))
+                    ? PopupMenuButton<String>(
+                        onSelected: (v) => v == 'transfer' ? _transfer(m) : _revokeMember(m),
+                        itemBuilder: (_) => [
+                          PopupMenuItem(value: 'transfer', child: Text(t.sharesTransfer)),
+                          PopupMenuItem(value: 'revoke', child: Text(t.sharesRevoke)),
+                        ],
+                      )
                     : null,
+              ),
+            if (s.iAmOwner && s.members.length > 1)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(t.sharesTransferHelp, style: Theme.of(context).textTheme.bodySmall),
               ),
             if (s.iAmOwner) ...[
               const SizedBox(height: 24),

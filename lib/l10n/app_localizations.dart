@@ -921,6 +921,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera unavailable. Allow camera access in the phone settings.'**
   String get cameraUnavailable;
+
+  /// No description provided for @sharesTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer ownership'**
+  String get sharesTransfer;
+
+  /// No description provided for @sharesTransferDo.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get sharesTransferDo;
+
+  /// No description provided for @sharesTransferConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will become the owner of this pet: only the owner can delete it for everyone, remove access and create invitation codes.'**
+  String sharesTransferConfirm(String name);
+
+  /// No description provided for @sharesTransferLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this pet from my account after the transfer'**
+  String get sharesTransferLeave;
+
+  /// No description provided for @sharesTransferHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'To hand this pet over: share it with the person (invitation code), then choose \"Transfer ownership\" on their name.'**
+  String get sharesTransferHelp;
 }
 
 class _AppLocalizationsDelegate

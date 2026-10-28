@@ -47,6 +47,14 @@ service cloud.firestore {
           && resource.data.members.hasAll(request.resource.data.members);
       }
 
+      // the owner hands the pet over to somebody who already has access (members stay as they are)
+      function transferring() {
+        return onlyChanges(['ownerUid'])
+          && resource.data.ownerUid == request.auth.uid
+          && request.resource.data.ownerUid != request.auth.uid
+          && request.resource.data.ownerUid in resource.data.members;
+      }
+
       // a newcomer adds only themself, and proves it with an unexpired invite for this pet
       function joining() {
         let invite = get(/databases/$(database)/documents/invites/$(request.resource.data.joinCode));
@@ -65,7 +73,7 @@ service cloud.firestore {
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.members == [request.auth.uid];
 
-      allow update: if (isMember() && (editing() || leaving() || revoking())) || joining();
+      allow update: if (isMember() && (editing() || leaving() || revoking() || transferring())) || joining();
 
       // pets are never removed: the owner sets deleted = true so other phones hear about it
       allow delete: if false;

@@ -135,5 +135,10 @@
   "sharesOffline": "Questo animale non è ancora sincronizzato. Riprova quando sei online.",
   "scanBarcode": "Scansiona il codice a barre",
   "scanHint": "Inquadra il codice a barre del microchip.",
-  "cameraUnavailable": "Fotocamera non disponibile. Consenti l'accesso alla fotocamera nelle impostazioni del telefono."
+  "cameraUnavailable": "Fotocamera non disponibile. Consenti l'accesso alla fotocamera nelle impostazioni del telefono.",
+  "sharesTransfer": "Trasferisci la proprietà",
+  "sharesTransferDo": "Trasferisci",
+  "sharesTransferConfirm": "{name} diventerà proprietario di questo animale: solo il proprietario può eliminarlo per tutti, rimuovere accessi e creare codici di invito.",
+  "sharesTransferLeave": "Rimuovi questo animale dal mio account dopo il trasferimento",
+  "sharesTransferHelp": "Per cedere questo animale: condividilo con la persona (codice di invito), poi scegli \"Trasferisci la proprietà\" sul suo nome."
 }

@@ -475,4 +475,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cameraUnavailable =>
       'Camera unavailable. Allow camera access in the phone settings.';
+
+  @override
+  String get sharesTransfer => 'Transfer ownership';
+
+  @override
+  String get sharesTransferDo => 'Transfer';
+
+  @override
+  String sharesTransferConfirm(String name) {
+    return '$name will become the owner of this pet: only the owner can delete it for everyone, remove access and create invitation codes.';
+  }
+
+  @override
+  String get sharesTransferLeave =>
+      'Remove this pet from my account after the transfer';
+
+  @override
+  String get sharesTransferHelp =>
+      'To hand this pet over: share it with the person (invitation code), then choose \"Transfer ownership\" on their name.';
 }

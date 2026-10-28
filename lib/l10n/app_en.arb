@@ -154,5 +154,11 @@
   "sharesOffline": "This pet is not synced yet. Try again once online.",
   "scanBarcode": "Scan the barcode",
   "scanHint": "Point the camera at the microchip barcode.",
-  "cameraUnavailable": "Camera unavailable. Allow camera access in the phone settings."
+  "cameraUnavailable": "Camera unavailable. Allow camera access in the phone settings.",
+  "sharesTransfer": "Transfer ownership",
+  "sharesTransferDo": "Transfer",
+  "sharesTransferConfirm": "{name} will become the owner of this pet: only the owner can delete it for everyone, remove access and create invitation codes.",
+  "@sharesTransferConfirm": { "placeholders": { "name": { "type": "String" } } },
+  "sharesTransferLeave": "Remove this pet from my account after the transfer",
+  "sharesTransferHelp": "To hand this pet over: share it with the person (invitation code), then choose \"Transfer ownership\" on their name."
 }

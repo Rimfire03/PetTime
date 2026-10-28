@@ -201,6 +201,20 @@ Future<void> revokeMember(int localPetId, String uid) async {
   }).timeout(const Duration(seconds: 20));
 }
 
+/// Owner only: [newOwnerUid] (already a member) becomes the owner. With [leave] the former owner then
+/// gives up their own access too, which makes it a full hand-over of the pet.
+Future<void> transferOwnership(int localPetId, String newOwnerUid, {required bool leave}) async {
+  final user = await ensureSignedIn();
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+  final ref = _pets.doc(pet.remoteId);
+  await ref.update({'ownerUid': newOwnerUid}).timeout(const Duration(seconds: 20));
+  if (!leave) return;
+  await ref.update({
+    'members': FieldValue.arrayRemove([user.uid]),
+    'memberInfo.${user.uid}': FieldValue.delete(),
+  }).timeout(const Duration(seconds: 20));
+}
+
 /// Owner only: the code stops working at once.
 Future<void> revokeInvite(String code) =>
     _fs.collection('invites').doc(code).delete().timeout(const Duration(seconds: 20));
