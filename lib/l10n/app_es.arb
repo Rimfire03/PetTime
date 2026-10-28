@@ -132,5 +132,8 @@
   "sharesInviteExpires": "Caduca el {date}",
   "sharesNoInvites": "Ningún código activo.",
   "sharesNewCode": "Crear un código de invitación",
-  "sharesOffline": "Este animal aún no está sincronizado. Inténtalo de nuevo con conexión."
+  "sharesOffline": "Este animal aún no está sincronizado. Inténtalo de nuevo con conexión.",
+  "scanBarcode": "Escanear el código de barras",
+  "scanHint": "Apunta la cámara al código de barras del microchip.",
+  "cameraUnavailable": "Cámara no disponible. Permite el acceso a la cámara en los ajustes del teléfono."
 }

@@ -465,4 +465,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sharesOffline =>
       'This pet is not synced yet. Try again once online.';
+
+  @override
+  String get scanBarcode => 'Scan the barcode';
+
+  @override
+  String get scanHint => 'Point the camera at the microchip barcode.';
+
+  @override
+  String get cameraUnavailable =>
+      'Camera unavailable. Allow camera access in the phone settings.';
 }

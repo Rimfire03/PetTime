@@ -468,4 +468,15 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get sharesOffline =>
       'Este animal ainda não está sincronizado. Tente novamente quando estiver online.';
+
+  @override
+  String get scanBarcode => 'Ler o código de barras';
+
+  @override
+  String get scanHint =>
+      'Aponte a câmara para o código de barras do microchip.';
+
+  @override
+  String get cameraUnavailable =>
+      'Câmara indisponível. Permita o acesso à câmara nas definições do telemóvel.';
 }

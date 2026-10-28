@@ -132,5 +132,8 @@
   "sharesInviteExpires": "Läuft ab am {date}",
   "sharesNoInvites": "Kein aktiver Code.",
   "sharesNewCode": "Einladungscode erstellen",
-  "sharesOffline": "Dieses Tier ist noch nicht synchronisiert. Versuchen Sie es online erneut."
+  "sharesOffline": "Dieses Tier ist noch nicht synchronisiert. Versuchen Sie es online erneut.",
+  "scanBarcode": "Barcode scannen",
+  "scanHint": "Richten Sie die Kamera auf den Barcode des Mikrochips.",
+  "cameraUnavailable": "Kamera nicht verfügbar. Erlauben Sie den Kamerazugriff in den Telefoneinstellungen."
 }

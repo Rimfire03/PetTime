@@ -467,4 +467,15 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sharesOffline =>
       'Dieses Tier ist noch nicht synchronisiert. Versuchen Sie es online erneut.';
+
+  @override
+  String get scanBarcode => 'Barcode scannen';
+
+  @override
+  String get scanHint =>
+      'Richten Sie die Kamera auf den Barcode des Mikrochips.';
+
+  @override
+  String get cameraUnavailable =>
+      'Kamera nicht verfügbar. Erlauben Sie den Kamerazugriff in den Telefoneinstellungen.';
 }

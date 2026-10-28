@@ -10,6 +10,7 @@ import '../photos.dart';
 import '../suggestions.dart';
 import '../widgets/suggest_field.dart';
 import '../labels.dart' show speciesLabel;
+import 'barcode_scan_screen.dart';
 
 enum WizardStep { name, species, sex, breed, birth, color, photo, chip, weight, vet, vetPhone, vaccine, notes }
 
@@ -370,7 +371,17 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
             controller: _chip,
             autofocus: true,
             textInputAction: action,
-            decoration: InputDecoration(labelText: t.chip),
+            decoration: InputDecoration(
+              labelText: t.chip,
+              suffixIcon: IconButton(
+                tooltip: t.scanBarcode,
+                icon: const Icon(Icons.qr_code_scanner),
+                onPressed: () async {
+                  final code = await scanBarcode(context);
+                  if (code != null) _chip.text = code;
+                },
+              ),
+            ),
             onSubmitted: (_) => _next(),
           ),
         ]),

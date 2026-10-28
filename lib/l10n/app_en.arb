@@ -151,5 +151,8 @@
   "@sharesInviteExpires": { "placeholders": { "date": { "type": "String" } } },
   "sharesNoInvites": "No active code.",
   "sharesNewCode": "Create an invitation code",
-  "sharesOffline": "This pet is not synced yet. Try again once online."
+  "sharesOffline": "This pet is not synced yet. Try again once online.",
+  "scanBarcode": "Scan the barcode",
+  "scanHint": "Point the camera at the microchip barcode.",
+  "cameraUnavailable": "Camera unavailable. Allow camera access in the phone settings."
 }

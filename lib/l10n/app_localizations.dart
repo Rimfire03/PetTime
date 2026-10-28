@@ -903,6 +903,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This pet is not synced yet. Try again once online.'**
   String get sharesOffline;
+
+  /// No description provided for @scanBarcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the barcode'**
+  String get scanBarcode;
+
+  /// No description provided for @scanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the microchip barcode.'**
+  String get scanHint;
+
+  /// No description provided for @cameraUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera unavailable. Allow camera access in the phone settings.'**
+  String get cameraUnavailable;
 }
 
 class _AppLocalizationsDelegate

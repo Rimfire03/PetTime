@@ -7,7 +7,7 @@
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier is used to show you more relevant ads.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>PetTime uses the camera to take your pet's photo.</string>
+	<string>PetTime uses the camera to take your pet's photo and to scan its microchip barcode.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PetTime uses your photo library to choose your pet's photo.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

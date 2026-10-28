@@ -9,6 +9,7 @@ import '../photos.dart';
 import '../suggestions.dart';
 import '../widgets/suggest_field.dart';
 import '../labels.dart' show speciesLabel;
+import 'barcode_scan_screen.dart';
 import 'delete_pet.dart';
 
 class PetFormScreen extends StatefulWidget {
@@ -192,7 +193,20 @@ class _PetFormScreenState extends State<PetFormScreen> {
                 if (d != null) setState(() => _birth = d);
               },
             ),
-            TextFormField(controller: _chip, decoration: InputDecoration(labelText: t.chip)),
+            TextFormField(
+              controller: _chip,
+              decoration: InputDecoration(
+                labelText: t.chip,
+                suffixIcon: IconButton(
+                  tooltip: t.scanBarcode,
+                  icon: const Icon(Icons.qr_code_scanner),
+                  onPressed: () async {
+                    final code = await scanBarcode(context);
+                    if (code != null) _chip.text = code;
+                  },
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
             SuggestField(controller: _vet, label: t.vetName, options: (q) => filterSuggestions(_vets, q)),
             const SizedBox(height: 12),

@@ -470,4 +470,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get sharesOffline =>
       'Cet animal n\'est pas encore synchronisé. Réessayez une fois en ligne.';
+
+  @override
+  String get scanBarcode => 'Scanner le code-barres';
+
+  @override
+  String get scanHint => 'Placez le code-barres de la puce dans le cadre.';
+
+  @override
+  String get cameraUnavailable =>
+      'Appareil photo indisponible. Autorisez l\'accès à la caméra dans les réglages du téléphone.';
 }

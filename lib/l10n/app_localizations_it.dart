@@ -468,4 +468,14 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get sharesOffline =>
       'Questo animale non è ancora sincronizzato. Riprova quando sei online.';
+
+  @override
+  String get scanBarcode => 'Scansiona il codice a barre';
+
+  @override
+  String get scanHint => 'Inquadra il codice a barre del microchip.';
+
+  @override
+  String get cameraUnavailable =>
+      'Fotocamera non disponibile. Consenti l\'accesso alla fotocamera nelle impostazioni del telefono.';
 }
