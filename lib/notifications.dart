@@ -74,7 +74,7 @@ Future<void> rescheduleAll() async {
     final pet = row.readTable(db.pets);
     await schedule(
       r.id,
-      reminderTime(r.nextDue!, r.remindDaysBefore, now),
+      reminderTime(r.nextDue!, r.remindDaysBefore, now, catchUp: true),
       '${pet.name} - ${recordLabel(t, r.type)}',
       '${r.product} - ${t.dueOn(fmt.format(r.nextDue!))}',
     );

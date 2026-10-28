@@ -14,7 +14,11 @@ DateTime? appointmentReminderTime(DateTime at, int daysBefore, DateTime now) {
 /// When to notify for a due date, or null if that moment is already past.
 /// Past reminders are skipped (not fired late) so reopening the app never
 /// repeats an alert.
-DateTime? reminderTime(DateTime due, int daysBefore, DateTime now) {
+/// With [catchUp], a care added too late for its "N days before" moment (e.g. due in 3 days, remind 7 days
+/// before) still gets one reminder, on the due day at 09:00, instead of none.
+DateTime? reminderTime(DateTime due, int daysBefore, DateTime now, {bool catchUp = false}) {
   final at = DateTime(due.year, due.month, due.day - daysBefore, reminderHour);
-  return at.isAfter(now) ? at : null;
+  if (at.isAfter(now)) return at;
+  final dueDay = DateTime(due.year, due.month, due.day, reminderHour);
+  return catchUp && dueDay.isAfter(now) ? dueDay : null;
 }

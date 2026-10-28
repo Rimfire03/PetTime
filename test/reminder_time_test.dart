@@ -20,6 +20,12 @@ void main() {
     expect(reminderTime(DateTime(2026, 10, 30), 7, now), isNull);
   });
 
+  test('catchUp falls back to the due day 09:00, never to a past moment', () {
+    expect(reminderTime(DateTime(2026, 10, 30), 7, now, catchUp: true), DateTime(2026, 10, 30, 9));
+    expect(reminderTime(DateTime(2026, 10, 27), 7, now, catchUp: true), isNull);
+    expect(reminderTime(DateTime(2026, 11, 10), 7, now, catchUp: true), DateTime(2026, 11, 3, 9));
+  });
+
   test('appointment with days uses 09:00 rule', () {
     expect(appointmentReminderTime(DateTime(2026, 11, 5, 15, 30), 1, now), DateTime(2026, 11, 4, 9));
   });
