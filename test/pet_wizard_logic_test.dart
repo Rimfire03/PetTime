@@ -41,4 +41,19 @@ void main() {
     expect(wizardSteps('dog'), contains(WizardStep.vaccine));
     expect(wizardSteps('other'), isNot(contains(WizardStep.vaccine)));
   });
+
+  test('vet phone step only when a vet name was given', () {
+    expect(wizardSteps('dog'), contains(WizardStep.vetPhone));
+    expect(wizardSteps('dog', hasVet: false), isNot(contains(WizardStep.vetPhone)));
+    expect(WizardAnswers(vetPhone: '0102030405').toPet().vetPhone.value, isNull);
+    expect(WizardAnswers(vet: 'Dr X', vetPhone: '0102030405').toPet().vetPhone.value, '0102030405');
+  });
+
+  test('"other" vaccine uses the typed name and no next due date', () {
+    final d = DateTime(2026, 1, 31);
+    expect(WizardAnswers(vaccine: otherVaccine, vaccineDate: d).toVaccine(1, 'fr'), isNull);
+    final r = WizardAnswers(vaccine: otherVaccine, vaccineOther: ' Parvo ', vaccineDate: d).toVaccine(1, 'fr')!;
+    expect(r.product.value, 'Parvo');
+    expect(r.nextDue.value, isNull);
+  });
 }

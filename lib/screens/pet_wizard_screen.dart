@@ -13,10 +13,16 @@ import '../labels.dart' show speciesLabel;
 
 enum WizardStep { name, species, sex, breed, birth, color, photo, chip, weight, vet, vetPhone, vaccine, notes }
 
-/// The steps to ask for [species]; the vaccine question is dropped when the catalogue has none.
-List<WizardStep> wizardSteps(String species) => [
+/// Dropdown entry that lets the person type a vaccine missing from the catalogue.
+const otherVaccine = CareSuggestion('Autre', 'Other');
+
+/// The steps to ask for [species]; the vaccine question is dropped when the catalogue has none,
+/// and the vet phone question when no vet name was given.
+List<WizardStep> wizardSteps(String species, {bool hasVet = true}) => [
       for (final s in WizardStep.values)
-        if (s != WizardStep.vaccine || (careCatalog[species]?[RecordType.vaccine]?.isNotEmpty ?? false)) s,
+        if ((s != WizardStep.vaccine || (careCatalog[species]?[RecordType.vaccine]?.isNotEmpty ?? false)) &&
+            (s != WizardStep.vetPhone || hasVet))
+          s,
     ];
 
 /// "4,2" and "4.2" both give 4.2; null when empty, not a number or not positive.
@@ -40,11 +46,12 @@ class WizardAnswers {
     this.vet = '',
     this.vetPhone = '',
     this.vaccine,
+    this.vaccineOther = '',
     this.vaccineDate,
     this.notes = '',
   });
 
-  String name, species, breed, color, chip, weight, vet, vetPhone, notes;
+  String name, species, breed, color, chip, weight, vet, vetPhone, vaccineOther, notes;
   String? sex, photo;
   DateTime? birth, vaccineDate;
   CareSuggestion? vaccine;
@@ -68,7 +75,7 @@ class WizardAnswers {
         photoPath: Value(photo),
         chip: Value(_n(chip)),
         vetName: Value(_n(vet)),
-        vetPhone: Value(_n(vetPhone)),
+        vetPhone: Value(_n(vet) == null ? null : _n(vetPhone)), // a phone without a vet name is dropped
         notes: Value(_n(notes)),
       );
 
@@ -82,11 +89,13 @@ class WizardAnswers {
   HealthRecordsCompanion? toVaccine(int petId, String languageCode) {
     final v = vaccine, d = vaccineDate;
     if (v == null || d == null) return null;
+    final other = identical(v, otherVaccine);
+    if (other && vaccineOther.trim().isEmpty) return null;
     final months = v.repeatMonths;
     return HealthRecordsCompanion(
       petId: Value(petId),
       type: const Value(RecordType.vaccine),
-      product: Value(v.nameFor(languageCode)),
+      product: Value(other ? vaccineOther.trim() : v.nameFor(languageCode)),
       date: Value(d),
       nextDue: Value(months == null ? null : addMonths(d, months)),
       remindDaysBefore: const Value(7),
@@ -111,13 +120,14 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
   final _vet = TextEditingController();
   final _vetPhone = TextEditingController();
   final _notes = TextEditingController();
+  final _vaccineOther = TextEditingController();
   List<String> _vets = const [];
   int _index = 0;
   bool _forward = true;
   bool _saving = false;
   bool _saved = false;
 
-  List<WizardStep> get _steps => wizardSteps(_a.species);
+  List<WizardStep> get _steps => wizardSteps(_a.species, hasVet: _a.vet.trim().isNotEmpty);
   WizardStep get _step => _steps[_index];
 
   @override
@@ -133,7 +143,7 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
   @override
   void dispose() {
     if (!_saved) deletePhoto(_a.photo); // picked but never saved
-    for (final c in [_name, _breed, _color, _chip, _weight, _vet, _vetPhone, _notes]) {
+    for (final c in [_name, _breed, _color, _chip, _weight, _vet, _vetPhone, _vaccineOther, _notes]) {
       c.dispose();
     }
     super.dispose();
@@ -147,6 +157,7 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
       ..chip = _chip.text
       ..vet = _vet.text
       ..vetPhone = _vetPhone.text
+      ..vaccineOther = _vaccineOther.text
       ..notes = _notes.text;
   }
 
@@ -405,9 +416,19 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
             items: [
               for (final s in suggestCare(_a.species, RecordType.vaccine, '', lang))
                 DropdownMenuItem(value: s, child: Text(s.nameFor(lang), overflow: TextOverflow.ellipsis)),
+              DropdownMenuItem(value: otherVaccine, child: Text(t.other)),
             ],
             onChanged: (v) => setState(() => _a.vaccine = v),
           ),
+          if (identical(_a.vaccine, otherVaccine)) ...[
+            const SizedBox(height: 16),
+            TextField(
+              controller: _vaccineOther,
+              autofocus: true,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: t.vaccine),
+            ),
+          ],
           const SizedBox(height: 16),
           OutlinedButton.icon(
             icon: const Icon(Icons.calendar_today),
