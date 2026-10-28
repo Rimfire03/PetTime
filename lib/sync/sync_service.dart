@@ -88,7 +88,12 @@ Future<void> _doPublish(int localPetId, String uid, bool wait) async {
   // 2. The pet document must exist before its children (their rules check membership on it).
   //    Firestore keeps this write queued while offline and sends writes in order, so the children
   //    can follow even when we do not wait for the answer.
-  final create = _pets.doc(id).set({...petWire(pet), 'members': [uid], 'ownerUid': uid});
+  final create = _pets.doc(id).set({
+    ...petWire(pet),
+    'members': [uid],
+    'ownerUid': uid,
+    'memberInfo': {uid: _userLabel(FirebaseAuth.instance.currentUser)},
+  });
   if (wait) {
     await create.timeout(const Duration(seconds: 20));
   } else {
@@ -117,6 +122,107 @@ Future<String> sharePet(int localPetId) async {
     'expiresAt': Timestamp.fromDate(DateTime.now().add(const Duration(days: 7))),
   }).timeout(const Duration(seconds: 20));
   return code;
+}
+
+/// What other members see for this account: the e-mail address, else the display name.
+String _userLabel(User? u) => u?.email ?? u?.displayName ?? '';
+
+class ShareMember {
+  const ShareMember({required this.uid, required this.label, required this.isOwner, required this.isMe});
+  final String uid, label;
+  final bool isOwner, isMe;
+}
+
+class ShareInvite {
+  const ShareInvite({required this.code, required this.expiresAt});
+  final String code;
+  final DateTime expiresAt;
+}
+
+class Shares {
+  const Shares({required this.members, required this.invites, required this.iAmOwner});
+  final List<ShareMember> members;
+  final List<ShareInvite> invites;
+  final bool iAmOwner;
+}
+
+/// Who can see this pet, plus the live invitation codes (only the owner creates codes).
+/// Returns null when the pet is not in the cloud yet.
+Future<Shares?> loadShares(int localPetId) async {
+  final user = await ensureSignedIn();
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+  final remote = pet.remoteId;
+  if (remote == null) return null;
+  final doc = await _pets.doc(remote).get().timeout(const Duration(seconds: 20));
+  final d = doc.data();
+  if (d == null) return null;
+  final owner = d['ownerUid'] as String?;
+  final info = Map<String, dynamic>.from(d['memberInfo'] as Map? ?? const {});
+  final uids = List<String>.from(d['members'] as List? ?? const []);
+  // pets shared before names were stored: each member fills their own entry in when they look here
+  if ((info[user.uid] as String?)?.isEmpty ?? true) {
+    final label = _userLabel(user);
+    if (label.isNotEmpty) {
+      info[user.uid] = label;
+      unawaited(_pets.doc(remote).update({'memberInfo.${user.uid}': label}).catchError(_log));
+    }
+  }
+  final now = DateTime.now();
+  final invites = <ShareInvite>[];
+  if (owner == user.uid) {
+    final q = await _fs
+        .collection('invites')
+        .where('ownerUid', isEqualTo: user.uid)
+        .where('petId', isEqualTo: remote)
+        .get()
+        .timeout(const Duration(seconds: 20));
+    for (final i in q.docs) {
+      final at = (i.data()['expiresAt'] as Timestamp).toDate();
+      if (at.isAfter(now)) invites.add(ShareInvite(code: i.id, expiresAt: at));
+    }
+    invites.sort((a, b) => a.expiresAt.compareTo(b.expiresAt));
+  }
+  return Shares(
+    iAmOwner: owner == user.uid,
+    invites: invites,
+    members: [
+      for (final u in uids)
+        ShareMember(uid: u, label: (info[u] as String?) ?? '', isOwner: u == owner, isMe: u == user.uid),
+    ],
+  );
+}
+
+/// Owner only: removes [uid]'s access. Their phone drops its copy when the server tells it.
+Future<void> revokeMember(int localPetId, String uid) async {
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+  await _pets.doc(pet.remoteId).update({
+    'members': FieldValue.arrayRemove([uid]),
+    'memberInfo.$uid': FieldValue.delete(),
+  }).timeout(const Duration(seconds: 20));
+}
+
+/// Owner only: the code stops working at once.
+Future<void> revokeInvite(String code) =>
+    _fs.collection('invites').doc(code).delete().timeout(const Duration(seconds: 20));
+
+enum PetRole { local, owner, member }
+
+/// Whether the pet is only on this phone, owned by this account, or shared with it by someone else.
+/// Falls back to [PetRole.local] when the server cannot be reached.
+Future<PetRole> petRole(int localPetId) async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+    if (user == null || pet.remoteId == null) return PetRole.local;
+    final doc = await _pets.doc(pet.remoteId).get().timeout(const Duration(seconds: 5));
+    final d = doc.data();
+    if (d == null) return PetRole.local;
+    final members = List<String>.from(d['members'] as List? ?? const []);
+    if (members.length <= 1) return PetRole.local; // nobody else: plain delete
+    return d['ownerUid'] == user.uid ? PetRole.owner : PetRole.member;
+  } catch (_) {
+    return PetRole.local;
+  }
 }
 
 /// Number of local changes the server has not received yet.
@@ -156,6 +262,7 @@ Future<void> joinWithCode(String code) async {
     await _pets.doc(data['petId'] as String).update({
       'members': FieldValue.arrayUnion([user.uid]),
       'joinCode': code,
+      'memberInfo.${user.uid}': _userLabel(user),
     }).timeout(const Duration(seconds: 20));
   } on FirebaseException {
     throw JoinFailed(); // rules refused: wrong or expired code

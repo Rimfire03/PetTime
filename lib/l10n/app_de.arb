@@ -115,5 +115,22 @@
   "chooseDate": "Datum wählen",
   "addPhoto": "Foto hinzufügen",
   "noRecords": "Noch keine Einträge.",
-  "dueOn": "Fällig am {date}"
+  "dueOn": "Fällig am {date}",
+  "deletePetTitle": "{name} löschen?",
+  "deletePetLocal": "Das Gesundheitsbuch dieses Tieres wird endgültig gelöscht.",
+  "deletePetOwner": "Dieses Tier ist geteilt: Es wird für alle Personen mit Zugriff gelöscht.",
+  "deletePetMember": "Dieses Tier ist mit Ihnen geteilt: Es wird aus Ihrem Konto entfernt, die anderen behalten es.",
+  "deletePetAction": "Dieses Tier löschen",
+  "sharesTitle": "Freigaben",
+  "sharesMembers": "Personen mit Zugriff",
+  "sharesOwnerTag": "Eigentümer",
+  "sharesYouTag": "Sie",
+  "sharesUnknown": "Mitglied",
+  "sharesRevoke": "Entziehen",
+  "sharesRevokeConfirm": "Zugriff für {name} entziehen? Die Person sieht dieses Tier nicht mehr. Widerrufen Sie auch noch aktive Einladungscodes.",
+  "sharesInvites": "Aktive Einladungscodes",
+  "sharesInviteExpires": "Läuft ab am {date}",
+  "sharesNoInvites": "Kein aktiver Code.",
+  "sharesNewCode": "Einladungscode erstellen",
+  "sharesOffline": "Dieses Tier ist noch nicht synchronisiert. Versuchen Sie es online erneut."
 }

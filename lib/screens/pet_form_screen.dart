@@ -9,6 +9,7 @@ import '../photos.dart';
 import '../suggestions.dart';
 import '../widgets/suggest_field.dart';
 import '../labels.dart' show speciesLabel;
+import 'delete_pet.dart';
 
 class PetFormScreen extends StatefulWidget {
   const PetFormScreen({super.key, this.pet});
@@ -93,9 +94,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
   }
 
   Future<void> _delete() async {
-    await (db.delete(db.pets)..where((p) => p.id.equals(widget.pet!.id))).go();
+    if (!await confirmDeletePet(context, widget.pet!)) return;
     _saved = true;
-    deletePhoto(widget.pet!.photoPath);
     if (_photoIsDraft) deletePhoto(_photo);
     if (!mounted) return;
     Navigator.of(context).popUntil((r) => r.isFirst);

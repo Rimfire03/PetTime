@@ -115,5 +115,22 @@
   "chooseDate": "Choisir une date",
   "addPhoto": "Ajouter une photo",
   "noRecords": "Aucun soin enregistré.",
-  "dueOn": "Échéance {date}"
+  "dueOn": "Échéance {date}",
+  "deletePetTitle": "Supprimer {name} ?",
+  "deletePetLocal": "Le carnet de santé de cet animal sera supprimé définitivement.",
+  "deletePetOwner": "Cet animal est partagé : il sera supprimé pour toutes les personnes qui y ont accès.",
+  "deletePetMember": "Cet animal est partagé avec vous : il sera retiré de votre compte, les autres personnes le conservent.",
+  "deletePetAction": "Supprimer cet animal",
+  "sharesTitle": "Partages",
+  "sharesMembers": "Personnes ayant accès",
+  "sharesOwnerTag": "Propriétaire",
+  "sharesYouTag": "Vous",
+  "sharesUnknown": "Membre",
+  "sharesRevoke": "Révoquer",
+  "sharesRevokeConfirm": "Retirer l'accès à {name} ? Cette personne ne verra plus cet animal. Pensez aussi à révoquer les codes d'invitation encore actifs.",
+  "sharesInvites": "Codes d'invitation actifs",
+  "sharesInviteExpires": "Expire le {date}",
+  "sharesNoInvites": "Aucun code actif.",
+  "sharesNewCode": "Créer un code d'invitation",
+  "sharesOffline": "Cet animal n'est pas encore synchronisé. Réessayez une fois en ligne."
 }

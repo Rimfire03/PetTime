@@ -801,6 +801,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Due {date}'**
   String dueOn(String date);
+
+  /// No description provided for @deletePetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}?'**
+  String deletePetTitle(String name);
+
+  /// No description provided for @deletePetLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'This pet\'s health book will be deleted for good.'**
+  String get deletePetLocal;
+
+  /// No description provided for @deletePetOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'This pet is shared: it will be deleted for everyone who has access.'**
+  String get deletePetOwner;
+
+  /// No description provided for @deletePetMember.
+  ///
+  /// In en, this message translates to:
+  /// **'This pet is shared with you: it will be removed from your account, the others keep it.'**
+  String get deletePetMember;
+
+  /// No description provided for @deletePetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this pet'**
+  String get deletePetAction;
+
+  /// No description provided for @sharesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing'**
+  String get sharesTitle;
+
+  /// No description provided for @sharesMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'People with access'**
+  String get sharesMembers;
+
+  /// No description provided for @sharesOwnerTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get sharesOwnerTag;
+
+  /// No description provided for @sharesYouTag.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get sharesYouTag;
+
+  /// No description provided for @sharesUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get sharesUnknown;
+
+  /// No description provided for @sharesRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke'**
+  String get sharesRevoke;
+
+  /// No description provided for @sharesRevokeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}\'s access? This person will no longer see this pet. Also revoke any invitation code that is still active.'**
+  String sharesRevokeConfirm(String name);
+
+  /// No description provided for @sharesInvites.
+  ///
+  /// In en, this message translates to:
+  /// **'Active invitation codes'**
+  String get sharesInvites;
+
+  /// No description provided for @sharesInviteExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires {date}'**
+  String sharesInviteExpires(String date);
+
+  /// No description provided for @sharesNoInvites.
+  ///
+  /// In en, this message translates to:
+  /// **'No active code.'**
+  String get sharesNoInvites;
+
+  /// No description provided for @sharesNewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an invitation code'**
+  String get sharesNewCode;
+
+  /// No description provided for @sharesOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'This pet is not synced yet. Try again once online.'**
+  String get sharesOffline;
 }
 
 class _AppLocalizationsDelegate

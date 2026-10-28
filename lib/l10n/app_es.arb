@@ -115,5 +115,22 @@
   "chooseDate": "Elegir una fecha",
   "addPhoto": "Añadir una foto",
   "noRecords": "Sin registros.",
-  "dueOn": "Vence {date}"
+  "dueOn": "Vence {date}",
+  "deletePetTitle": "¿Eliminar a {name}?",
+  "deletePetLocal": "La cartilla de salud de este animal se eliminará definitivamente.",
+  "deletePetOwner": "Este animal está compartido: se eliminará para todas las personas con acceso.",
+  "deletePetMember": "Este animal está compartido contigo: se quitará de tu cuenta, los demás lo conservan.",
+  "deletePetAction": "Eliminar este animal",
+  "sharesTitle": "Compartidos",
+  "sharesMembers": "Personas con acceso",
+  "sharesOwnerTag": "Propietario",
+  "sharesYouTag": "Tú",
+  "sharesUnknown": "Miembro",
+  "sharesRevoke": "Revocar",
+  "sharesRevokeConfirm": "¿Quitar el acceso a {name}? Esta persona ya no verá este animal. Revoca también los códigos de invitación que sigan activos.",
+  "sharesInvites": "Códigos de invitación activos",
+  "sharesInviteExpires": "Caduca el {date}",
+  "sharesNoInvites": "Ningún código activo.",
+  "sharesNewCode": "Crear un código de invitación",
+  "sharesOffline": "Este animal aún no está sincronizado. Inténtalo de nuevo con conexión."
 }

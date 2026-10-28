@@ -405,4 +405,65 @@ class AppLocalizationsEs extends AppLocalizations {
   String dueOn(String date) {
     return 'Vence $date';
   }
+
+  @override
+  String deletePetTitle(String name) {
+    return '¿Eliminar a $name?';
+  }
+
+  @override
+  String get deletePetLocal =>
+      'La cartilla de salud de este animal se eliminará definitivamente.';
+
+  @override
+  String get deletePetOwner =>
+      'Este animal está compartido: se eliminará para todas las personas con acceso.';
+
+  @override
+  String get deletePetMember =>
+      'Este animal está compartido contigo: se quitará de tu cuenta, los demás lo conservan.';
+
+  @override
+  String get deletePetAction => 'Eliminar este animal';
+
+  @override
+  String get sharesTitle => 'Compartidos';
+
+  @override
+  String get sharesMembers => 'Personas con acceso';
+
+  @override
+  String get sharesOwnerTag => 'Propietario';
+
+  @override
+  String get sharesYouTag => 'Tú';
+
+  @override
+  String get sharesUnknown => 'Miembro';
+
+  @override
+  String get sharesRevoke => 'Revocar';
+
+  @override
+  String sharesRevokeConfirm(String name) {
+    return '¿Quitar el acceso a $name? Esta persona ya no verá este animal. Revoca también los códigos de invitación que sigan activos.';
+  }
+
+  @override
+  String get sharesInvites => 'Códigos de invitación activos';
+
+  @override
+  String sharesInviteExpires(String date) {
+    return 'Caduca el $date';
+  }
+
+  @override
+  String get sharesNoInvites => 'Ningún código activo.';
+
+  @override
+  String get sharesNewCode => 'Crear un código de invitación';
+
+  @override
+  String get sharesOffline =>
+      'Este animal aún no está sincronizado. Inténtalo de nuevo con conexión.';
 }

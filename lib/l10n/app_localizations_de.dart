@@ -406,4 +406,65 @@ class AppLocalizationsDe extends AppLocalizations {
   String dueOn(String date) {
     return 'Fällig am $date';
   }
+
+  @override
+  String deletePetTitle(String name) {
+    return '$name löschen?';
+  }
+
+  @override
+  String get deletePetLocal =>
+      'Das Gesundheitsbuch dieses Tieres wird endgültig gelöscht.';
+
+  @override
+  String get deletePetOwner =>
+      'Dieses Tier ist geteilt: Es wird für alle Personen mit Zugriff gelöscht.';
+
+  @override
+  String get deletePetMember =>
+      'Dieses Tier ist mit Ihnen geteilt: Es wird aus Ihrem Konto entfernt, die anderen behalten es.';
+
+  @override
+  String get deletePetAction => 'Dieses Tier löschen';
+
+  @override
+  String get sharesTitle => 'Freigaben';
+
+  @override
+  String get sharesMembers => 'Personen mit Zugriff';
+
+  @override
+  String get sharesOwnerTag => 'Eigentümer';
+
+  @override
+  String get sharesYouTag => 'Sie';
+
+  @override
+  String get sharesUnknown => 'Mitglied';
+
+  @override
+  String get sharesRevoke => 'Entziehen';
+
+  @override
+  String sharesRevokeConfirm(String name) {
+    return 'Zugriff für $name entziehen? Die Person sieht dieses Tier nicht mehr. Widerrufen Sie auch noch aktive Einladungscodes.';
+  }
+
+  @override
+  String get sharesInvites => 'Aktive Einladungscodes';
+
+  @override
+  String sharesInviteExpires(String date) {
+    return 'Läuft ab am $date';
+  }
+
+  @override
+  String get sharesNoInvites => 'Kein aktiver Code.';
+
+  @override
+  String get sharesNewCode => 'Einladungscode erstellen';
+
+  @override
+  String get sharesOffline =>
+      'Dieses Tier ist noch nicht synchronisiert. Versuchen Sie es online erneut.';
 }

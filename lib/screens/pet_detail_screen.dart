@@ -5,7 +5,8 @@ import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../pdf_export.dart';
 import '../sync/sync_service.dart' show syncAvailable;
-import 'share_dialogs.dart';
+import 'delete_pet.dart';
+import 'shares_screen.dart';
 import '../photos.dart';
 import '../watermark.dart';
 import 'appointments_tab.dart';
@@ -57,8 +58,9 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                   builder: (_, on, _) => on
                       ? IconButton(
                           tooltip: t.sharePet,
-                          icon: const Icon(Icons.group_add),
-                          onPressed: () => showShareDialog(context, petId),
+                          icon: const Icon(Icons.group),
+                          onPressed: () => Navigator.push(
+                              context, MaterialPageRoute(builder: (_) => SharesScreen(petId: petId))),
                         )
                       : const SizedBox.shrink(),
                 ),
@@ -118,6 +120,19 @@ class _Info extends StatelessWidget {
         ),
         for (final (label, value) in rows)
           if (value != null) ListTile(title: Text(label), subtitle: Text(value)),
+        const SizedBox(height: 24),
+        Center(
+          child: TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
+            icon: const Icon(Icons.delete_outline),
+            label: Text(t.deletePetAction),
+            onPressed: () async {
+              final nav = Navigator.of(context);
+              if (await confirmDeletePet(context, pet)) nav.popUntil((r) => r.isFirst);
+            },
+          ),
+        ),
+        const SizedBox(height: 24),
       ],
     );
   }

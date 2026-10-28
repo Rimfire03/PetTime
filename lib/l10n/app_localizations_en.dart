@@ -404,4 +404,65 @@ class AppLocalizationsEn extends AppLocalizations {
   String dueOn(String date) {
     return 'Due $date';
   }
+
+  @override
+  String deletePetTitle(String name) {
+    return 'Delete $name?';
+  }
+
+  @override
+  String get deletePetLocal =>
+      'This pet\'s health book will be deleted for good.';
+
+  @override
+  String get deletePetOwner =>
+      'This pet is shared: it will be deleted for everyone who has access.';
+
+  @override
+  String get deletePetMember =>
+      'This pet is shared with you: it will be removed from your account, the others keep it.';
+
+  @override
+  String get deletePetAction => 'Delete this pet';
+
+  @override
+  String get sharesTitle => 'Sharing';
+
+  @override
+  String get sharesMembers => 'People with access';
+
+  @override
+  String get sharesOwnerTag => 'Owner';
+
+  @override
+  String get sharesYouTag => 'You';
+
+  @override
+  String get sharesUnknown => 'Member';
+
+  @override
+  String get sharesRevoke => 'Revoke';
+
+  @override
+  String sharesRevokeConfirm(String name) {
+    return 'Remove $name\'s access? This person will no longer see this pet. Also revoke any invitation code that is still active.';
+  }
+
+  @override
+  String get sharesInvites => 'Active invitation codes';
+
+  @override
+  String sharesInviteExpires(String date) {
+    return 'Expires $date';
+  }
+
+  @override
+  String get sharesNoInvites => 'No active code.';
+
+  @override
+  String get sharesNewCode => 'Create an invitation code';
+
+  @override
+  String get sharesOffline =>
+      'This pet is not synced yet. Try again once online.';
 }
