@@ -35,6 +35,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
   List<String> _vets = const [];
   late String? _photo = widget.pet?.photoPath;
   bool _saved = false;
+  // only the owner of a pet may delete it; shown once the role is known
+  late final Future<bool> _canDelete = widget.pet == null ? Future.value(false) : canDeletePet(widget.pet!.id);
 
   /// A photo picked in this form but not saved yet; safe to delete.
   bool get _photoIsDraft => _photo != null && _photo != widget.pet?.photoPath;
@@ -111,11 +113,12 @@ class _PetFormScreenState extends State<PetFormScreen> {
       appBar: AppBar(
         title: Text(widget.pet == null ? t.addPet : t.editPet),
         actions: [
-          if (widget.pet != null)
-            IconButton(
-                tooltip: t.delete,
-                icon: const Icon(Icons.delete_outline),
-                onPressed: _delete),
+          FutureBuilder<bool>(
+            future: _canDelete,
+            builder: (_, snap) => snap.data == true
+                ? IconButton(tooltip: t.delete, icon: const Icon(Icons.delete_outline), onPressed: _delete)
+                : const SizedBox.shrink(),
+          ),
         ],
       ),
       body: Form(

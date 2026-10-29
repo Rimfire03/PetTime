@@ -494,4 +494,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get sharesTransferHelp =>
       'To hand this pet over: share it with the person (invitation code), then choose \"Transfer ownership\" on their name.';
+
+  @override
+  String get deleteOnlyOwner => 'Only the owner of the pet can delete it.';
 }

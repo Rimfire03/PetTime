@@ -497,4 +497,8 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sharesTransferHelp =>
       'Um dieses Tier abzugeben: Teilen Sie es mit der Person (Einladungscode) und wählen Sie bei ihrem Namen \"Eigentum übertragen\".';
+
+  @override
+  String get deleteOnlyOwner =>
+      'Nur der Eigentümer des Tieres kann es löschen.';
 }

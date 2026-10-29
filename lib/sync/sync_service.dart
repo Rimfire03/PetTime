@@ -222,21 +222,28 @@ Future<void> revokeInvite(String code) =>
 enum PetRole { local, owner, member }
 
 /// Whether the pet is only on this phone, owned by this account, or shared with it by someone else.
-/// Falls back to [PetRole.local] when the server cannot be reached.
+/// Only the owner may delete a pet, so when the answer cannot be found (offline and not cached) this
+/// says [PetRole.member]: refusing a delete is safer than letting a shared pet be removed by mistake.
 Future<PetRole> petRole(int localPetId) async {
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingleOrNull();
+  if (pet == null) return PetRole.local;
+  if (pet.remoteId == null || !syncAvailable.value) return PetRole.local;
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) return PetRole.member;
+  Map<String, dynamic>? d;
   try {
-    final user = FirebaseAuth.instance.currentUser;
-    final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
-    if (user == null || pet.remoteId == null) return PetRole.local;
-    final doc = await _pets.doc(pet.remoteId).get().timeout(const Duration(seconds: 5));
-    final d = doc.data();
-    if (d == null) return PetRole.local;
-    final members = List<String>.from(d['members'] as List? ?? const []);
-    if (members.length <= 1) return PetRole.local; // nobody else: plain delete
-    return d['ownerUid'] == user.uid ? PetRole.owner : PetRole.member;
+    d = (await _pets.doc(pet.remoteId).get().timeout(const Duration(seconds: 5))).data();
   } catch (_) {
-    return PetRole.local;
+    try {
+      d = (await _pets.doc(pet.remoteId).get(const GetOptions(source: Source.cache))).data();
+    } catch (_) {
+      return PetRole.member;
+    }
   }
+  if (d == null) return PetRole.member;
+  final members = List<String>.from(d['members'] as List? ?? const []);
+  if (d['ownerUid'] != user.uid) return PetRole.member;
+  return members.length <= 1 ? PetRole.local : PetRole.owner; // nobody else has access: plain delete
 }
 
 /// Number of local changes the server has not received yet.

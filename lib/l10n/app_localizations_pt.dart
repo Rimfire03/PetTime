@@ -498,4 +498,7 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get sharesTransferHelp =>
       'Para ceder este animal: partilhe-o com a pessoa (código de convite) e escolha \"Transferir a propriedade\" no nome dela.';
+
+  @override
+  String get deleteOnlyOwner => 'Só o proprietário do animal o pode eliminar.';
 }

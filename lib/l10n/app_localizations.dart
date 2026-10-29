@@ -951,6 +951,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To hand this pet over: share it with the person (invitation code), then choose \"Transfer ownership\" on their name.'**
   String get sharesTransferHelp;
+
+  /// No description provided for @deleteOnlyOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the owner of the pet can delete it.'**
+  String get deleteOnlyOwner;
 }
 
 class _AppLocalizationsDelegate

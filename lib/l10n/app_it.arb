@@ -140,5 +140,6 @@
   "sharesTransferDo": "Trasferisci",
   "sharesTransferConfirm": "{name} diventerà proprietario di questo animale: solo il proprietario può eliminarlo per tutti, rimuovere accessi e creare codici di invito.",
   "sharesTransferLeave": "Rimuovi questo animale dal mio account dopo il trasferimento",
-  "sharesTransferHelp": "Per cedere questo animale: condividilo con la persona (codice di invito), poi scegli \"Trasferisci la proprietà\" sul suo nome."
+  "sharesTransferHelp": "Per cedere questo animale: condividilo con la persona (codice di invito), poi scegli \"Trasferisci la proprietà\" sul suo nome.",
+  "deleteOnlyOwner": "Solo il proprietario dell'animale può eliminarlo."
 }

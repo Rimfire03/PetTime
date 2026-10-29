@@ -93,9 +93,18 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   }
 }
 
-class _Info extends StatelessWidget {
+class _Info extends StatefulWidget {
   const _Info({required this.pet});
   final Pet pet;
+
+  @override
+  State<_Info> createState() => _InfoState();
+}
+
+class _InfoState extends State<_Info> {
+  Pet get pet => widget.pet;
+  // only the owner of a pet may delete it; the button shows once the role is known
+  late final Future<bool> _canDelete = canDeletePet(pet.id);
 
   @override
   Widget build(BuildContext context) {
@@ -121,16 +130,21 @@ class _Info extends StatelessWidget {
         for (final (label, value) in rows)
           if (value != null) ListTile(title: Text(label), subtitle: Text(value)),
         const SizedBox(height: 24),
-        Center(
-          child: TextButton.icon(
-            style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
-            icon: const Icon(Icons.delete_outline),
-            label: Text(t.deletePetAction),
-            onPressed: () async {
-              final nav = Navigator.of(context);
-              if (await confirmDeletePet(context, pet)) nav.popUntil((r) => r.isFirst);
-            },
-          ),
+        FutureBuilder<bool>(
+          future: _canDelete,
+          builder: (context, snap) => snap.data != true
+              ? const SizedBox.shrink()
+              : Center(
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text(t.deletePetAction),
+                    onPressed: () async {
+                      final nav = Navigator.of(context);
+                      if (await confirmDeletePet(context, pet)) nav.popUntil((r) => r.isFirst);
+                    },
+                  ),
+                ),
         ),
         const SizedBox(height: 24),
       ],
