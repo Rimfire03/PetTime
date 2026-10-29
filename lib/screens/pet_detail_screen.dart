@@ -132,19 +132,22 @@ class _InfoState extends State<_Info> {
         const SizedBox(height: 24),
         FutureBuilder<bool>(
           future: _canDelete,
-          builder: (context, snap) => snap.data != true
-              ? const SizedBox.shrink()
-              : Center(
-                  child: TextButton.icon(
-                    style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
-                    icon: const Icon(Icons.delete_outline),
-                    label: Text(t.deletePetAction),
-                    onPressed: () async {
-                      final nav = Navigator.of(context);
-                      if (await confirmDeletePet(context, pet)) nav.popUntil((r) => r.isFirst);
-                    },
-                  ),
-                ),
+          builder: (context, snap) {
+            if (!snap.hasData) return const SizedBox.shrink();
+            final owner = snap.data!; // owner (or unshared pet): delete; somebody it was shared with: leave
+            return Center(
+              child: TextButton.icon(
+                style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
+                icon: Icon(owner ? Icons.delete_outline : Icons.logout),
+                label: Text(owner ? t.deletePetAction : t.leaveShare),
+                onPressed: () async {
+                  final nav = Navigator.of(context);
+                  final gone = owner ? await confirmDeletePet(context, pet) : await confirmLeaveShare(context, pet);
+                  if (gone) nav.popUntil((r) => r.isFirst);
+                },
+              ),
+            );
+          },
         ),
         const SizedBox(height: 24),
       ],

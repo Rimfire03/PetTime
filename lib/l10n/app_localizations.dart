@@ -957,6 +957,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only the owner of the pet can delete it.'**
   String get deleteOnlyOwner;
+
+  /// No description provided for @leaveShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this share'**
+  String get leaveShare;
+
+  /// No description provided for @leaveShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the sharing of {name}?'**
+  String leaveShareTitle(String name);
+
+  /// No description provided for @leaveShareBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This pet will disappear from your account. The others keep it, and you can get it back with a new invitation code.'**
+  String get leaveShareBody;
 }
 
 class _AppLocalizationsDelegate

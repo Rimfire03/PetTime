@@ -141,5 +141,8 @@
   "sharesTransferConfirm": "{name} wird Eigentümer dieses Tieres: Nur der Eigentümer kann es für alle löschen, Zugriffe entziehen und Einladungscodes erstellen.",
   "sharesTransferLeave": "Dieses Tier nach der Übertragung aus meinem Konto entfernen",
   "sharesTransferHelp": "Um dieses Tier abzugeben: Teilen Sie es mit der Person (Einladungscode) und wählen Sie bei ihrem Namen \"Eigentum übertragen\".",
-  "deleteOnlyOwner": "Nur der Eigentümer des Tieres kann es löschen."
+  "deleteOnlyOwner": "Nur der Eigentümer des Tieres kann es löschen.",
+  "leaveShare": "Freigabe verlassen",
+  "leaveShareTitle": "Freigabe von {name} verlassen?",
+  "leaveShareBody": "Dieses Tier verschwindet aus Ihrem Konto. Die anderen behalten es, und Sie können es mit einem neuen Einladungscode zurückholen."
 }

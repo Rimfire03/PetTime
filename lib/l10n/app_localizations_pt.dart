@@ -501,4 +501,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get deleteOnlyOwner => 'Só o proprietário do animal o pode eliminar.';
+
+  @override
+  String get leaveShare => 'Sair desta partilha';
+
+  @override
+  String leaveShareTitle(String name) {
+    return 'Sair da partilha de $name?';
+  }
+
+  @override
+  String get leaveShareBody =>
+      'Este animal vai desaparecer da sua conta. As outras pessoas mantêm-no e pode recuperá-lo com um novo código de convite.';
 }

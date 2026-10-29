@@ -219,6 +219,18 @@ Future<void> transferOwnership(int localPetId, String newOwnerUid, {required boo
 Future<void> revokeInvite(String code) =>
     _fs.collection('invites').doc(code).delete().timeout(const Duration(seconds: 20));
 
+/// A member gives up their own access; the pet stays for everybody else. Needs the server, and
+/// removes the local copy straight away (the sync must not treat that as a delete).
+Future<void> leaveShare(int localPetId) async {
+  final user = await ensureSignedIn();
+  final pet = await (db.select(db.pets)..where((p) => p.id.equals(localPetId))).getSingle();
+  await _pets.doc(pet.remoteId).update({
+    'members': FieldValue.arrayRemove([user.uid]),
+    'memberInfo.${user.uid}': FieldValue.delete(),
+  }).timeout(const Duration(seconds: 20));
+  await db.applyingRemote(() => (db.delete(db.pets)..where((p) => p.id.equals(localPetId))).go());
+}
+
 enum PetRole { local, owner, member }
 
 /// Whether the pet is only on this phone, owned by this account, or shared with it by someone else.

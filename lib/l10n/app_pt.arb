@@ -141,5 +141,8 @@
   "sharesTransferConfirm": "{name} passará a ser o proprietário deste animal: só o proprietário o pode eliminar para todos, remover acessos e criar códigos de convite.",
   "sharesTransferLeave": "Remover este animal da minha conta após a transferência",
   "sharesTransferHelp": "Para ceder este animal: partilhe-o com a pessoa (código de convite) e escolha \"Transferir a propriedade\" no nome dela.",
-  "deleteOnlyOwner": "Só o proprietário do animal o pode eliminar."
+  "deleteOnlyOwner": "Só o proprietário do animal o pode eliminar.",
+  "leaveShare": "Sair desta partilha",
+  "leaveShareTitle": "Sair da partilha de {name}?",
+  "leaveShareBody": "Este animal vai desaparecer da sua conta. As outras pessoas mantêm-no e pode recuperá-lo com um novo código de convite."
 }

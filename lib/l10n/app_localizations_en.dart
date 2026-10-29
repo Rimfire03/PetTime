@@ -497,4 +497,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteOnlyOwner => 'Only the owner of the pet can delete it.';
+
+  @override
+  String get leaveShare => 'Leave this share';
+
+  @override
+  String leaveShareTitle(String name) {
+    return 'Leave the sharing of $name?';
+  }
+
+  @override
+  String get leaveShareBody =>
+      'This pet will disappear from your account. The others keep it, and you can get it back with a new invitation code.';
 }

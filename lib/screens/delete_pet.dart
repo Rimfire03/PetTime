@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../photos.dart';
-import '../sync/sync_service.dart' show PetRole, petRole;
+import '../sync/sync_service.dart' show PetRole, describeError, leaveShare, petRole;
 
 /// True when this account may delete the pet: its owner, never somebody it was shared with.
 Future<bool> canDeletePet(int petId) async => await petRole(petId) != PetRole.member;
@@ -31,6 +31,33 @@ Future<bool> confirmDeletePet(BuildContext context, Pet pet) async {
   );
   if (ok != true) return false;
   await (db.delete(db.pets)..where((p) => p.id.equals(pet.id))).go();
+  deletePhoto(pet.photoPath);
+  return true;
+}
+
+/// Asks for confirmation, then removes a pet that was shared with this account from it (others keep it).
+/// Returns true when the pet is gone from this phone.
+Future<bool> confirmLeaveShare(BuildContext context, Pet pet) async {
+  final t = AppLocalizations.of(context);
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text(t.leaveShareTitle(pet.name)),
+      content: Text(t.leaveShareBody),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, false), child: Text(t.cancel)),
+        FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(t.leaveShare)),
+      ],
+    ),
+  );
+  if (ok != true || !context.mounted) return false;
+  final messenger = ScaffoldMessenger.of(context);
+  try {
+    await leaveShare(pet.id);
+  } catch (e) {
+    messenger.showSnackBar(SnackBar(content: Text('${t.syncFailed}\n${describeError(e)}')));
+    return false;
+  }
   deletePhoto(pet.photoPath);
   return true;
 }
