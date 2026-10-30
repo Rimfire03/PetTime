@@ -31,6 +31,9 @@ jobs:
           pw=$(printf '%s' "$UPLOAD_KEYSTORE_PASSWORD" | tr -d '\r\n')
           printf 'storeFile=upload.jks\nstorePassword=%s\nkeyAlias=upload\nkeyPassword=%s\n' "$pw" "$pw" > android/key.properties
           printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          # fail early (and say why) instead of deep inside Gradle
+          echo "keystore bytes: $(wc -c < android/upload.jks), password length: ${#pw}"
+          keytool -list -keystore android/upload.jks -storepass "$pw" | head -5
       - run: flutter build appbundle --release
       - uses: actions/upload-artifact@v4
         with:
