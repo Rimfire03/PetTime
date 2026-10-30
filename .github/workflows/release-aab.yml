@@ -28,7 +28,8 @@ jobs:
         run: |
           test -n "$UPLOAD_KEYSTORE_BASE64" || { echo "UPLOAD_KEYSTORE_BASE64 secret missing"; exit 1; }
           printf '%s' "$UPLOAD_KEYSTORE_BASE64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > android/upload.jks
-          pw=$(printf '%s' "$UPLOAD_KEYSTORE_PASSWORD" | tr -d '\r\n')
+          # the password is letters and digits only; the secret was stored from Windows and carries stray bytes
+          pw=$(printf '%s' "$UPLOAD_KEYSTORE_PASSWORD" | tr -cd 'A-Za-z0-9')
           printf 'storeFile=upload.jks\nstorePassword=%s\nkeyAlias=upload\nkeyPassword=%s\n' "$pw" "$pw" > android/key.properties
           printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           # fail early (and say why) instead of deep inside Gradle
