@@ -1,0 +1,39 @@
+name: Release AAB
+
+# Builds the signed Android App Bundle for Google Play. Run by hand (Actions > Release AAB > Run workflow).
+on:
+  workflow_dispatch:
+
+jobs:
+  aab:
+    name: Build signed AAB
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Upload key and Firebase config
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          test -n "$UPLOAD_KEYSTORE_BASE64" || { echo "UPLOAD_KEYSTORE_BASE64 secret missing"; exit 1; }
+          printf '%s' "$UPLOAD_KEYSTORE_BASE64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > android/upload.jks
+          pw=$(printf '%s' "$UPLOAD_KEYSTORE_PASSWORD" | tr -d '\r\n')
+          printf 'storeFile=upload.jks\nstorePassword=%s\nkeyAlias=upload\nkeyPassword=%s\n' "$pw" "$pw" > android/key.properties
+          printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+      - run: flutter build appbundle --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pettime-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
