@@ -77,14 +77,18 @@ class _Chart extends StatelessWidget {
                 showTitles: true,
                 interval: span < 3 ? 1 : span / 3,
                 reservedSize: 28,
-                getTitlesWidget: (v, meta) => SideTitleWidget(
-                  meta: meta,
-                  child: Text(
-                    DateFormat.Md(locale).format(
-                        DateTime.fromMillisecondsSinceEpoch((v * _msPerDay).round())),
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                ),
+                getTitlesWidget: (v, meta) {
+                  // the interval rarely divides the span exactly: skip a label that would sit on top of the last one
+                  if (v != meta.max && meta.max - v < meta.appliedInterval * 0.5) return const SizedBox.shrink();
+                  return SideTitleWidget(
+                    meta: meta,
+                    child: Text(
+                      DateFormat.Md(locale).format(
+                          DateTime.fromMillisecondsSinceEpoch((v * _msPerDay).round())),
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  );
+                },
               ),
             ),
           ),

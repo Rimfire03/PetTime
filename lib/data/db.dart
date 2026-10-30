@@ -86,7 +86,8 @@ class SyncFlags extends Table {
   IntColumn get applying => integer().withDefault(const Constant(0))();
 }
 
-final db = AppDb();
+/// The app's database. Not final only so a test can swap in an in-memory one.
+AppDb db = AppDb();
 
 const _syncTables = ['pets', 'health_records', 'weights', 'appointments'];
 
