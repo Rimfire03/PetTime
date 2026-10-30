@@ -7,6 +7,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/db.dart';
 import '../photos.dart' show replaceAllPhotos;
@@ -41,10 +42,25 @@ Future<void> initSync() async {
   });
 }
 
+// Web client of the Firebase project (client_type 3 in google-services.json): not a secret.
+const _webClientId = '793901455251-cjfmcn8g4jtf3q0iei94k5u8qll7dl94.apps.googleusercontent.com';
+bool _googleReady = false;
+
+/// Google account picker built into Android. The browser based flow (signInWithProvider) loses its
+/// state on some phones ("missing initial state"), this one never opens a browser.
+Future<AuthCredential> _googleCredential() async {
+  if (!_googleReady) {
+    await GoogleSignIn.instance.initialize(serverClientId: _webClientId);
+    _googleReady = true;
+  }
+  final account = await GoogleSignIn.instance.authenticate();
+  return GoogleAuthProvider.credential(idToken: account.authentication.idToken);
+}
+
 Future<User> ensureSignedIn() async {
   final current = FirebaseAuth.instance.currentUser;
   if (current != null) return current;
-  final cred = await FirebaseAuth.instance.signInWithProvider(GoogleAuthProvider());
+  final cred = await FirebaseAuth.instance.signInWithCredential(await _googleCredential());
   return cred.user!;
 }
 
@@ -288,7 +304,7 @@ Future<void> signOutAndWipe() async {
 /// Asks Google to confirm the identity first, so nothing is half-deleted when that is refused.
 Future<void> deleteAccount() async {
   final user = await ensureSignedIn();
-  await user.reauthenticateWithProvider(GoogleAuthProvider());
+  await user.reauthenticateWithCredential(await _googleCredential());
   final uid = user.uid;
   final pets = await _pets.where('members', arrayContains: uid).get().timeout(const Duration(seconds: 20));
   for (final doc in pets.docs) {
