@@ -69,6 +69,7 @@ android {
         release {
             // without key.properties, falls back to debug keys so local release runs still work (not publishable)
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
