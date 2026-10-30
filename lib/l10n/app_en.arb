@@ -85,6 +85,8 @@
   "logoutConfirm": "Log out and remove this account's data from this phone? It stays safe in the cloud and comes back when you sign in again. Photos are not saved in the cloud and will be removed.",
   "logoutUnsynced": "{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}",
   "@logoutUnsynced": { "placeholders": { "n": { "type": "int" } } },
+  "deleteAccount": "Delete my account",
+  "deleteAccountConfirm": "Delete your account for good? Your sign-in and your cloud data are deleted: pets you own are removed for everybody they are shared with, and you leave the ones shared with you. Photos on this phone are removed too. This cannot be undone.",
   "recordType": "Type of care",
   "repeatEvery": "{n, plural, =1{every month} other{every {n} months}}",
   "@repeatEvery": { "placeholders": { "n": { "type": "int" } } },

@@ -274,6 +274,13 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get deleteAccount => 'Mein Konto löschen';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Konto endgültig löschen? Deine Anmeldung und deine Cloud-Daten werden gelöscht: Tiere, die dir gehören, verschwinden für alle, mit denen sie geteilt sind, und du verlässt die mit dir geteilten. Fotos auf diesem Handy werden ebenfalls entfernt. Das kann nicht rückgängig gemacht werden.';
+
+  @override
   String get recordType => 'Art der Behandlung';
 
   @override

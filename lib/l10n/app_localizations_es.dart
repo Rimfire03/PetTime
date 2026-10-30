@@ -274,6 +274,13 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get deleteAccount => 'Eliminar mi cuenta';
+
+  @override
+  String get deleteAccountConfirm =>
+      '¿Eliminar tu cuenta definitivamente? Se eliminan tu inicio de sesión y tus datos en la nube: las mascotas que son tuyas desaparecen para todos con quienes están compartidas, y sales de las compartidas contigo. Las fotos de este teléfono también se eliminan. No se puede deshacer.';
+
+  @override
   String get recordType => 'Tipo de cuidado';
 
   @override

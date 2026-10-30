@@ -604,6 +604,18 @@ abstract class AppLocalizations {
   /// **'{n, plural, =1{1 change has not been sent to the cloud yet and will be lost.} other{{n} changes have not been sent to the cloud yet and will be lost.}}'**
   String logoutUnsynced(int n);
 
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account for good? Your sign-in and your cloud data are deleted: pets you own are removed for everybody they are shared with, and you leave the ones shared with you. Photos on this phone are removed too. This cannot be undone.'**
+  String get deleteAccountConfirm;
+
   /// No description provided for @recordType.
   ///
   /// In en, this message translates to:

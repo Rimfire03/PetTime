@@ -4,10 +4,11 @@ import '../ads.dart';
 import '../backup.dart';
 import '../l10n/app_localizations.dart';
 import '../purchases.dart';
-import '../sync/sync_service.dart' show signOutAndWipe, syncAvailable, syncUser, unsyncedCount;
+import '../sync/sync_service.dart'
+    show deleteAccount, describeError, signOutAndWipe, syncAvailable, syncUser, unsyncedCount;
 import 'share_dialogs.dart';
 
-enum _Action { join, export, import, removeAds, restore, privacy, logout }
+enum _Action { join, export, import, removeAds, restore, privacy, logout, deleteAccount }
 
 /// The "..." menu of the home screen: sharing, backup, purchase and account actions.
 /// Each entry only shows when it applies (no purchase entry once ads are removed, no logout when signed out...).
@@ -32,6 +33,7 @@ class HomeMenu extends StatelessWidget {
           ],
           if (privacyOptionsRequired.value) PopupMenuItem(value: _Action.privacy, child: Text(t.privacySettings)),
           if (syncUser.value != null) PopupMenuItem(value: _Action.logout, child: Text(t.logout)),
+          if (syncUser.value != null) PopupMenuItem(value: _Action.deleteAccount, child: Text(t.deleteAccount)),
         ],
       ),
     );
@@ -44,6 +46,7 @@ class HomeMenu extends StatelessWidget {
         _Action.restore => restorePurchases(),
         _Action.privacy => Future.sync(showPrivacyOptions),
         _Action.logout => _logout(context),
+        _Action.deleteAccount => _deleteAccount(context),
       };
 
   static Future<void> _logout(BuildContext context) async {
@@ -62,6 +65,32 @@ class HomeMenu extends StatelessWidget {
       ),
     );
     if (ok == true) await signOutAndWipe();
+  }
+
+  static Future<void> _deleteAccount(BuildContext context) async {
+    final t = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(t.deleteAccount),
+        content: Text(t.deleteAccountConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(t.cancel)),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(t.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await deleteAccount();
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text('${t.syncFailed}\n${describeError(e)}')));
+    }
   }
 
   static Future<void> _backup(BuildContext context, _Action action) async {

@@ -83,6 +83,8 @@
   "logout": "Cerrar sesión",
   "logoutConfirm": "¿Cerrar sesión y eliminar los datos de esta cuenta de este teléfono? Siguen seguros en la nube y vuelven al iniciar sesión. Las fotos no se guardan en la nube y se eliminarán.",
   "logoutUnsynced": "{n, plural, =1{1 cambio aún no se ha enviado a la nube y se perderá.} other{{n} cambios aún no se han enviado a la nube y se perderán.}}",
+  "deleteAccount": "Eliminar mi cuenta",
+  "deleteAccountConfirm": "¿Eliminar tu cuenta definitivamente? Se eliminan tu inicio de sesión y tus datos en la nube: las mascotas que son tuyas desaparecen para todos con quienes están compartidas, y sales de las compartidas contigo. Las fotos de este teléfono también se eliminan. No se puede deshacer.",
   "recordType": "Tipo de cuidado",
   "repeatEvery": "{n, plural, =1{cada mes} other{cada {n} meses}}",
   "suggestionNote": "Fecha sugerida: confírmala con tu veterinario.",

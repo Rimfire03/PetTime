@@ -276,6 +276,13 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get deleteAccount => 'Supprimer mon compte';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Supprimer définitivement ton compte ? Ta connexion et tes données cloud sont supprimées : les animaux dont tu es propriétaire disparaissent pour toutes les personnes avec qui ils sont partagés, et tu quittes ceux partagés avec toi. Les photos de ce téléphone sont aussi supprimées. Action irréversible.';
+
+  @override
   String get recordType => 'Type de soin';
 
   @override

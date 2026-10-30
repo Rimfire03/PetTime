@@ -282,6 +282,39 @@ Future<void> signOutAndWipe() async {
   replaceAllPhotos({});
   await FirebaseAuth.instance.signOut();
 }
+
+/// Deletes the account: its pets leave the cloud (pets it owns are removed for everybody, shared ones
+/// are just left), its invite codes stop working, the sign-in is deleted, and the phone is wiped.
+/// Asks Google to confirm the identity first, so nothing is half-deleted when that is refused.
+Future<void> deleteAccount() async {
+  final user = await ensureSignedIn();
+  await user.reauthenticateWithProvider(GoogleAuthProvider());
+  final uid = user.uid;
+  final pets = await _pets.where('members', arrayContains: uid).get().timeout(const Duration(seconds: 20));
+  for (final doc in pets.docs) {
+    if (doc.data()['ownerUid'] == uid) {
+      await doc.reference.update({'deleted': true, 'updatedAt': _nowMs()});
+    } else {
+      await doc.reference.update({
+        'members': FieldValue.arrayRemove([uid]),
+        'memberInfo.$uid': FieldValue.delete(),
+      });
+    }
+  }
+  final invites = await _fs.collection('invites').where('ownerUid', isEqualTo: uid).get();
+  for (final i in invites.docs) {
+    await i.reference.delete();
+  }
+  _sync?.dispose();
+  _sync = null;
+  await user.delete();
+  await db.applyingRemote(() async {
+    await db.delete(db.pets).go();
+    await db.delete(db.syncDeletes).go();
+  });
+  replaceAllPhotos({});
+}
+
 /// Joins the pet behind [code]. It then appears locally through the normal sync.
 Future<void> joinWithCode(String code) async {
   final user = await ensureSignedIn();

@@ -83,6 +83,8 @@
   "logout": "Abmelden",
   "logoutConfirm": "Abmelden und die Daten dieses Kontos von diesem Handy entfernen? Sie bleiben sicher in der Cloud und kommen bei der nächsten Anmeldung zurück. Fotos werden nicht in der Cloud gespeichert und gelöscht.",
   "logoutUnsynced": "{n, plural, =1{1 Änderung wurde noch nicht an die Cloud gesendet und geht verloren.} other{{n} Änderungen wurden noch nicht an die Cloud gesendet und gehen verloren.}}",
+  "deleteAccount": "Mein Konto löschen",
+  "deleteAccountConfirm": "Konto endgültig löschen? Deine Anmeldung und deine Cloud-Daten werden gelöscht: Tiere, die dir gehören, verschwinden für alle, mit denen sie geteilt sind, und du verlässt die mit dir geteilten. Fotos auf diesem Handy werden ebenfalls entfernt. Das kann nicht rückgängig gemacht werden.",
   "recordType": "Art der Behandlung",
   "repeatEvery": "{n, plural, =1{jeden Monat} other{alle {n} Monate}}",
   "suggestionNote": "Vorgeschlagenes Datum: bitte mit dem Tierarzt abstimmen.",

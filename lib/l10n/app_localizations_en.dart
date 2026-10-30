@@ -273,6 +273,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get deleteAccount => 'Delete my account';
+
+  @override
+  String get deleteAccountConfirm =>
+      'Delete your account for good? Your sign-in and your cloud data are deleted: pets you own are removed for everybody they are shared with, and you leave the ones shared with you. Photos on this phone are removed too. This cannot be undone.';
+
+  @override
   String get recordType => 'Type of care';
 
   @override
