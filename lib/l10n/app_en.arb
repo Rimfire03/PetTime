@@ -165,5 +165,10 @@
   "leaveShare": "Leave this share",
   "leaveShareTitle": "Leave the sharing of {name}?",
   "@leaveShareTitle": { "placeholders": { "name": { "type": "String" } } },
-  "leaveShareBody": "This pet will disappear from your account. The others keep it, and you can get it back with a new invitation code."
+  "leaveShareBody": "This pet will disappear from your account. The others keep it, and you can get it back with a new invitation code.",
+  "upcomingTitle": "Coming up",
+  "overdueTitle": "Overdue",
+  "overdueSince": "Overdue since {date}",
+  "@overdueSince": { "placeholders": { "date": { "type": "String" } } },
+  "noAppointmentPlanned": "No appointment planned"
 }

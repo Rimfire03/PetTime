@@ -513,4 +513,18 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get leaveShareBody =>
       'Dieses Tier verschwindet aus Ihrem Konto. Die anderen behalten es, und Sie können es mit einem neuen Einladungscode zurückholen.';
+
+  @override
+  String get upcomingTitle => 'Anstehende Termine';
+
+  @override
+  String get overdueTitle => 'Überfällig';
+
+  @override
+  String overdueSince(String date) {
+    return 'Überfällig seit $date';
+  }
+
+  @override
+  String get noAppointmentPlanned => 'Kein Termin geplant';
 }

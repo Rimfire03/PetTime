@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../labels.dart' show speciesLabel;
 import '../photos.dart';
 import '../watermark.dart';
+import '../widgets/due_widgets.dart';
 import 'home_menu.dart';
 import 'pet_detail_screen.dart';
 import 'pet_wizard_screen.dart';
@@ -27,6 +28,7 @@ class PetsScreen extends StatelessWidget {
             if (pets.isEmpty) return Center(child: Text(t.noPets));
             return ListView(
               children: [
+                OverdueNotice(pets: pets),
                 for (final p in pets)
                   ListTile(
                     leading: PetAvatar(name: p.name, photo: p.photoPath),

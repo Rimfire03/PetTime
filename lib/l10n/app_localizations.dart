@@ -975,6 +975,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This pet will disappear from your account. The others keep it, and you can get it back with a new invitation code.'**
   String get leaveShareBody;
+
+  /// No description provided for @upcomingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming up'**
+  String get upcomingTitle;
+
+  /// No description provided for @overdueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdueTitle;
+
+  /// No description provided for @overdueSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue since {date}'**
+  String overdueSince(String date);
+
+  /// No description provided for @noAppointmentPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'No appointment planned'**
+  String get noAppointmentPlanned;
 }
 
 class _AppLocalizationsDelegate

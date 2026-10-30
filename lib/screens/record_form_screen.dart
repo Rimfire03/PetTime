@@ -42,6 +42,7 @@ class _RecordFormScreenState extends State<RecordFormScreen> {
   }
 
   void _applySuggestion(CareSuggestion s) {
+    _productFocus.unfocus(); // the list must close once a suggestion is chosen
     final months = s.repeatMonths;
     setState(() {
       // never overwrite a date the person typed by hand

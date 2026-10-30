@@ -139,7 +139,10 @@ Future<void> _seed() async {
 
   final biscotte = await pet('Biscotte', 'dog', 'Golden retriever', 'female', DateTime(2021, 3, 12),
       vet: 'Clinique vétérinaire des Lilas', vetPhone: '01 23 45 67 89', chip: '250268500123456', color: 'Doré');
-  await pet('Pixel', 'cat', 'Européen', 'male', DateTime(2022, 7, 2), color: 'Gris tigré');
+  final pixel = await pet('Pixel', 'cat', 'Européen', 'male', DateTime(2022, 7, 2), color: 'Gris tigré');
+  // late and no appointment planned: shows the notice on the pet list
+  await db.into(db.healthRecords).insert(HealthRecordsCompanion.insert(
+      petId: pixel, type: RecordType.vaccine, product: 'Typhus, coryza, leucose (TCL)', date: DateTime(2025, 9, 10), nextDue: Value(DateTime(2026, 9, 10))));
   await pet('Noisette', 'rabbit', 'Bélier nain', 'female', DateTime(2024, 1, 20), color: 'Marron');
 
   Future<void> record(RecordType type, String product, DateTime date, DateTime? next) => db.into(db.healthRecords).insert(

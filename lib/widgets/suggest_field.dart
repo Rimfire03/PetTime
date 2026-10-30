@@ -67,7 +67,15 @@ class _SuggestFieldState extends State<SuggestField> {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 children: [
-                  for (final o in options) ListTile(dense: true, title: Text(o), onTap: () => onSelected(o)),
+                  for (final o in options)
+                    ListTile(
+                      dense: true,
+                      title: Text(o),
+                      onTap: () {
+                        onSelected(o);
+                        _focus.unfocus(); // the list must close once a suggestion is chosen
+                      },
+                    ),
                 ],
               ),
             ),

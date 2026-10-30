@@ -515,4 +515,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get leaveShareBody =>
       'Cet animal disparaîtra de votre compte. Les autres personnes le conservent, et vous pourrez le retrouver avec un nouveau code d\'invitation.';
+
+  @override
+  String get upcomingTitle => 'Prochaines échéances';
+
+  @override
+  String get overdueTitle => 'Échéances dépassées';
+
+  @override
+  String overdueSince(String date) {
+    return 'En retard depuis le $date';
+  }
+
+  @override
+  String get noAppointmentPlanned => 'Aucun rendez-vous prévu';
 }

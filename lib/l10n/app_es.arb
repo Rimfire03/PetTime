@@ -144,5 +144,9 @@
   "deleteOnlyOwner": "Solo el propietario del animal puede eliminarlo.",
   "leaveShare": "Salir de este compartido",
   "leaveShareTitle": "¿Salir del compartido de {name}?",
-  "leaveShareBody": "Este animal desaparecerá de tu cuenta. Los demás lo conservan y podrás recuperarlo con un nuevo código de invitación."
+  "leaveShareBody": "Este animal desaparecerá de tu cuenta. Los demás lo conservan y podrás recuperarlo con un nuevo código de invitación.",
+  "upcomingTitle": "Próximos vencimientos",
+  "overdueTitle": "Vencidos",
+  "overdueSince": "Vencido desde el {date}",
+  "noAppointmentPlanned": "Ninguna cita prevista"
 }

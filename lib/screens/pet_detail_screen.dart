@@ -5,6 +5,7 @@ import '../data/db.dart';
 import '../l10n/app_localizations.dart';
 import '../pdf_export.dart';
 import '../sync/sync_service.dart' show syncAvailable;
+import '../widgets/due_widgets.dart';
 import 'delete_pet.dart';
 import 'shares_screen.dart';
 import '../photos.dart';
@@ -127,6 +128,7 @@ class _InfoState extends State<_Info> {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Center(child: PetAvatar(name: pet.name, photo: pet.photoPath, radius: 56)),
         ),
+        PetDueSummary(petId: pet.id),
         for (final (label, value) in rows)
           if (value != null) ListTile(title: Text(label), subtitle: Text(value)),
         const SizedBox(height: 24),
