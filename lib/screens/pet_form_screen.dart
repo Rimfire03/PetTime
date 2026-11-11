@@ -167,7 +167,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
             SuggestField(
               controller: _color,
               label: t.color,
-              options: (q) => filterSuggestions(colorsFor(_species, lang), q, allWhenEmpty: true),
+              options: (q) => filterSuggestions(colorsFor(_species, lang), q, allWhenEmpty: true, limit: 20),
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(

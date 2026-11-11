@@ -347,7 +347,7 @@ class _PetWizardScreenState extends State<PetWizardScreen> {
             label: t.color,
             autofocus: true,
             textInputAction: action,
-            options: (q) => filterSuggestions(colorsFor(_a.species, lang), q, allWhenEmpty: true),
+            options: (q) => filterSuggestions(colorsFor(_a.species, lang), q, allWhenEmpty: true, limit: 20),
             onSubmitted: (_) => _next(),
           ),
         ]),
