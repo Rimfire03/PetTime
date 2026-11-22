@@ -1,5 +1,7 @@
 # PetTime
 
+[![Release](https://img.shields.io/github/v/release/Rimfire03/PetTime)](https://github.com/Rimfire03/PetTime/releases/latest) ![Flutter](https://img.shields.io/badge/Flutter-3-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white) ![Android](https://img.shields.io/badge/Android-AAB-3DDC84?logo=android&logoColor=white)
+
 Carnet de santé pour animaux (chiens, chats, lapins...) par TomLine prod&co : fiche de l'animal, vaccins et soins, poids, rendez-vous, rappels, export PDF, partage d'un animal avec d'autres personnes et synchronisation entre téléphones. Les photos restent sur l'appareil.
 
 Langues : français, anglais, allemand, espagnol, italien, portugais.
